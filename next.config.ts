@@ -1,7 +1,15 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  images: {
+    remotePatterns: [
+      { protocol: "https", hostname: "medex.co.th", pathname: "/**" },
+      { protocol: "https", hostname: "medex.co", pathname: "/**" },
+      { protocol: "https", hostname: "jivi.co", pathname: "/**" },
+      { protocol: "https", hostname: "api.medex.co", pathname: "/**" },
+      { protocol: "https", hostname: "ert5385cfau.exactdn.com", pathname: "/**" },
+    ],
+  },
 };
 
 export default nextConfig;
