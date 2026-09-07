@@ -2,33 +2,44 @@ import { FaStar } from "react-icons/fa";
 import ImageWithFallback from "@/app/_components/shared/ImageWithFallback";
 import InitialsAvatar from "@/app/_components/shared/InitialsAvatar";
 import { DOCTORS_DATA, type Doctor } from "@/app/_lib/homepage-data";
+import { brand } from "@/app/_lib/theme";
 
 function Card({ d }: { d: Doctor }) {
   return (
     <div className="rounded-[20px] overflow-hidden bg-white border border-slate-200 flex flex-col transition-[transform,box-shadow] duration-250 hover:-translate-y-1.5 hover:shadow-[0_20px_40px_#0f172a1f]">
-      <div className="relative h-[280px] overflow-hidden bg-[linear-gradient(135deg,#ffe0dc,#f1dff1)]">
+      <div className="relative h-[280px] overflow-hidden bg-[linear-gradient(135deg,var(--color-primary-100),var(--color-secondary-100))]">
         <ImageWithFallback
           src={d.img}
           alt={d.name}
           fill
           sizes="(min-width: 1040px) 25vw, 50vw"
           className="object-cover"
-          fallback={<InitialsAvatar name={d.name.replace("Dr. ", "")} rounded="lg" className="absolute inset-0 h-full w-full text-6xl" />}
+          fallback={
+            <InitialsAvatar
+              name={d.name.replace("Dr. ", "")}
+              rounded="lg"
+              className="absolute inset-0 h-full w-full text-6xl"
+            />
+          }
         />
         <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_55%,#0f172ae0_100%)] pointer-events-none" />
         <div className="absolute top-3 right-3 flex items-center gap-1 bg-white rounded-full py-1 px-2.5">
-          <FaStar size={13} color="#f33b27" />
-          <span className="text-[#0f172a] font-bold text-xs font-sans">{d.rating}</span>
+          <FaStar size={13} color={brand.primary} />
+          <span className="text-slate-900 font-bold text-xs font-sans">
+            {d.rating}
+          </span>
         </div>
         <div className="absolute bottom-4 left-4 right-4">
-          <div className="font-[family-name:var(--font-heading)] text-white font-bold text-lg mb-0.5">{d.name}</div>
+          <div className="font-heading text-white font-bold text-lg mb-0.5">
+            {d.name}
+          </div>
           <div className="text-white/85 text-[13px] font-sans">
             {d.specialty} · {d.exp} exp.
           </div>
         </div>
       </div>
       <div className="p-4">
-        <button className="w-full text-sm py-2.5 rounded-full text-white font-bold border-none cursor-pointer font-sans bg-[linear-gradient(120deg,#f33b27,#872888)] transition-opacity duration-200 hover:opacity-88">
+        <button className="w-full text-sm py-2.5 rounded-full text-white font-bold border-none cursor-pointer font-sans bg-[linear-gradient(120deg,var(--color-primary),var(--color-secondary))] transition-opacity duration-200 hover:opacity-88">
           Book Now
         </button>
       </div>
@@ -40,12 +51,14 @@ function SectionHeading() {
   return (
     <>
       <div>
-        <span className="text-[#f33b27] font-bold text-sm font-sans">Meet the network</span>
-        <h2 className="font-[family-name:var(--font-heading)] text-[#0f172a] font-bold text-[clamp(26px,3.2vw,36px)] tracking-[-0.02em] mt-2">
+        <span className="text-primary font-bold text-sm font-sans">
+          Meet the network
+        </span>
+        <h2 className="font-heading text-slate-900 font-bold text-[clamp(26px,3.2vw,36px)] tracking-[-0.02em] mt-2">
           Doctors ready to see you
         </h2>
       </div>
-      <button className="text-[#0f172a] font-bold text-sm bg-transparent border-none cursor-pointer font-sans">
+      <button className="text-slate-900 font-bold text-sm bg-transparent border-none cursor-pointer font-sans">
         View all doctors
       </button>
     </>

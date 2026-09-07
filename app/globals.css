@@ -13,6 +13,22 @@
   /* Desktop nav breakpoint used throughout the homepage (matches the
      original design's isDesktop threshold of 1040px). */
   --breakpoint-dt: 1040px;
+
+  /* Brand accent colors — the single source of truth is `brand` in
+     app/_lib/theme.ts (also feeds antd's ConfigProvider theme). Tailwind's
+     CSS-native config can't import that TS object, so these mirror it
+     literally; keep the two in sync when a shade changes. Exposes
+     bg-primary, text-primary-600, border-secondary-100, etc. Ink/grays are
+     deliberately not tokenized here — they already match Tailwind's slate
+     scale (slate-900/600/500/200), so use those utilities directly. */
+  --color-primary-50: #fff1ef;
+  --color-primary-100: #ffe0dc;
+  --color-primary: #f33b27;
+  --color-primary-600: #df321f;
+  --color-primary-700: #d92e1c;
+  --color-secondary-100: #f1dff1;
+  --color-secondary: #872888;
+  --color-secondary-600: #79227a;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -37,7 +53,7 @@ a {
 }
 
 a:hover {
-  color: #f33b27;
+  color: var(--color-primary);
 }
 
 select {
