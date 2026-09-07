@@ -10,11 +10,14 @@ import {
   FiHeart,
   FiLogIn,
   FiMenu,
+  FiPhone,
+  FiShield,
   FiShoppingCart,
   FiStar,
   FiUserPlus,
 } from "react-icons/fi";
 import { FaFlask } from "react-icons/fa";
+import LangCountrySwitcher from "@/app/_components/shared/LangCountrySwitcher";
 import { MOBILE_NAV_LABELS, NAV_MENUS_DATA } from "@/app/_lib/homepage-data";
 
 export type HeaderActive =
@@ -49,6 +52,9 @@ export default function Navbar({
 }: NavbarProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [navMenuOpen, setNavMenuOpen] = useState<string | null>(null);
+  const [mobileCategoryOpen, setMobileCategoryOpen] = useState<string | null>(
+    null
+  );
 
   const navRef = useRef<HTMLDivElement>(null);
 
@@ -193,25 +199,113 @@ export default function Navbar({
           </div>
         </div>
 
-        {/* Mobile slide-down menu */}
+        {/* Mobile slide-down menu — purple, matching the desktop dropdown's mega-menu panel */}
         {mobileOpen && (
-          <div className="dt:hidden flex flex-col gap-0.5 pb-3.5">
-            {MOBILE_NAV_LABELS.map((label) => (
-              <a
-                key={label}
-                href="#"
-                className={`text-[14.5px] font-bold py-2.5 px-1 ${label === active ? "text-primary" : "text-slate-900"}`}
-              >
-                {label}
-              </a>
-            ))}
+          <div className="dt:hidden -mx-5 px-5 pb-3.5 flex flex-col gap-0.5 bg-secondary">
+            {MOBILE_NAV_LABELS.map((label) => {
+              const menu = NAV_MENUS_DATA.find((m) => m.label === label);
+              const isActive = label === active;
+
+              // Vendors/Doctors have no submenu data — render as a plain link.
+              if (!menu) {
+                return (
+                  <a
+                    key={label}
+                    href="#"
+                    className={`text-[14.5px] font-bold py-2.5 px-1 ${
+                      isActive ? "text-primary" : "text-white"
+                    }`}
+                  >
+                    {label}
+                  </a>
+                );
+              }
+
+              const isOpen = mobileCategoryOpen === label;
+              return (
+                <div key={label}>
+                  <button
+                    onClick={() =>
+                      setMobileCategoryOpen((v) => (v === label ? null : label))
+                    }
+                    className={`flex items-center justify-between w-full gap-2 bg-transparent border-none cursor-pointer text-left text-[14.5px] font-bold py-2.5 px-1 font-sans ${
+                      isOpen || isActive ? "text-primary" : "text-white"
+                    }`}
+                  >
+                    <span>{label}</span>
+                    <FiChevronDown
+                      size={16}
+                      className="transition-transform duration-200"
+                      style={{ transform: isOpen ? "rotate(180deg)" : "none" }}
+                    />
+                  </button>
+                  {isOpen && (
+                    <div className="flex flex-col gap-0.5 ml-2 pl-3 pb-2 border-l-2 border-white/25">
+                      {menu.items.map((mi) => (
+                        <a
+                          key={mi.label}
+                          href="#"
+                          className="flex items-center justify-between gap-2 rounded-lg px-2 py-2 text-sm text-white/80 transition-colors duration-150 hover:bg-white/10 hover:text-white"
+                        >
+                          <span>{mi.label}</span>
+                          {mi.isNew && (
+                            <span className="text-[10px] font-bold tracking-wide text-white bg-primary rounded-full px-1.5 py-0.5">
+                              NEW
+                            </span>
+                          )}
+                        </a>
+                      ))}
+                      <a
+                        href="#"
+                        className="flex items-center gap-1.5 rounded-lg px-2 py-2 text-sm font-bold text-white transition-colors duration-150 hover:bg-white/10"
+                      >
+                        {menu.viewAll}
+                        <FiArrowRight size={13} />
+                      </a>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+
             <div className="flex items-center gap-2 mt-2">
-              <button className="flex-1 text-sm py-2.5 rounded-full bg-slate-100 border-none text-slate-900 font-bold cursor-pointer font-sans">
+              <button className="flex-1 text-sm py-2.5 rounded-full bg-white border-none text-slate-900 font-bold cursor-pointer font-sans">
                 Log in
               </button>
               <button className="flex-1 text-sm py-2.5 rounded-full bg-primary border-none text-white font-bold cursor-pointer font-sans">
                 Sign up
               </button>
+            </div>
+
+            {/* Utility strip content — desktop-only in TopBar, folded in here so
+                it's still reachable below the `dt` breakpoint. */}
+            <div className="mt-3 pt-3 border-t border-white/20 flex flex-col gap-2.5">
+              <LangCountrySwitcher invert />
+              <a
+                href="tel:+660254400001"
+                className="flex items-center gap-1.5 text-xs text-white/80 font-semibold px-1  my-1"
+              >
+                <FiPhone size={13} />
+                +66-02-544-0001
+              </a>
+              <div className="flex items-center gap-3 px-1 my-1">
+                <a href="#" className="text-xs font-bold text-white">
+                  About
+                </a>
+                <a href="#" className="text-xs font-bold text-white">
+                  Contact
+                </a>
+              </div>
+              <div className="flex flex-col gap-2">
+                <button className="flex items-center justify-center gap-1.5 text-xs py-2 rounded-full border-[1.5px] border-primary text-primary bg-primary-50 font-bold cursor-pointer font-sans">
+                  <FiShield size={13} />
+                  Become a Partner
+                </button>
+                <button className="flex items-center justify-center gap-1.5 text-xs py-2 rounded-full border-[1.5px] border-white/40 text-white bg-white/10 font-bold cursor-pointer font-sans">
+                  <FiStar size={13} />
+                  Become a Member
+                </button>
+              </div>
             </div>
           </div>
         )}
