@@ -100,12 +100,16 @@ overflow-hidden` block (following the established
   sticky-positioning ancestor and risk breaking its sticky behavior —
   so the mesh backdrop stays scoped to the intro band only; the
   filter/results region below it carries no mesh.
-- Restyle `TabPills` (sits over the intro band's mesh, so `glass.subtle`
-  refracts it) and `SearchSortBar`, `FilterSidebar`/
-  `MobileFilterDrawer`, `FilterGroups`, `ListingCard` onto `glass.subtle`
-  panels — `glass.subtle` is documented as safe "regardless of what's
-  behind it", so this holds even without a mesh behind the
-  filter/results region.
+- Restyle the actual panel-level surfaces onto `glass.subtle` —
+  `TabPills` (sits over the intro band's mesh), `FilterSidebar`,
+  `MobileFilterDrawer`'s sheet, and `ListingCard` — `glass.subtle` is
+  documented as safe "regardless of what's behind it", so this holds
+  even without a mesh behind the filter/results region.
+  `SearchSortBar`'s antd `Input`/`Select` and `FilterGroups`' antd
+  `Checkbox`/`Slider` are small inline form controls, not panels — left
+  visually as-is (matches homepage precedent: nowhere does the
+  homepage put a glass surface directly on an antd form control) other
+  than sitting inside their now-glass parent panel.
 - `ListingCard`'s grid entrance wrapped in `Reveal`.
 - No changes to `ListingsView.tsx`'s filter/search/sort/pagination
   state or logic — visual only.
