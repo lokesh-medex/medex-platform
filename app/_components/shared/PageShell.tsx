@@ -23,7 +23,7 @@ export default function PageShell({
   children,
 }: PageShellProps) {
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-[#F5F5F5]">
       <Header
         active={active}
         showCart={showCart}
