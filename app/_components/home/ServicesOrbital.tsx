@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { Button, Tag } from "antd";
+import { Button, Popover, Tag } from "antd";
 import { FiHeart, FiStar } from "react-icons/fi";
 import { FaFlask, FaStethoscope } from "react-icons/fa";
 import {
@@ -55,17 +55,6 @@ export default function ServicesOrbital() {
       );
     }, ORBIT_INTERVAL_MS);
     return () => clearInterval(id);
-  }, [activeService]);
-
-  useEffect(() => {
-    const onDocClick = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
-      if (activeService !== null && !target.closest("[data-service-node]")) {
-        setActiveService(null);
-      }
-    };
-    document.addEventListener("click", onDocClick);
-    return () => document.removeEventListener("click", onDocClick);
   }, [activeService]);
 
   const activeSvcData =
@@ -198,94 +187,101 @@ export default function ServicesOrbital() {
                   zIndex: isActive ? 30 : 10,
                 }}
               >
-                <div className="relative flex flex-col items-center">
-                  <div
-                    className="absolute rounded-full pointer-events-none"
-                    style={{
-                      background: `radial-gradient(circle, ${glow} 0%, transparent 70%)`,
-                      width: glowSize,
-                      height: glowSize,
-                      left: "50%",
-                      top: "40px",
-                      transform: "translate(-50%,-50%)",
-                    }}
-                  />
-                  <Button
-                    type="text"
-                    shape="circle"
-                    onClick={() =>
-                      setActiveService((prev) =>
-                        prev === svc.id ? null : svc.id
-                      )
-                    }
-                    className="relative! h-20! w-20! transition-transform! duration-300!"
-                    style={{
-                      background: bg,
-                      border: `2px solid ${borderColor}`,
-                      boxShadow: shadow,
-                      transform: scale,
-                    }}
-                    icon={
-                      <ServiceIcon icon={svc.icon} color={renderIconColor} />
-                    }
-                  />
-                  <span
-                    className="mt-3 whitespace-nowrap font-bold text-xs tracking-[0.02em] transition-[color,transform] duration-300 font-sans"
-                    style={{ color: labelColor, transform: labelScale }}
-                  >
-                    {svc.title}
-                  </span>
-                </div>
-
-                {isActive && (
-                  <div className="absolute top-28 left-1/2 -translate-x-1/2 w-66 rounded-xl p-4.5 text-left bg-[rgba(10,14,24,0.96)] backdrop-blur-md border border-white/15 shadow-[0_24px_48px_#00000066] z-40">
-                    <div className="flex items-center justify-between mb-2.5">
-                      <span
-                        className="text-[10px] font-bold tracking-[0.08em] font-sans"
-                        style={{ color: iconColor }}
-                      >
-                        {svc.title.toUpperCase()}
-                      </span>
-                    </div>
-                    <p className="text-white/75 text-[13px] leading-normal mb-3.5 font-sans">
-                      {svc.blurb}
-                    </p>
-                    <div className="grid grid-cols-2 gap-2.5 mb-3.5">
-                      <div className="bg-white/6 rounded-lg p-2.5">
-                        <div className="font-heading text-white font-bold text-lg">
-                          {svc.metricValue}
+                <Popover
+                  trigger="click"
+                  open={isActive}
+                  onOpenChange={(next) =>
+                    setActiveService(next ? svc.id : null)
+                  }
+                  placement="bottom"
+                  arrow={false}
+                  classNames={{
+                    container: "p-0! bg-transparent! shadow-none!",
+                  }}
+                  content={
+                    <div className="w-66 rounded-xl p-4.5 text-left bg-[rgba(10,14,24,0.96)] backdrop-blur-md border border-white/15 shadow-[0_24px_48px_#00000066]">
+                      <div className="flex items-center justify-between mb-2.5">
+                        <span
+                          className="text-[10px] font-bold tracking-[0.08em] font-sans"
+                          style={{ color: iconColor }}
+                        >
+                          {svc.title.toUpperCase()}
+                        </span>
+                      </div>
+                      <p className="text-white/75 text-[13px] leading-normal mb-3.5 font-sans">
+                        {svc.blurb}
+                      </p>
+                      <div className="grid grid-cols-2 gap-2.5 mb-3.5">
+                        <div className="bg-white/6 rounded-lg p-2.5">
+                          <div className="font-heading text-white font-bold text-lg">
+                            {svc.metricValue}
+                          </div>
+                          <div className="text-white/50 text-[10.5px] mt-0.5 font-sans">
+                            {svc.metricLabel}
+                          </div>
                         </div>
-                        <div className="text-white/50 text-[10.5px] mt-0.5 font-sans">
-                          {svc.metricLabel}
+                        <div className="bg-white/6 rounded-lg p-2.5">
+                          <div className="font-heading text-white font-bold text-lg">
+                            {svc.secondaryValue}
+                          </div>
+                          <div className="text-white/50 text-[10.5px] mt-0.5 font-sans">
+                            {svc.secondaryLabel}
+                          </div>
                         </div>
                       </div>
-                      <div className="bg-white/6 rounded-lg p-2.5">
-                        <div className="font-heading text-white font-bold text-lg">
-                          {svc.secondaryValue}
-                        </div>
-                        <div className="text-white/50 text-[10.5px] mt-0.5 font-sans">
-                          {svc.secondaryLabel}
+                      <div className="border-t border-white/10 pt-3">
+                        <span className="text-white/45 font-bold text-[10px] tracking-[0.06em] font-sans">
+                          TOP VENDORS
+                        </span>
+                        <div className="flex flex-wrap gap-1.5 mt-2">
+                          {svc.vendors.map((v) => (
+                            <Tag
+                              key={v}
+                              variant="filled"
+                              className="m-0! text-[11px]! rounded-full py-1! px-2.5! bg-white/8! text-white/85! border! border-white/10! font-sans"
+                            >
+                              {v}
+                            </Tag>
+                          ))}
                         </div>
                       </div>
                     </div>
-                    <div className="border-t border-white/10 pt-3">
-                      <span className="text-white/45 font-bold text-[10px] tracking-[0.06em] font-sans">
-                        TOP VENDORS
-                      </span>
-                      <div className="flex flex-wrap gap-1.5 mt-2">
-                        {svc.vendors.map((v) => (
-                          <Tag
-                            key={v}
-                            variant="filled"
-                            className="m-0! text-[11px]! rounded-full py-1! px-2.5! bg-white/8! text-white/85! border! border-white/10! font-sans"
-                          >
-                            {v}
-                          </Tag>
-                        ))}
-                      </div>
-                    </div>
+                  }
+                >
+                  <div className="relative flex flex-col items-center">
+                    <div
+                      className="absolute rounded-full pointer-events-none"
+                      style={{
+                        background: `radial-gradient(circle, ${glow} 0%, transparent 70%)`,
+                        width: glowSize,
+                        height: glowSize,
+                        left: "50%",
+                        top: "40px",
+                        transform: "translate(-50%,-50%)",
+                      }}
+                    />
+                    <Button
+                      type="text"
+                      shape="circle"
+                      className="relative! h-20! w-20! transition-transform! duration-300!"
+                      style={{
+                        background: bg,
+                        border: `2px solid ${borderColor}`,
+                        boxShadow: shadow,
+                        transform: scale,
+                      }}
+                      icon={
+                        <ServiceIcon icon={svc.icon} color={renderIconColor} />
+                      }
+                    />
+                    <span
+                      className="mt-3 whitespace-nowrap font-bold text-xs tracking-[0.02em] transition-[color,transform] duration-300 font-sans"
+                      style={{ color: labelColor, transform: labelScale }}
+                    >
+                      {svc.title}
+                    </span>
                   </div>
-                )}
+                </Popover>
               </div>
             );
           })}
