@@ -1,93 +1,121 @@
+/**
+ * Membership — three `glass.dark` panels on the dark `membership` mesh
+ * preset instead of flat white/gradient cards. Only the tier's
+ * name/price/period/desc/features/isFeatured/cta are used — the data
+ * module's other style fields (bg/border/shadow/textColor/...) were authored
+ * for a light card and don't apply to a dark glass shell, so they're ignored
+ * here. The featured tier scales up and glows on desktop; on mobile it just
+ * leads the stack (scaling up would just make it awkwardly wide there).
+ */
+
 import { Button, Tag } from "antd";
 import { FiCheck } from "react-icons/fi";
-import { MEMBERSHIP_TIERS_DATA } from "@/app/_lib/homepage-data";
+import BackdropMotifs from "@/app/_components/shared/BackdropMotifs";
+import { Parallax, Reveal } from "@/app/_components/shared/Motion";
+import { glass } from "@/app/_lib/glass";
+import {
+  MEMBERSHIP_TIERS_DATA,
+  type MembershipTier,
+} from "@/app/_lib/homepage-data";
+import Mesh from "./Mesh";
+
+function TierCard({ tier }: { tier: MembershipTier }) {
+  return (
+    <article
+      className={`relative isolate flex flex-col rounded-[32px] p-8 transition-transform duration-300 dt:p-9 ${
+        tier.isFeatured
+          ? "dt:scale-105 shadow-[0_0_80px_rgba(243,59,39,0.35)]"
+          : ""
+      } ${glass.dark}`}
+    >
+      {tier.isFeatured && (
+        <Tag className="absolute! -top-3! left-8! m-0! rounded-full! border-0! bg-[linear-gradient(120deg,var(--color-primary),var(--color-secondary))]! px-3! py-1! font-sans text-[11px]! font-bold! text-white! tracking-[0.1em]! uppercase!">
+          Most popular
+        </Tag>
+      )}
+
+      <h3 className="mb-2 font-heading text-[22px] font-bold tracking-[-0.02em] text-white">
+        {tier.name}
+      </h3>
+      <div className="mb-4 flex items-baseline gap-1.5">
+        <span className="font-heading text-[36px] leading-none font-bold tracking-[-0.03em] text-white">
+          {tier.price}
+        </span>
+        {tier.period && (
+          <span className="font-sans text-[13px] text-white/55">
+            {tier.period}
+          </span>
+        )}
+      </div>
+      <p className="mb-7 font-sans text-[14px] leading-[1.6] text-white/70">
+        {tier.desc}
+      </p>
+
+      <ul className="mb-8 flex flex-1 flex-col gap-3">
+        {tier.features.map((f) => (
+          <li
+            key={f}
+            className="flex items-start gap-2.5 font-sans text-[13.5px] leading-[1.5] text-white/85"
+          >
+            <FiCheck size={16} className="mt-0.5 shrink-0 text-[#ff8a75]" />
+            {f}
+          </li>
+        ))}
+      </ul>
+
+      <Button
+        type={tier.isFeatured ? "primary" : "default"}
+        ghost={!tier.isFeatured}
+        block
+        size="large"
+        className={
+          tier.isFeatured
+            ? "h-auto! border-0! bg-[linear-gradient(120deg,var(--color-primary),var(--color-secondary))]! py-3.5! text-[14.5px]! font-sans"
+            : "h-auto! border-white/25! py-3.5! text-[14.5px]! text-white! font-sans hover:border-white/50! hover:text-white!"
+        }
+      >
+        {tier.cta}
+      </Button>
+    </article>
+  );
+}
 
 export default function Membership() {
   return (
-    <section id="membership" className="py-20 bg-[#F5F5F5]">
-      <div className="max-w-[1280px] mx-auto px-5 dt:px-8">
-        <div className="text-center max-w-[560px] mx-auto mb-10">
-          <span className="text-secondary font-bold text-sm font-sans">
-            Become a Member
+    <section className="relative overflow-hidden bg-[#160221] py-24 dt:py-32">
+      <Parallax yPercent={-8} className="pointer-events-none absolute inset-0">
+        <Mesh preset="membership" />
+      </Parallax>
+      <Parallax yPercent={-12} className="pointer-events-none absolute inset-0">
+        <BackdropMotifs
+          count={9}
+          opacity={0.1}
+          color="#ffffff"
+          seed={53}
+          zone="full"
+          minSize={90}
+          maxSize={200}
+        />
+      </Parallax>
+
+      <div className="relative mx-auto max-w-[1280px] px-5 dt:px-8">
+        <div className="mx-auto mb-16 max-w-[680px] text-center">
+          <span className="font-sans text-[12px] font-bold tracking-[0.16em] text-[#ff8a75] uppercase">
+            Membership
           </span>
-          <h2 className="font-heading text-slate-900 font-bold text-[clamp(26px,3.2vw,36px)] tracking-[-0.02em] mt-2">
-            Membership plans for every need
+          <h2 className="mt-3 font-heading text-[clamp(30px,4.4vw,52px)] leading-[1.02] font-bold tracking-[-0.04em] text-balance text-white">
+            Pick the plan that fits your family.
           </h2>
         </div>
-        <div className="grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-6 items-stretch">
+
+        <Reveal
+          preset="standard"
+          className="mx-auto grid max-w-[1080px] grid-cols-1 gap-6 dt:grid-cols-3 dt:items-center dt:gap-7"
+        >
           {MEMBERSHIP_TIERS_DATA.map((tier) => (
-            <div
-              key={tier.name}
-              className="relative rounded-[20px] p-8 px-7 flex flex-col"
-              style={{
-                background: tier.bg,
-                border: tier.border,
-                boxShadow: tier.shadow,
-              }}
-            >
-              {tier.isFeatured && (
-                <Tag
-                  variant="filled"
-                  className="absolute -top-3 left-1/2 -translate-x-1/2 m-0! text-[11px]! tracking-[0.04em] text-white! bg-primary! rounded-full px-3.5! py-1! border-0!"
-                >
-                  MOST POPULAR
-                </Tag>
-              )}
-              <h3
-                className="font-heading font-bold text-xl mb-2"
-                style={{ color: tier.textColor }}
-              >
-                {tier.name}
-              </h3>
-              <div className="flex items-baseline gap-1 mb-2">
-                <span
-                  className="font-heading font-bold text-[32px]"
-                  style={{ color: tier.textColor }}
-                >
-                  {tier.price}
-                </span>
-                <span className="text-sm" style={{ color: tier.subTextColor }}>
-                  {tier.period}
-                </span>
-              </div>
-              <p
-                className="text-[13.5px] leading-[1.5] mb-6"
-                style={{ color: tier.subTextColor }}
-              >
-                {tier.desc}
-              </p>
-              <div className="flex flex-col gap-3 mb-7 flex-1">
-                {tier.features.map((f) => (
-                  <div key={f} className="flex items-start gap-2">
-                    <FiCheck
-                      size={16}
-                      color={tier.checkColor}
-                      className="shrink-0 mt-px"
-                    />
-                    <span
-                      className="text-[13.5px]"
-                      style={{ color: tier.textColor }}
-                    >
-                      {f}
-                    </span>
-                  </div>
-                ))}
-              </div>
-              <Button
-                type="text"
-                block
-                className="h-auto! text-sm! py-3! font-sans"
-                style={{
-                  background: tier.btnBg,
-                  color: tier.btnColor,
-                  border: tier.btnBorder,
-                }}
-              >
-                {tier.cta}
-              </Button>
-            </div>
+            <TierCard key={tier.name} tier={tier} />
           ))}
-        </div>
+        </Reveal>
       </div>
     </section>
   );

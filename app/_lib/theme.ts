@@ -56,3 +56,22 @@ export const antdTheme: ThemeConfig = {
     },
   },
 };
+
+/**
+ * "Brand dark" surface — for anywhere a dark dropdown/panel needs to
+ * guarantee text contrast regardless of what's behind it (the header once
+ * scrolled, the mega-menu popover, the mobile nav drawer). A flat near-black
+ * reads as plain black rather than the site's brand-purple dark register
+ * (Hero, ServicesOrbital, CTA, Footer), so this blends darkened primary/
+ * secondary in the same 120deg direction as the brand gradient used
+ * everywhere else on the site.
+ *
+ * Exported as two pieces because not every surface wants the full panel
+ * treatment — the mobile drawer supplies its own top border and shouldn't
+ * gain a shadow/border on all four sides, so it takes `BG` alone.
+ */
+export const BRAND_DARK_BG =
+  "bg-[linear-gradient(120deg,rgba(74,18,13,0.94),rgba(58,15,61,0.94))]";
+
+/** Full treatment: background + blur + hairline border + drop shadow. */
+export const BRAND_DARK_PANEL = `${BRAND_DARK_BG} backdrop-blur-2xl border border-white/10 shadow-[0_12px_40px_rgba(0,0,0,0.45)]`;

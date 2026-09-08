@@ -1,81 +1,118 @@
+/**
+ * Vendors — large image-first cards with the name/location set ON the photo
+ * behind a gradient scrim, rather than an image-above-text card. No glass
+ * here on purpose — the photos are the texture, and the section sits between
+ * two heavy glass bands.
+ */
+
 import Image from "next/image";
 import { Button } from "antd";
-import { FiMapPin } from "react-icons/fi";
-import { VENDORS_DATA, type Vendor } from "@/app/_lib/homepage-data";
+import { FiArrowUpRight, FiMapPin } from "react-icons/fi";
+import BackdropMotifs from "@/app/_components/shared/BackdropMotifs";
+import { Parallax, Reveal } from "@/app/_components/shared/Motion";
+import { VENDORS_DATA } from "@/app/_lib/homepage-data";
+import Mesh from "./Mesh";
 
-function Card({ v }: { v: Vendor }) {
-  return (
-    <div className="rounded-2xl overflow-hidden bg-white border border-slate-200 flex flex-col transition-[transform,box-shadow] duration-200 hover:-translate-y-1 hover:shadow-[0_16px_32px_#0f172a1a]">
-      <div
-        className="relative h-35 overflow-hidden"
-        style={{ background: v.gradient }}
-      >
-        <Image
-          src={v.img}
-          alt={v.name}
-          fill
-          sizes="(min-width: 1040px) 25vw, 50vw"
-          className="object-cover"
-        />
-      </div>
-      <div className="p-4 flex flex-col flex-1">
-        <h4 className="font-heading text-slate-900 font-bold text-[15px] mb-2">
-          {v.name}
-        </h4>
-        <div className="flex items-start gap-1.5 mb-4 flex-1">
-          <FiMapPin size={14} className="shrink-0 mt-0.5 text-slate-500" />
-          <p className="text-slate-500 text-xs leading-[1.4] m-0">
-            {v.location}
-          </p>
-        </div>
-        <Button
-          type="text"
-          className="self-start h-auto! text-[12.5px]! py-2! px-4! text-white! font-sans bg-[linear-gradient(120deg,var(--color-primary),var(--color-secondary))]!"
-        >
-          Book Now
-        </Button>
-      </div>
-    </div>
-  );
-}
+/** Each row leads with a double-wide card, so no row reads as a flat 4-up. */
+const SPANS = [
+  "dt:col-span-2",
+  "dt:col-span-1",
+  "dt:col-span-1",
+  "dt:col-span-2",
+  "dt:col-span-1",
+  "dt:col-span-1",
+];
 
 export default function Vendors() {
   return (
-    <section id="vendors" className="py-20 bg-white">
-      <div className="max-w-7xl mx-auto px-5 dt:px-8">
-        {/* Heading: centered on tablet/desktop, sticks below the header while scrolling on mobile */}
-        <div className="hidden sm:block text-center max-w-140 mx-auto mb-10">
-          <span className="text-secondary font-bold text-sm font-sans">
-            Our Network
-          </span>
-          <h2 className="font-heading text-slate-900 font-bold text-[clamp(26px,3.2vw,36px)] tracking-[-0.02em] mt-2">
-            Our Vendors
-          </h2>
-        </div>
-        <div className="sm:hidden sticky top-16 z-5 bg-white text-center max-w-140 mx-auto pt-3 pb-7">
-          <span className="text-secondary font-bold text-sm font-sans">
-            Our Network
-          </span>
-          <h2 className="font-heading text-slate-900 font-bold text-[clamp(26px,3.2vw,36px)] tracking-[-0.02em] mt-2">
-            Our Vendors
-          </h2>
+    <section
+      id="vendors"
+      className="relative overflow-hidden bg-white py-24 dt:py-32"
+    >
+      <Parallax yPercent={-8} className="pointer-events-none absolute inset-0">
+        <Mesh preset="vendors" />
+      </Parallax>
+      <Parallax yPercent={-12} className="pointer-events-none absolute inset-0">
+        <BackdropMotifs
+          count={9}
+          opacity={0.1}
+          seed={73}
+          zone="full"
+          minSize={90}
+          maxSize={200}
+        />
+      </Parallax>
+
+      <div className="relative mx-auto max-w-[1280px] px-5 dt:px-8">
+        <div className="mb-12 flex flex-wrap items-end justify-between gap-6">
+          <div className="max-w-[620px]">
+            <span className="font-sans text-[12px] font-bold tracking-[0.16em] text-primary uppercase">
+              Our network
+            </span>
+            <h2 className="mt-3 font-heading text-[clamp(30px,4.4vw,52px)] leading-[1.02] font-bold tracking-[-0.04em] text-balance text-slate-900">
+              Vendors people actually rebook.
+            </h2>
+          </div>
+          <p className="max-w-[340px] font-sans text-[14.5px] leading-[1.6] text-slate-700">
+            Every listing is verified before it goes live — licences, facilities
+            and pricing checked by our team.
+          </p>
         </div>
 
-        {/* Tablet/desktop: plain grid */}
-        <div className="hidden sm:grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-5">
+        <Reveal
+          preset="standard"
+          className="grid grid-cols-1 gap-4 sm:grid-cols-2 dt:grid-cols-4 dt:gap-5"
+        >
           {VENDORS_DATA.map((v, i) => (
-            <Card key={`${v.name}-${i}`} v={v} />
-          ))}
-        </div>
+            <article
+              key={`${v.name}-${i}`}
+              className={`group relative h-[360px] overflow-hidden rounded-[28px] shadow-[0_18px_44px_rgba(15,23,42,0.16)] ${SPANS[i]}`}
+            >
+              <div
+                className="absolute inset-0"
+                style={{ background: v.gradient }}
+              />
+              <Image
+                src={v.img}
+                alt={v.name}
+                fill
+                sizes="(min-width: 1040px) 33vw, (min-width: 640px) 50vw, 100vw"
+                className="object-cover transition-transform duration-[700ms] ease-out group-hover:scale-[1.06]"
+              />
+              {/* Scrim: strong at the base so overlaid copy stays legible on
+                  any photo, near-transparent at the top. */}
+              <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(10,2,16,0.05)_0%,rgba(10,2,16,0.35)_45%,rgba(10,2,16,0.9)_100%)]" />
+              <div
+                className="absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-40"
+                style={{ background: v.gradient }}
+              />
 
-        {/* Mobile: cards stack via position:sticky at a shared offset, cascading over each other while scrolling */}
-        <div className="sm:hidden relative">
-          {VENDORS_DATA.map((v, i) => (
-            <div key={`${v.name}-${i}`} className="sticky top-45 pb-6">
-              <Card v={v} />
-            </div>
+              <div className="absolute inset-x-0 bottom-0 p-6">
+                <h3 className="mb-2 font-heading text-[21px] leading-[1.15] font-bold tracking-[-0.02em] text-white">
+                  {v.name}
+                </h3>
+                <div className="mb-5 flex items-start gap-2">
+                  <FiMapPin
+                    size={13}
+                    className="mt-0.5 shrink-0 text-white/70"
+                  />
+                  <p className="m-0 line-clamp-2 font-sans text-[12.5px] leading-[1.45] text-white/75">
+                    {v.location}
+                  </p>
+                </div>
+                <Button
+                  type="text"
+                  className="h-auto! bg-white! px-5! py-2.5! text-[13px]! text-slate-900! transition-transform! duration-200! font-sans group-hover:-translate-y-0.5!"
+                >
+                  <span className="flex items-center gap-1.5">
+                    Book now
+                    <FiArrowUpRight size={13} />
+                  </span>
+                </Button>
+              </div>
+            </article>
           ))}
-        </div>
+        </Reveal>
       </div>
     </section>
   );

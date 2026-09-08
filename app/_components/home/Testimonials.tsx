@@ -1,162 +1,159 @@
-import { FaStar } from "react-icons/fa";
+"use client";
+
+/**
+ * Testimonials — a GSAP-pinned horizontal scroll: the section pins in place
+ * while the track of testimonial cards translates left as the page scrolls
+ * vertically through the pinned duration (the `gsap.to(track, { x: ...
+ * scrollTrigger: { pin: true } })` recipe).
+ *
+ * The DOM underneath is a genuinely-working `overflow-x-auto` snap rail on
+ * its own — no layout branching between the two motion states. When
+ * `prefers-reduced-motion: no-preference` is NOT set, GSAP never runs and the
+ * rail behaves like any horizontally-scrollable row (drag/swipe/trackpad).
+ * When motion is welcome, `mm.add` swaps the container to `overflow: hidden`
+ * and hands scroll control to the pinned tween instead, so there's never a
+ * moment where native scroll and the tween fight each other.
+ *
+ * `pinType: "transform"` is required here because the section (like every
+ * homepage section) is `overflow-hidden` for its Mesh/BackdropMotifs layers —
+ * GSAP's default `position: fixed` pin doesn't survive that ancestor, but a
+ * transform-based pin does.
+ */
+
+import { useRef } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
+import { Rate } from "antd";
+import BackdropMotifs from "@/app/_components/shared/BackdropMotifs";
+import { Parallax } from "@/app/_components/shared/Motion";
+import { glass, glassScrim } from "@/app/_lib/glass";
 import InitialsAvatar from "@/app/_components/shared/InitialsAvatar";
-import {
-  COLOR,
-  TESTIMONIALS_DATA,
-  type Testimonial,
-} from "@/app/_lib/homepage-data";
+import { TESTIMONIALS_DATA, type Testimonial } from "@/app/_lib/homepage-data";
+import Mesh from "./Mesh";
 
-/** Google's multi-color "G" mark — kept as inline SVG since it's a brand logomark, not a generic icon. */
-function GoogleLogo({ size }: { size: number }) {
+gsap.registerPlugin(ScrollTrigger, useGSAP);
+
+function TestimonialCard({ t }: { t: Testimonial }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 48 48">
-      <path
-        fill="#4285F4"
-        d="M45.12 24.5c0-1.56-.14-3.06-.4-4.5H24v8.51h11.84c-.51 2.75-2.06 5.08-4.39 6.64v5.52h7.11c4.16-3.83 6.56-9.47 6.56-16.17z"
+    <article
+      className={`relative isolate flex w-[86vw] shrink-0 snap-start flex-col rounded-[32px] p-8 dt:w-[440px] dt:p-9 ${glass.vivid} ${glassScrim}`}
+    >
+      <Rate
+        disabled
+        value={t.rating}
+        style={{ fontSize: 15 }}
+        className="mb-6"
       />
-      <path
-        fill="#34A853"
-        d="M24 46c5.94 0 10.92-1.97 14.56-5.33l-7.11-5.52c-1.97 1.32-4.49 2.1-7.45 2.1-5.73 0-10.58-3.87-12.31-9.07H4.34v5.7C7.96 41.07 15.4 46 24 46z"
-      />
-      <path
-        fill="#FBBC05"
-        d="M11.69 28.18C11.25 26.86 11 25.45 11 24s.25-2.86.69-4.18v-5.7H4.34C2.85 17.09 2 20.45 2 24s.85 6.91 2.34 9.88l7.35-5.7z"
-      />
-      <path
-        fill="#EA4335"
-        d="M24 10.75c3.23 0 6.13 1.11 8.41 3.29l6.31-6.31C34.91 4.18 29.93 2 24 2 15.4 2 7.96 6.93 4.34 14.12l7.35 5.7c1.73-5.2 6.58-9.07 12.31-9.07z"
-      />
-    </svg>
-  );
-}
-
-interface ColumnItem extends Testimonial {
-  key: string;
-  stars: string[];
-}
-
-const COLUMN_COUNT = 4;
-
-function buildColumn(colIndex: number): {
-  anim: string;
-  duration: string;
-  items: ColumnItem[];
-} {
-  const offset = colIndex % TESTIMONIALS_DATA.length;
-  const base = [
-    ...TESTIMONIALS_DATA.slice(offset),
-    ...TESTIMONIALS_DATA.slice(0, offset),
-  ];
-  const doubled = [...base, ...base];
-  const items: ColumnItem[] = doubled.map((t, idx) => ({
-    ...t,
-    key: `${colIndex}-${idx}`,
-    stars: [1, 2, 3, 4, 5].map((n) =>
-      n <= t.rating ? COLOR.primary : COLOR.slate200
-    ),
-  }));
-  return {
-    anim: colIndex % 2 === 0 ? "marqueeVert" : "marqueeVertRev",
-    duration: `${18 + colIndex * 3}s`,
-    items,
-  };
-}
-
-export default function Testimonials() {
-  const columns = Array.from({ length: COLUMN_COUNT }, (_, i) =>
-    buildColumn(i)
-  );
-
-  return (
-    <section id="testimonials" className="py-20 bg-[#F5F5F5] overflow-hidden">
-      <div className="max-w-[1280px] mx-auto px-5 dt:px-8">
-        <div className="text-center max-w-[560px] mx-auto mb-12">
-          <span className="text-secondary font-bold text-sm font-sans">
-            From people who&apos;ve booked
-          </span>
-          <h2 className="font-heading text-slate-900 font-bold text-[clamp(26px,3.2vw,36px)] tracking-[-0.02em] mt-2 mb-6">
-            What patients say
-          </h2>
-          <div className="inline-flex items-center gap-3 rounded-2xl py-3 px-5 bg-white border border-slate-200">
-            <GoogleLogo size={24} />
-            <div className="text-left">
-              <div className="flex items-baseline gap-2">
-                <span className="font-heading text-slate-900 font-bold text-[22px]">
-                  4.4
-                </span>
-                <div className="flex gap-px">
-                  {[1, 1, 1, 1, 0].map((filled, i) => (
-                    <FaStar
-                      key={i}
-                      size={13}
-                      color={filled ? COLOR.primary : COLOR.slate200}
-                    />
-                  ))}
-                </div>
-              </div>
-              <span className="text-slate-500 text-xs font-sans">
-                Based on 642 Reviews
-              </span>
-            </div>
+      <p className="mb-8 flex-1 font-heading text-[19px] leading-[1.55] font-medium tracking-[-0.01em] text-balance text-slate-900">
+        “{t.quote}”
+      </p>
+      <div className="flex items-center gap-3 border-t border-slate-900/10 pt-5">
+        <InitialsAvatar
+          name={t.name}
+          className="h-11! w-11! shrink-0 text-[15px]!"
+        />
+        <div className="min-w-0">
+          <div className="font-sans text-[14px] font-bold text-slate-900">
+            {t.name}
+          </div>
+          <div className="truncate font-sans text-[12.5px] text-slate-600">
+            {t.role}
           </div>
         </div>
       </div>
-      <div className="relative h-[460px] flex items-center justify-center overflow-hidden px-5 dt:px-8">
-        <div className="flex gap-5 w-full max-w-[1000px] justify-center">
-          {columns.map((col, i) => (
-            <div
-              key={i}
-              className={`h-[420px] flex-1 min-w-0 max-w-[480px] dt:max-w-[230px] overflow-hidden ${i >= 2 ? "hidden dt:block" : ""}`}
-            >
-              <div
-                className="flex flex-col gap-4"
-                style={{
-                  animation: `${col.anim} ${col.duration} linear infinite`,
-                }}
-              >
-                {col.items.map((t) => (
-                  <div
-                    key={t.key}
-                    className="rounded-[14px] p-4.5 bg-white border border-slate-200 shadow-[0_8px_20px_#0f172a12] shrink-0"
-                  >
-                    <div className="flex items-center gap-2.5 mb-3">
-                      <InitialsAvatar
-                        name={t.name}
-                        className="h-[34px] w-[34px] shrink-0 text-sm"
-                      />
-                      <div>
-                        <div className="text-slate-900 font-bold text-[13px] font-sans">
-                          {t.name}
-                        </div>
-                        <div className="text-slate-500 text-[11px] font-sans">
-                          {t.role}
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-1.5 mb-2.5">
-                      <div className="flex gap-px">
-                        {t.stars.map((color, si) => (
-                          <FaStar key={si} size={12} color={color} />
-                        ))}
-                      </div>
-                      <GoogleLogo size={13} />
-                    </div>
-                    <p className="text-slate-700 text-[12.5px] leading-[1.5] m-0 font-sans">
-                      &quot;{t.quote}&quot;
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </div>
+    </article>
+  );
+}
+
+export default function Testimonials() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+
+  useGSAP(
+    () => {
+      const mm = gsap.matchMedia();
+
+      mm.add("(prefers-reduced-motion: no-preference)", () => {
+        const section = sectionRef.current;
+        const container = containerRef.current;
+        const track = trackRef.current;
+        if (!section || !container || !track) return;
+
+        // Native drag-scroll and the pinned tween would otherwise both try to
+        // own horizontal position at once — hand it fully to GSAP while
+        // motion is welcome, restore the native rail on cleanup.
+        const prevOverflow = container.style.overflow;
+        container.style.overflow = "hidden";
+
+        const tween = gsap.to(track, {
+          x: () => -(track.scrollWidth - container.clientWidth),
+          ease: "none",
+          scrollTrigger: {
+            trigger: section,
+            start: "top top",
+            end: () => "+=" + (track.scrollWidth - container.clientWidth),
+            scrub: 1,
+            pin: true,
+            pinType: "transform",
+            invalidateOnRefresh: true,
+          },
+        });
+
+        return () => {
+          tween.kill();
+          container.style.overflow = prevOverflow;
+        };
+      });
+
+      return () => mm.revert();
+    },
+    { scope: sectionRef }
+  );
+
+  return (
+    <section
+      ref={sectionRef}
+      className="relative overflow-hidden bg-white py-24 dt:py-32"
+    >
+      <Parallax yPercent={-8} className="pointer-events-none absolute inset-0">
+        <Mesh preset="testimonials" />
+      </Parallax>
+      <Parallax yPercent={-12} className="pointer-events-none absolute inset-0">
+        <BackdropMotifs
+          count={9}
+          opacity={0.1}
+          seed={128}
+          zone="full"
+          minSize={90}
+          maxSize={200}
+        />
+      </Parallax>
+
+      <div className="relative mx-auto mb-14 max-w-[1280px] px-5 dt:px-8">
+        <div className="mx-auto max-w-[680px] text-center">
+          <span className="font-sans text-[12px] font-bold tracking-[0.16em] text-secondary uppercase">
+            From people who&apos;ve booked
+          </span>
+          <h2 className="mt-3 font-heading text-[clamp(30px,4.4vw,52px)] leading-[1.02] font-bold tracking-[-0.04em] text-balance text-slate-900">
+            What patients say.
+          </h2>
+        </div>
+      </div>
+
+      <div
+        ref={containerRef}
+        className="relative overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+      >
+        <div
+          ref={trackRef}
+          className="flex w-max snap-x snap-mandatory gap-6 px-5 pb-2 dt:px-8"
+        >
+          {TESTIMONIALS_DATA.map((t) => (
+            <TestimonialCard key={t.name} t={t} />
           ))}
         </div>
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            background:
-              "linear-gradient(180deg,#F5F5F5 0%, transparent 15%, transparent 85%, #F5F5F5 100%), linear-gradient(90deg,#F5F5F5 0%, transparent 10%, transparent 90%, #F5F5F5 100%)",
-          }}
-        />
       </div>
     </section>
   );

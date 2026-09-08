@@ -1,105 +1,118 @@
-import { Button } from "antd";
-import { FaStar } from "react-icons/fa";
+/**
+ * Doctors — an overlapping stack of rotated glass cards instead of a plain
+ * grid/rail: each card leans at its own small angle and straightens flat
+ * (plus lifts to the front of the stack) on hover, matching the loud, layered
+ * feel of the rest of the page. Collapses to a simple stacked column on
+ * mobile, where an overlap would just clip content.
+ */
+
+import { Rate } from "antd";
+import { FiStar } from "react-icons/fi";
 import ImageWithFallback from "@/app/_components/shared/ImageWithFallback";
 import InitialsAvatar from "@/app/_components/shared/InitialsAvatar";
+import BackdropMotifs from "@/app/_components/shared/BackdropMotifs";
+import { Parallax, Reveal } from "@/app/_components/shared/Motion";
+import { glass, glassScrim } from "@/app/_lib/glass";
 import { DOCTORS_DATA, type Doctor } from "@/app/_lib/homepage-data";
-import { brand } from "@/app/_lib/theme";
+import Mesh from "./Mesh";
 
-function Card({ d }: { d: Doctor }) {
+/** One angle per card, alternating so the stack reads as loosely fanned. */
+const ROTATE = ["-rotate-3", "rotate-2", "-rotate-2", "rotate-3"];
+/** Arbitrary-value z-index per source position (never overridden by an
+ * inline style, unlike a plain `style={{ zIndex }}` would be — so
+ * `hover:z-40` below can still win). */
+const BASE_Z = ["z-[1]", "z-[2]", "z-[3]", "z-[4]"];
+
+function DoctorCard({ doc, i }: { doc: Doctor; i: number }) {
   return (
-    <div className="rounded-[20px] overflow-hidden bg-white border border-slate-200 flex flex-col transition-[transform,box-shadow] duration-250 hover:-translate-y-1.5 hover:shadow-[0_20px_40px_#0f172a1f]">
-      <div className="relative h-[280px] overflow-hidden bg-[linear-gradient(135deg,var(--color-primary-100),var(--color-secondary-100))]">
+    <article
+      className={`group relative w-full overflow-hidden rounded-[28px] p-5 transition-[transform,box-shadow] duration-400 ease-out dt:w-[260px] dt:shrink-0 ${
+        i > 0 ? "dt:-ml-16" : ""
+      } ${ROTATE[i % ROTATE.length]} ${BASE_Z[i % BASE_Z.length]} hover:z-40 hover:rotate-0 hover:-translate-y-3 hover:shadow-[0_28px_60px_rgba(15,23,42,0.28)] ${glass.vivid} ${glassScrim}`}
+    >
+      <div className="relative mb-4 h-56 w-full overflow-hidden rounded-[18px] bg-[linear-gradient(140deg,var(--color-primary-100),var(--color-secondary-100))]">
         <ImageWithFallback
-          src={d.img}
-          alt={d.name}
+          src={doc.img}
+          alt={doc.name}
           fill
-          sizes="(min-width: 1040px) 25vw, 50vw"
+          sizes="260px"
           className="object-cover"
           fallback={
             <InitialsAvatar
-              name={d.name.replace("Dr. ", "")}
+              name={doc.name.replace("Dr. ", "")}
               rounded="lg"
-              className="absolute inset-0 h-full w-full text-6xl"
+              className="absolute inset-0 h-full! w-full! text-5xl!"
             />
           }
         />
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_55%,#0f172ae0_100%)] pointer-events-none" />
-        <div className="absolute top-3 right-3 flex items-center gap-1 bg-white rounded-full py-1 px-2.5">
-          <FaStar size={13} color={brand.primary} />
-          <span className="text-slate-900 font-bold text-xs font-sans">
-            {d.rating}
+        <span className="absolute top-3 right-3 flex items-center gap-1 rounded-full bg-white/90 px-2.5 py-1 shadow-[0_2px_8px_rgba(15,23,42,0.12)]">
+          <FiStar size={12} className="fill-amber-400 text-amber-400" />
+          <span className="font-sans text-[12px] font-bold text-slate-900 tabular-nums">
+            {doc.rating}
           </span>
-        </div>
-        <div className="absolute bottom-4 left-4 right-4">
-          <div className="font-heading text-white font-bold text-lg mb-0.5">
-            {d.name}
-          </div>
-          <div className="text-white/85 text-[13px] font-sans">
-            {d.specialty} · {d.exp} exp.
-          </div>
-        </div>
-      </div>
-      <div className="p-4">
-        <Button
-          type="text"
-          block
-          className="h-auto! text-sm! py-2.5! text-white! font-sans bg-[linear-gradient(120deg,var(--color-primary),var(--color-secondary))]! transition-opacity! duration-200! hover:opacity-88!"
-        >
-          Book Now
-        </Button>
-      </div>
-    </div>
-  );
-}
-
-function SectionHeading() {
-  return (
-    <>
-      <div>
-        <span className="text-primary font-bold text-sm font-sans">
-          Meet the network
         </span>
-        <h2 className="font-heading text-slate-900 font-bold text-[clamp(26px,3.2vw,36px)] tracking-[-0.02em] mt-2">
-          Doctors ready to see you
-        </h2>
       </div>
-      <Button
-        type="text"
-        className="h-auto! p-0! text-slate-900! text-sm! font-sans"
-      >
-        View all doctors
-      </Button>
-    </>
+
+      <h3 className="mb-1 font-heading text-[18px] leading-tight font-bold tracking-[-0.02em] text-slate-900">
+        {doc.name}
+      </h3>
+      <p className="mb-3 font-sans text-[13px] font-bold text-primary-700">
+        {doc.specialty}
+      </p>
+
+      <div className="flex items-center justify-between border-t border-slate-900/10 pt-3">
+        <span className="font-sans text-[12px] text-slate-600">
+          {doc.exp} experience
+        </span>
+        <Rate
+          disabled
+          allowHalf
+          value={Number(doc.rating)}
+          className="text-[11px]!"
+        />
+      </div>
+    </article>
   );
 }
 
 export default function Doctors() {
   return (
-    <section id="doctors" className="py-20 bg-white">
-      <div className="max-w-[1280px] mx-auto px-5 dt:px-8">
-        {/* Heading row: static on tablet/desktop, sticks below the header while scrolling on mobile */}
-        <div className="hidden sm:flex items-end justify-between flex-wrap gap-4 mb-10">
-          <SectionHeading />
-        </div>
-        <div className="sm:hidden sticky top-16 z-[5] bg-white flex items-end justify-between flex-wrap gap-4 pb-7">
-          <SectionHeading />
+    <section
+      id="doctors"
+      className="relative overflow-hidden bg-[#f8f5fa] py-24 dt:py-32"
+    >
+      <Parallax yPercent={-8} className="pointer-events-none absolute inset-0">
+        <Mesh preset="doctors" />
+      </Parallax>
+      <Parallax yPercent={-12} className="pointer-events-none absolute inset-0">
+        <BackdropMotifs
+          count={9}
+          opacity={0.12}
+          seed={112}
+          zone="full"
+          minSize={90}
+          maxSize={200}
+        />
+      </Parallax>
+
+      <div className="relative mx-auto max-w-[1280px] px-5 dt:px-8">
+        <div className="mx-auto mb-16 max-w-[680px] text-center">
+          <span className="font-sans text-[12px] font-bold tracking-[0.16em] text-secondary uppercase">
+            Meet the network
+          </span>
+          <h2 className="mt-3 font-heading text-[clamp(30px,4.4vw,52px)] leading-[1.02] font-bold tracking-[-0.04em] text-balance text-slate-900">
+            Doctors ready to see you.
+          </h2>
         </div>
 
-        {/* Tablet/desktop: plain grid */}
-        <div className="hidden sm:grid grid-cols-[repeat(auto-fit,minmax(240px,1fr))] gap-5">
-          {DOCTORS_DATA.map((d) => (
-            <Card key={d.name} d={d} />
+        <Reveal
+          preset="standard"
+          className="mx-auto flex max-w-[1040px] flex-col gap-8 pt-4 dt:flex-row dt:items-start dt:justify-center dt:gap-0 dt:pt-10"
+        >
+          {DOCTORS_DATA.map((doc, i) => (
+            <DoctorCard key={doc.name} doc={doc} i={i} />
           ))}
-        </div>
-
-        {/* Mobile: cards stack via position:sticky at a shared offset, cascading over each other while scrolling */}
-        <div className="sm:hidden relative">
-          {DOCTORS_DATA.map((d) => (
-            <div key={d.name} className="sticky top-[180px] pb-6">
-              <Card d={d} />
-            </div>
-          ))}
-        </div>
+        </Reveal>
       </div>
     </section>
   );

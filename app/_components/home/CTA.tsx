@@ -1,30 +1,75 @@
+/**
+ * Closing CTA — the loudest section on the page, by design: the `cta` mesh preset already
+ * pushes blob opacity up to 0.4-0.5 with `screen` blending on a near-black
+ * ground. A single centred `glass.dark` panel holds the close, rather than
+ * splitting focus across cards.
+ */
+
 import { Button } from "antd";
+import { FiArrowRight } from "react-icons/fi";
+import BackdropMotifs from "@/app/_components/shared/BackdropMotifs";
+import { Parallax, Reveal } from "@/app/_components/shared/Motion";
+import { glass } from "@/app/_lib/glass";
+import Mesh from "./Mesh";
 
 export default function CTA() {
   return (
-    <section className="px-5 dt:px-8 pb-16 bg-[#F5F5F5]">
-      <div className="max-w-[1024px] mx-auto rounded-3xl py-14 px-8 text-center bg-[linear-gradient(120deg,var(--color-primary),var(--color-secondary))]">
-        <h2 className="font-heading text-white font-bold text-[clamp(22px,2.6vw,30px)] tracking-[-0.02em] mb-3">
-          Find the right care, without the runaround.
-        </h2>
-        <p className="text-primary-50 max-w-[420px] mx-auto mb-7 font-sans">
-          Join as a partner to reach more patients, or become a member to unlock
-          exclusive benefits.
-        </p>
-        <div className="flex items-center justify-center gap-3 flex-wrap">
-          <Button
-            type="text"
-            className="h-auto! py-3! px-6! text-sm! bg-white! text-primary-700! font-sans transition-[transform,box-shadow]! duration-150! hover:-translate-y-0.5! hover:shadow-[0_8px_20px_#00000033]!"
+    <section className="relative overflow-hidden bg-[#0d0116] py-24 dt:py-32">
+      <Parallax yPercent={-8} className="pointer-events-none absolute inset-0">
+        <Mesh preset="cta" />
+      </Parallax>
+      <Parallax yPercent={-12} className="pointer-events-none absolute inset-0">
+        <BackdropMotifs
+          count={9}
+          opacity={0.1}
+          color="#ffffff"
+          seed={135}
+          zone="full"
+          minSize={90}
+          maxSize={200}
+        />
+      </Parallax>
+
+      <div className="relative mx-auto max-w-[1280px] px-5 dt:px-8">
+        <Reveal preset="standard" className="mx-auto max-w-[820px]">
+          <div
+            className={`rounded-[40px] p-10 text-center dt:p-16 ${glass.dark}`}
           >
-            Become a Partner
-          </Button>
-          <Button
-            type="text"
-            className="h-auto! py-3! px-6! text-sm! bg-transparent! text-white! border-[1.5px]! border-white! font-sans transition-[transform,background]! duration-150! hover:-translate-y-0.5! hover:bg-white/15!"
-          >
-            Become a Member
-          </Button>
-        </div>
+            <span className="mb-6 inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 font-sans text-[12px] font-bold tracking-[0.16em] text-white uppercase">
+              <span className="h-1.5 w-1.5 rounded-full bg-[#ff8a75]" />
+              Ready when you are
+            </span>
+
+            <h2 className="mb-5 font-heading text-[clamp(32px,5vw,56px)] leading-[1.03] font-bold tracking-[-0.04em] text-balance text-white">
+              Find and book your care in minutes, not phone calls.
+            </h2>
+
+            <p className="mx-auto mb-9 max-w-[520px] font-sans text-[clamp(15px,1.6vw,18px)] leading-[1.6] text-white/70">
+              Compare hospitals, labs and wellness studios across our network,
+              then confirm a booking without leaving the app.
+            </p>
+
+            <div className="flex flex-wrap items-center justify-center gap-3">
+              <Button
+                type="text"
+                size="large"
+                className="h-auto! bg-white! px-8! py-4! text-[16px]! text-slate-900! shadow-[0_18px_40px_rgba(0,0,0,0.4)]! transition-transform! duration-200! font-sans hover:-translate-y-0.5!"
+              >
+                <span className="flex items-center gap-2">
+                  Get started free
+                  <FiArrowRight size={17} />
+                </span>
+              </Button>
+              <Button
+                type="text"
+                size="large"
+                className={`h-auto! px-8! py-4! text-[16px]! text-white! transition-transform! duration-200! font-sans hover:-translate-y-0.5! ${glass.dark}`}
+              >
+                Talk to a doctor
+              </Button>
+            </div>
+          </div>
+        </Reveal>
       </div>
     </section>
   );
