@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { Badge, Button, Dropdown, Tag } from "antd";
 import {
   FiArrowRight,
   FiBox,
@@ -19,6 +20,11 @@ import {
 import { FaFlask } from "react-icons/fa";
 import LangCountrySwitcher from "@/app/_components/shared/LangCountrySwitcher";
 import { MOBILE_NAV_LABELS, NAV_MENUS_DATA } from "@/app/_lib/homepage-data";
+import { getTabByLabel, hrefForTab } from "@/app/_lib/listings-data";
+import {
+  getDetailCategoryByLabel,
+  hrefForDetailCategory,
+} from "@/app/_lib/detail-data";
 
 export type HeaderActive =
   | ""
@@ -56,21 +62,9 @@ export default function Navbar({
     null
   );
 
-  const navRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const onDocClick = (e: MouseEvent) => {
-      if (navRef.current && !navRef.current.contains(e.target as Node)) {
-        setNavMenuOpen(null);
-      }
-    };
-    document.addEventListener("click", onDocClick);
-    return () => document.removeEventListener("click", onDocClick);
-  }, []);
-
   return (
-    <div ref={navRef} className="bg-white border-b border-slate-200">
-      <div className="max-w-[1280px] mx-auto px-5 dt:px-8">
+    <div className="bg-white border-b border-slate-200">
+      <div className="max-w-7xl mx-auto px-5 dt:px-8">
         <div className="flex items-center justify-between gap-4 py-3.5">
           <Link href="/" className="shrink-0">
             <Image
@@ -78,7 +72,7 @@ export default function Navbar({
               alt="Medex"
               height={34}
               width={149}
-              className="h-[34px] w-auto"
+              className="h-8.5 w-auto"
               priority
             />
           </Link>
@@ -89,19 +83,60 @@ export default function Navbar({
               const isOpen = navMenuOpen === menu.label;
               const isActive = active === menu.label;
               const highlighted = isOpen || isActive;
+              const menuTab = getTabByLabel(menu.label);
+              const viewAllHref = menuTab ? hrefForTab(menuTab) : "/listings";
+              const detailCategory = getDetailCategoryByLabel(menu.label);
+              const itemHref = detailCategory
+                ? hrefForDetailCategory(detailCategory)
+                : viewAllHref;
               return (
-                <div key={menu.label} className="relative">
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setNavMenuOpen((v) =>
-                        v === menu.label ? null : menu.label
-                      );
-                    }}
-                    className={`flex items-center gap-1.5 bg-transparent border-none cursor-pointer text-sm font-semibold py-1.5 px-0.5 whitespace-nowrap border-b-2 transition-colors duration-150 hover:text-primary font-sans ${
+                <Dropdown
+                  key={menu.label}
+                  trigger={["hover"]}
+                  open={isOpen}
+                  onOpenChange={(next) =>
+                    setNavMenuOpen(next ? menu.label : null)
+                  }
+                  popupRender={() => (
+                    <div className="w-56 rounded-2xl py-2 bg-secondary border border-secondary shadow-[0_12px_32px_#0f172a17]">
+                      {menu.items.map((mi) => (
+                        <Link
+                          key={mi.label}
+                          href={itemHref}
+                          onClick={() => setNavMenuOpen(null)}
+                          className="flex items-center justify-between gap-2 px-4 py-2 text-sm text-white! transition-colors duration-150 hover:bg-white/10"
+                        >
+                          <span>{mi.label}</span>
+                          {mi.isNew && (
+                            <Tag
+                              variant="filled"
+                              color="magenta"
+                              className="m-0! bg-primary! text-white! rounded-full px-1.5 py-0.5 text-[10px] font-bold tracking-wide leading-none"
+                            >
+                              NEW
+                            </Tag>
+                          )}
+                        </Link>
+                      ))}
+                      <div className="border-t border-white/20 mt-1 pt-1">
+                        <Link
+                          href={viewAllHref}
+                          onClick={() => setNavMenuOpen(null)}
+                          className="flex items-center gap-1.5 px-4 py-2 text-sm text-white! font-bold transition-colors duration-150 hover:bg-white/10"
+                        >
+                          {menu.viewAll}
+                          <FiArrowRight size={13} />
+                        </Link>
+                      </div>
+                    </div>
+                  )}
+                >
+                  <Button
+                    type="text"
+                    className={`flex! items-center! gap-1.5! h-auto! text-sm! font-semibold! py-1.5! px-0.5! whitespace-nowrap! rounded-none! border-b-2! font-sans ${
                       highlighted
-                        ? "text-primary border-b-primary"
-                        : "text-slate-600 border-b-transparent"
+                        ? "text-primary! border-b-primary!"
+                        : "text-slate-600! border-b-transparent!"
                     }`}
                   >
                     {NAV_ICON[menu.label]}
@@ -111,91 +146,65 @@ export default function Navbar({
                       className="transition-transform duration-200"
                       style={{ transform: isOpen ? "rotate(180deg)" : "none" }}
                     />
-                  </button>
-                  {isOpen && (
-                    <div className="absolute left-1/2 -translate-x-1/2 top-full pt-3 z-50">
-                      <div className="w-56 rounded-2xl py-2 bg-secondary border border-secondary shadow-[0_12px_32px_#0f172a17]">
-                        {menu.items.map((mi) => (
-                          <a
-                            key={mi.label}
-                            href="#"
-                            className="flex items-center justify-between gap-2 px-4 py-2 text-sm text-white transition-colors duration-150 hover:bg-white/10"
-                          >
-                            <span>{mi.label}</span>
-                            {mi.isNew && (
-                              <span className="text-[10px] font-bold tracking-wide text-white bg-primary rounded-full px-1.5 py-0.5">
-                                NEW
-                              </span>
-                            )}
-                          </a>
-                        ))}
-                        <div className="border-t border-white/20 mt-1 pt-1">
-                          <a
-                            href="#"
-                            className="flex items-center gap-1.5 px-4 py-2 text-sm text-white font-bold transition-colors duration-150 hover:bg-white/10"
-                          >
-                            {menu.viewAll}
-                            <FiArrowRight size={13} />
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
+                  </Button>
+                </Dropdown>
               );
             })}
           </nav>
 
           {/* Desktop auth/cart */}
           <div className="hidden dt:flex items-center gap-1.5 shrink-0">
-            <button className="flex items-center gap-1.5 text-sm whitespace-nowrap px-2.5 py-1.5 rounded-full bg-transparent border-none text-slate-900 font-bold cursor-pointer transition-colors duration-150 hover:bg-slate-100 font-sans">
+            <Link
+              href="/auth/login"
+              className="flex items-center gap-1.5 text-sm whitespace-nowrap px-2.5 py-1.5 rounded-full bg-transparent text-slate-900 font-bold cursor-pointer transition-colors duration-150 hover:bg-slate-100 font-sans"
+            >
               <FiLogIn size={14} />
               Log in
-            </button>
-            <button className="flex items-center gap-1.5 text-sm whitespace-nowrap px-3.5 py-1.5 rounded-full bg-primary border-none text-white font-bold cursor-pointer transition-[transform,box-shadow] duration-150 hover:-translate-y-px hover:shadow-[0_4px_12px_#f33b2740] font-sans">
+            </Link>
+            <Link
+              href="/auth/signup"
+              className="flex items-center gap-1.5 text-sm whitespace-nowrap px-3.5 py-1.5 rounded-full bg-primary text-white font-bold cursor-pointer transition-[transform,box-shadow] duration-150 hover:-translate-y-px hover:shadow-[0_4px_12px_#f33b2740] font-sans"
+            >
               <FiUserPlus size={14} />
               Sign up
-            </button>
+            </Link>
             {showCart && (
-              <button
-                onClick={onCartClick}
-                aria-label="Cart"
-                className="relative h-[38px] w-[38px] rounded-full bg-slate-100 border-none flex items-center justify-center cursor-pointer"
-              >
-                <FiShoppingCart size={17} className="text-slate-900" />
-                {cartCount > 0 && (
-                  <span className="absolute -top-1 -right-1 h-[18px] min-w-[18px] px-1 rounded-full bg-primary text-white text-[10px] font-extrabold flex items-center justify-center">
-                    {cartCount}
-                  </span>
-                )}
-              </button>
+              <Badge count={cartCount} size="small" offset={[-4, 4]}>
+                <Button
+                  type="text"
+                  shape="circle"
+                  onClick={onCartClick}
+                  aria-label="Cart"
+                  className="h-9.5! w-9.5! bg-slate-100!"
+                  icon={<FiShoppingCart size={17} className="text-slate-900" />}
+                />
+              </Badge>
             )}
           </div>
 
           {/* Mobile right side */}
           <div className="flex dt:hidden items-center gap-2">
             {showCart && (
-              <button
-                onClick={onCartClick}
-                aria-label="Cart"
-                className="relative h-9 w-9 rounded-full bg-slate-100 border-none flex items-center justify-center cursor-pointer"
-              >
-                <FiShoppingCart size={16} className="text-slate-900" />
-                {cartCount > 0 && (
-                  <span className="absolute -top-1 -right-1 h-4 min-w-4 px-1 rounded-full bg-primary text-white text-[9px] font-extrabold flex items-center justify-center">
-                    {cartCount}
-                  </span>
-                )}
-              </button>
+              <Badge count={cartCount} size="small" offset={[-2, 2]}>
+                <Button
+                  type="text"
+                  shape="circle"
+                  onClick={onCartClick}
+                  aria-label="Cart"
+                  className="h-9! w-9! bg-slate-100!"
+                  icon={<FiShoppingCart size={16} className="text-slate-900" />}
+                />
+              </Badge>
             )}
-            <button
+            <Button
+              type="text"
+              shape="circle"
               onClick={() => setMobileOpen((v) => !v)}
               aria-label="Menu"
               aria-expanded={mobileOpen}
-              className="h-9 w-9 rounded-[10px] bg-slate-100 border-none flex items-center justify-center cursor-pointer"
-            >
-              <FiMenu size={18} className="text-slate-900" />
-            </button>
+              className="h-9! w-9! rounded-[10px]! bg-slate-100!"
+              icon={<FiMenu size={18} className="text-slate-900" />}
+            />
           </div>
         </div>
 
@@ -206,30 +215,41 @@ export default function Navbar({
               const menu = NAV_MENUS_DATA.find((m) => m.label === label);
               const isActive = label === active;
 
-              // Vendors/Doctors have no submenu data — render as a plain link.
+              // Vendors/Doctors have no submenu data — render as a plain link
+              // straight to their /listings/<slug> tab.
               if (!menu) {
+                const tab = getTabByLabel(label);
                 return (
-                  <a
+                  <Link
                     key={label}
-                    href="#"
+                    href={tab ? hrefForTab(tab) : "/listings"}
+                    onClick={() => setMobileOpen(false)}
                     className={`text-[14.5px] font-bold py-2.5 px-1 ${
                       isActive ? "text-primary" : "text-white"
                     }`}
                   >
                     {label}
-                  </a>
+                  </Link>
                 );
               }
 
               const isOpen = mobileCategoryOpen === label;
+              const menuTab = getTabByLabel(label);
+              const viewAllHref = menuTab ? hrefForTab(menuTab) : "/listings";
+              const detailCategory = getDetailCategoryByLabel(label);
+              const itemHref = detailCategory
+                ? hrefForDetailCategory(detailCategory)
+                : viewAllHref;
               return (
                 <div key={label}>
-                  <button
+                  <Button
+                    type="text"
+                    block
                     onClick={() =>
                       setMobileCategoryOpen((v) => (v === label ? null : label))
                     }
-                    className={`flex items-center justify-between w-full gap-2 bg-transparent border-none cursor-pointer text-left text-[14.5px] font-bold py-2.5 px-1 font-sans ${
-                      isOpen || isActive ? "text-primary" : "text-white"
+                    className={`flex! items-center! justify-between! h-auto! text-left! text-[14.5px]! font-bold! py-2.5! px-1! font-sans ${
+                      isOpen || isActive ? "text-primary!" : "text-white!"
                     }`}
                   >
                     <span>{label}</span>
@@ -238,30 +258,36 @@ export default function Navbar({
                       className="transition-transform duration-200"
                       style={{ transform: isOpen ? "rotate(180deg)" : "none" }}
                     />
-                  </button>
+                  </Button>
                   {isOpen && (
                     <div className="flex flex-col gap-0.5 ml-2 pl-3 pb-2 border-l-2 border-white/25">
                       {menu.items.map((mi) => (
-                        <a
+                        <Link
                           key={mi.label}
-                          href="#"
+                          href={itemHref}
+                          onClick={() => setMobileOpen(false)}
                           className="flex items-center justify-between gap-2 rounded-lg px-2 py-2 text-sm text-white/80 transition-colors duration-150 hover:bg-white/10 hover:text-white"
                         >
                           <span>{mi.label}</span>
                           {mi.isNew && (
-                            <span className="text-[10px] font-bold tracking-wide text-white bg-primary rounded-full px-1.5 py-0.5">
+                            <Tag
+                              variant="filled"
+                              color="magenta"
+                              className="m-0! bg-primary! text-white! rounded-full px-1.5 py-0.5 text-[10px] font-bold tracking-wide leading-none"
+                            >
                               NEW
-                            </span>
+                            </Tag>
                           )}
-                        </a>
+                        </Link>
                       ))}
-                      <a
-                        href="#"
+                      <Link
+                        href={viewAllHref}
+                        onClick={() => setMobileOpen(false)}
                         className="flex items-center gap-1.5 rounded-lg px-2 py-2 text-sm font-bold text-white transition-colors duration-150 hover:bg-white/10"
                       >
                         {menu.viewAll}
                         <FiArrowRight size={13} />
-                      </a>
+                      </Link>
                     </div>
                   )}
                 </div>
@@ -269,12 +295,20 @@ export default function Navbar({
             })}
 
             <div className="flex items-center gap-2 mt-2">
-              <button className="flex-1 text-sm py-2.5 rounded-full bg-white border-none text-slate-900 font-bold cursor-pointer font-sans">
+              <Link
+                href="/auth/login"
+                onClick={() => setMobileOpen(false)}
+                className="flex-1 flex items-center justify-center text-sm py-2.5 rounded-full bg-white text-slate-900 font-bold cursor-pointer font-sans"
+              >
                 Log in
-              </button>
-              <button className="flex-1 text-sm py-2.5 rounded-full bg-primary border-none text-white font-bold cursor-pointer font-sans">
+              </Link>
+              <Link
+                href="/auth/signup"
+                onClick={() => setMobileOpen(false)}
+                className="flex-1 flex items-center justify-center text-sm py-2.5 rounded-full bg-primary text-white font-bold cursor-pointer font-sans"
+              >
                 Sign up
-              </button>
+              </Link>
             </div>
 
             {/* Utility strip content — desktop-only in TopBar, folded in here so
@@ -297,14 +331,21 @@ export default function Navbar({
                 </a>
               </div>
               <div className="flex flex-col gap-2">
-                <button className="flex items-center justify-center gap-1.5 text-xs py-2 rounded-full border-[1.5px] border-primary text-primary bg-primary-50 font-bold cursor-pointer font-sans">
-                  <FiShield size={13} />
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  icon={<FiShield size={13} />}
+                  className="flex! items-center! justify-center! gap-1.5! text-xs! py-2! h-auto! bg-primary-50! font-sans"
+                >
                   Become a Partner
-                </button>
-                <button className="flex items-center justify-center gap-1.5 text-xs py-2 rounded-full border-[1.5px] border-white/40 text-white bg-white/10 font-bold cursor-pointer font-sans">
-                  <FiStar size={13} />
+                </Button>
+                <Button
+                  variant="outlined"
+                  icon={<FiStar size={13} />}
+                  className="flex! items-center! justify-center! gap-1.5! text-xs! py-2! h-auto! border-white/40! text-white! bg-white/10! font-sans"
+                >
                   Become a Member
-                </button>
+                </Button>
               </div>
             </div>
           </div>

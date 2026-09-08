@@ -3,6 +3,7 @@ import { Space_Grotesk, Manrope } from "next/font/google";
 import "./globals.css";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 import AntdThemeProvider from "@/app/_components/providers/AntdThemeProvider";
+import BackToTopButton from "@/app/_components/shared/BackToTopButton";
 
 const spaceGrotesk = Space_Grotesk({
   variable: "--font-space-grotesk",
@@ -34,7 +35,10 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col font-sans">
         <AntdRegistry>
-          <AntdThemeProvider>{children}</AntdThemeProvider>
+          <AntdThemeProvider>
+            {children}
+            <BackToTopButton />
+          </AntdThemeProvider>
         </AntdRegistry>
       </body>
     </html>

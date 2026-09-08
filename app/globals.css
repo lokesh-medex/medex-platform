@@ -29,6 +29,11 @@
   --color-secondary-100: #f1dff1;
   --color-secondary: #872888;
   --color-secondary-600: #79227a;
+
+  /* Form validation state — Tailwind's red scale doesn't carry a semantic
+     name, so form components (AppInput et al.) reach for `danger` instead
+     of a raw shade. */
+  --color-danger: #dc2626;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -101,6 +106,15 @@ select {
   }
   50% {
     transform: translateY(-26px);
+  }
+}
+@keyframes authFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-14px);
   }
 }
 @keyframes heroPulse {

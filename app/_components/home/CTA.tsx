@@ -1,3 +1,5 @@
+import { Button } from "antd";
+
 export default function CTA() {
   return (
     <section className="px-5 dt:px-8 pb-16 bg-[#F5F5F5]">
@@ -10,12 +12,18 @@ export default function CTA() {
           exclusive benefits.
         </p>
         <div className="flex items-center justify-center gap-3 flex-wrap">
-          <button className="rounded-full py-3 px-6 text-sm bg-white text-primary-700 font-bold border-none cursor-pointer font-sans transition-[transform,box-shadow] duration-150 hover:-translate-y-0.5 hover:shadow-[0_8px_20px_#00000033]">
+          <Button
+            type="text"
+            className="h-auto! py-3! px-6! text-sm! bg-white! text-primary-700! font-sans transition-[transform,box-shadow]! duration-150! hover:-translate-y-0.5! hover:shadow-[0_8px_20px_#00000033]!"
+          >
             Become a Partner
-          </button>
-          <button className="rounded-full py-3 px-6 text-sm bg-transparent text-white font-bold border-[1.5px] border-white cursor-pointer font-sans transition-[transform,background] duration-150 hover:-translate-y-0.5 hover:bg-white/15">
+          </Button>
+          <Button
+            type="text"
+            className="h-auto! py-3! px-6! text-sm! bg-transparent! text-white! border-[1.5px]! border-white! font-sans transition-[transform,background]! duration-150! hover:-translate-y-0.5! hover:bg-white/15!"
+          >
             Become a Member
-          </button>
+          </Button>
         </div>
       </div>
     </section>

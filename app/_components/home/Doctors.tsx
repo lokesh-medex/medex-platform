@@ -1,3 +1,4 @@
+import { Button } from "antd";
 import { FaStar } from "react-icons/fa";
 import ImageWithFallback from "@/app/_components/shared/ImageWithFallback";
 import InitialsAvatar from "@/app/_components/shared/InitialsAvatar";
@@ -39,9 +40,13 @@ function Card({ d }: { d: Doctor }) {
         </div>
       </div>
       <div className="p-4">
-        <button className="w-full text-sm py-2.5 rounded-full text-white font-bold border-none cursor-pointer font-sans bg-[linear-gradient(120deg,var(--color-primary),var(--color-secondary))] transition-opacity duration-200 hover:opacity-88">
+        <Button
+          type="text"
+          block
+          className="h-auto! text-sm! py-2.5! text-white! font-sans bg-[linear-gradient(120deg,var(--color-primary),var(--color-secondary))]! transition-opacity! duration-200! hover:opacity-88!"
+        >
           Book Now
-        </button>
+        </Button>
       </div>
     </div>
   );
@@ -58,9 +63,12 @@ function SectionHeading() {
           Doctors ready to see you
         </h2>
       </div>
-      <button className="text-slate-900 font-bold text-sm bg-transparent border-none cursor-pointer font-sans">
+      <Button
+        type="text"
+        className="h-auto! p-0! text-slate-900! text-sm! font-sans"
+      >
         View all doctors
-      </button>
+      </Button>
     </>
   );
 }

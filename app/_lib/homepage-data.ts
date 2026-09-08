@@ -647,3 +647,30 @@ export const FOOTER_COLS_DATA: FooterCol[] = [
   { title: "Company", items: ["About Medex", "Partners", "Careers"] },
   { title: "Support", items: ["Help center", "Contact us", "Trust & safety"] },
 ];
+
+// Matches the "Find Us" block in Medex-Footer.dc.html.
+export const OFFICE_LOCATION = {
+  mapEmbedUrl:
+    "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3532.7!2d85.324!3d27.7172!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2sKathmandu!5e0!3m2!1sen!2snp!4v1692786357355!5m2!1sen!2snp",
+  address: "Sanepa, Lalitpur, Kathmandu, Nepal",
+};
+
+export interface SocialLink {
+  label: "Facebook" | "Instagram" | "LinkedIn" | "YouTube";
+  href: string;
+}
+
+export const SOCIAL_LINKS_DATA: SocialLink[] = [
+  { label: "Facebook", href: "#" },
+  { label: "Instagram", href: "#" },
+  { label: "LinkedIn", href: "#" },
+  { label: "YouTube", href: "#" },
+];
+
+export const PAYMENT_PARTNERS_DATA: string[] = [
+  "eSewa",
+  "Khalti",
+  "Visa",
+  "Mastercard",
+  "ConnectIPS",
+];

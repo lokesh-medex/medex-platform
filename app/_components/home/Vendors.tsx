@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { Button } from "antd";
 import { FiMapPin } from "react-icons/fi";
 import { VENDORS_DATA, type Vendor } from "@/app/_lib/homepage-data";
 
@@ -6,7 +7,7 @@ function Card({ v }: { v: Vendor }) {
   return (
     <div className="rounded-2xl overflow-hidden bg-white border border-slate-200 flex flex-col transition-[transform,box-shadow] duration-200 hover:-translate-y-1 hover:shadow-[0_16px_32px_#0f172a1a]">
       <div
-        className="relative h-[140px] overflow-hidden"
+        className="relative h-35 overflow-hidden"
         style={{ background: v.gradient }}
       >
         <Image
@@ -27,9 +28,12 @@ function Card({ v }: { v: Vendor }) {
             {v.location}
           </p>
         </div>
-        <button className="self-start text-[12.5px] py-2 px-4 rounded-full text-white font-bold border-none cursor-pointer font-sans bg-[linear-gradient(120deg,var(--color-primary),var(--color-secondary))]">
+        <Button
+          type="text"
+          className="self-start h-auto! text-[12.5px]! py-2! px-4! text-white! font-sans bg-[linear-gradient(120deg,var(--color-primary),var(--color-secondary))]!"
+        >
           Book Now
-        </button>
+        </Button>
       </div>
     </div>
   );
@@ -38,9 +42,9 @@ function Card({ v }: { v: Vendor }) {
 export default function Vendors() {
   return (
     <section id="vendors" className="py-20 bg-white">
-      <div className="max-w-[1280px] mx-auto px-5 dt:px-8">
+      <div className="max-w-7xl mx-auto px-5 dt:px-8">
         {/* Heading: centered on tablet/desktop, sticks below the header while scrolling on mobile */}
-        <div className="hidden sm:block text-center max-w-[560px] mx-auto mb-10">
+        <div className="hidden sm:block text-center max-w-140 mx-auto mb-10">
           <span className="text-secondary font-bold text-sm font-sans">
             Our Network
           </span>
@@ -48,7 +52,7 @@ export default function Vendors() {
             Our Vendors
           </h2>
         </div>
-        <div className="sm:hidden sticky top-16 z-[5] bg-white text-center max-w-[560px] mx-auto pt-3 pb-7">
+        <div className="sm:hidden sticky top-16 z-5 bg-white text-center max-w-140 mx-auto pt-3 pb-7">
           <span className="text-secondary font-bold text-sm font-sans">
             Our Network
           </span>
@@ -67,7 +71,7 @@ export default function Vendors() {
         {/* Mobile: cards stack via position:sticky at a shared offset, cascading over each other while scrolling */}
         <div className="sm:hidden relative">
           {VENDORS_DATA.map((v, i) => (
-            <div key={`${v.name}-${i}`} className="sticky top-[180px] pb-6">
+            <div key={`${v.name}-${i}`} className="sticky top-45 pb-6">
               <Card v={v} />
             </div>
           ))}

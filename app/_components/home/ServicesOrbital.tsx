@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import { Button, Tag } from "antd";
 import { FiHeart, FiStar } from "react-icons/fi";
 import { FaFlask, FaStethoscope } from "react-icons/fa";
 import {
@@ -209,22 +210,25 @@ export default function ServicesOrbital() {
                       transform: "translate(-50%,-50%)",
                     }}
                   />
-                  <button
+                  <Button
+                    type="text"
+                    shape="circle"
                     onClick={() =>
                       setActiveService((prev) =>
                         prev === svc.id ? null : svc.id
                       )
                     }
-                    className="relative h-20 w-20 rounded-full flex items-center justify-center cursor-pointer transition-transform duration-300"
+                    className="relative! h-20! w-20! transition-transform! duration-300!"
                     style={{
                       background: bg,
                       border: `2px solid ${borderColor}`,
                       boxShadow: shadow,
                       transform: scale,
                     }}
-                  >
-                    <ServiceIcon icon={svc.icon} color={renderIconColor} />
-                  </button>
+                    icon={
+                      <ServiceIcon icon={svc.icon} color={renderIconColor} />
+                    }
+                  />
                   <span
                     className="mt-3 whitespace-nowrap font-bold text-xs tracking-[0.02em] transition-[color,transform] duration-300 font-sans"
                     style={{ color: labelColor, transform: labelScale }}
@@ -234,7 +238,7 @@ export default function ServicesOrbital() {
                 </div>
 
                 {isActive && (
-                  <div className="absolute top-[112px] left-1/2 -translate-x-1/2 w-[264px] rounded-xl p-4.5 text-left bg-[rgba(10,14,24,0.96)] backdrop-blur-md border border-white/15 shadow-[0_24px_48px_#00000066] z-40">
+                  <div className="absolute top-28 left-1/2 -translate-x-1/2 w-66 rounded-xl p-4.5 text-left bg-[rgba(10,14,24,0.96)] backdrop-blur-md border border-white/15 shadow-[0_24px_48px_#00000066] z-40">
                     <div className="flex items-center justify-between mb-2.5">
                       <span
                         className="text-[10px] font-bold tracking-[0.08em] font-sans"
@@ -243,11 +247,11 @@ export default function ServicesOrbital() {
                         {svc.title.toUpperCase()}
                       </span>
                     </div>
-                    <p className="text-white/75 text-[13px] leading-[1.5] mb-3.5 font-sans">
+                    <p className="text-white/75 text-[13px] leading-normal mb-3.5 font-sans">
                       {svc.blurb}
                     </p>
                     <div className="grid grid-cols-2 gap-2.5 mb-3.5">
-                      <div className="bg-white/[0.06] rounded-lg p-2.5">
+                      <div className="bg-white/6 rounded-lg p-2.5">
                         <div className="font-heading text-white font-bold text-lg">
                           {svc.metricValue}
                         </div>
@@ -255,7 +259,7 @@ export default function ServicesOrbital() {
                           {svc.metricLabel}
                         </div>
                       </div>
-                      <div className="bg-white/[0.06] rounded-lg p-2.5">
+                      <div className="bg-white/6 rounded-lg p-2.5">
                         <div className="font-heading text-white font-bold text-lg">
                           {svc.secondaryValue}
                         </div>
@@ -270,12 +274,13 @@ export default function ServicesOrbital() {
                       </span>
                       <div className="flex flex-wrap gap-1.5 mt-2">
                         {svc.vendors.map((v) => (
-                          <span
+                          <Tag
                             key={v}
-                            className="text-[11px] rounded-full py-1 px-2.5 bg-white/[0.08] text-white/85 border border-white/10 font-sans"
+                            variant="filled"
+                            className="m-0! text-[11px]! rounded-full py-1! px-2.5! bg-white/8! text-white/85! border! border-white/10! font-sans"
                           >
                             {v}
-                          </span>
+                          </Tag>
                         ))}
                       </div>
                     </div>

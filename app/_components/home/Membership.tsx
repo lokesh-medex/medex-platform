@@ -1,3 +1,4 @@
+import { Button, Tag } from "antd";
 import { FiCheck } from "react-icons/fi";
 import { MEMBERSHIP_TIERS_DATA } from "@/app/_lib/homepage-data";
 
@@ -25,9 +26,12 @@ export default function Membership() {
               }}
             >
               {tier.isFeatured && (
-                <span className="absolute -top-3 left-1/2 -translate-x-1/2 text-[11px] font-bold tracking-[0.04em] text-white bg-primary rounded-full px-3.5 py-1">
+                <Tag
+                  variant="filled"
+                  className="absolute -top-3 left-1/2 -translate-x-1/2 m-0! text-[11px]! tracking-[0.04em] text-white! bg-primary! rounded-full px-3.5! py-1! border-0!"
+                >
                   MOST POPULAR
-                </span>
+                </Tag>
               )}
               <h3
                 className="font-heading font-bold text-xl mb-2"
@@ -69,8 +73,10 @@ export default function Membership() {
                   </div>
                 ))}
               </div>
-              <button
-                className="w-full text-sm py-3 rounded-full font-bold cursor-pointer font-sans"
+              <Button
+                type="text"
+                block
+                className="h-auto! text-sm! py-3! font-sans"
                 style={{
                   background: tier.btnBg,
                   color: tier.btnColor,
@@ -78,7 +84,7 @@ export default function Membership() {
                 }}
               >
                 {tier.cta}
-              </button>
+              </Button>
             </div>
           ))}
         </div>

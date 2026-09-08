@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { Button, Input } from "antd";
 import {
   FiChevronLeft,
   FiChevronRight,
@@ -341,42 +342,47 @@ export default function Hero() {
             className="flex items-center gap-2 bg-white rounded-full py-1.5 pl-5 pr-1.5 w-full max-w-[460px] shadow-[0_12px_32px_#0f172a26]"
           >
             <FiSearch size={18} className="shrink-0 text-slate-500" />
-            <input
+            <Input
               type="text"
+              variant="borderless"
               placeholder="Search pages, services, vendors..."
-              className="flex-1 border-none outline-none text-sm text-slate-900 min-w-0 bg-transparent font-sans"
+              className="flex-1 p-0! text-sm! text-slate-900! min-w-0 bg-transparent! font-sans shadow-none!"
             />
-            <button
-              type="submit"
-              className="text-sm py-[11px] px-[22px] rounded-full bg-primary text-white font-bold border-none cursor-pointer shrink-0 font-sans"
+            <Button
+              type="text"
+              htmlType="submit"
+              className="h-auto! text-sm! py-2.75! px-5.5! bg-primary! text-white! shrink-0 font-sans"
             >
               Search
-            </button>
+            </Button>
           </form>
         </div>
       </div>
 
-      <button
+      <Button
+        type="text"
+        shape="circle"
         onClick={prev}
         aria-label="Previous slide"
-        className="absolute left-4 dt:left-8 top-1/2 -translate-y-1/2 h-10 w-10 rounded-full flex items-center justify-center bg-white/20 border-none cursor-pointer z-10"
-      >
-        <FiChevronLeft size={20} className="text-white" />
-      </button>
-      <button
+        className="absolute left-4 dt:left-8 top-1/2 -translate-y-1/2 h-10! w-10! bg-white/20! z-10"
+        icon={<FiChevronLeft size={20} className="text-white" />}
+      />
+      <Button
+        type="text"
+        shape="circle"
         onClick={next}
         aria-label="Next slide"
-        className="absolute right-4 dt:right-8 top-1/2 -translate-y-1/2 h-10 w-10 rounded-full flex items-center justify-center bg-white/20 border-none cursor-pointer z-10"
-      >
-        <FiChevronRight size={20} className="text-white" />
-      </button>
+        className="absolute right-4 dt:right-8 top-1/2 -translate-y-1/2 h-10! w-10! bg-white/20! z-10"
+        icon={<FiChevronRight size={20} className="text-white" />}
+      />
       <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-2 z-10">
         {SLIDES_DATA.map((slide, i) => (
-          <button
+          <Button
             key={slide.id}
+            type="text"
             onClick={() => goTo(i)}
             aria-label={`Go to slide ${i + 1}`}
-            className="h-1.5 rounded-full border-none cursor-pointer transition-all duration-300"
+            className="h-1.5! min-w-0! p-0! rounded-full! transition-all! duration-300!"
             style={{
               width: heroIndex === i ? "28px" : "8px",
               background:

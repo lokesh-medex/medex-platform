@@ -1,3 +1,5 @@
+import { Avatar } from "antd";
+
 interface InitialsAvatarProps {
   name: string;
   className?: string;
@@ -12,13 +14,14 @@ export default function InitialsAvatar({
 }: InitialsAvatarProps) {
   const initial = name.trim().charAt(0).toUpperCase() || "?";
   return (
-    <div
-      className={`flex items-center justify-center bg-[linear-gradient(135deg,var(--color-primary),var(--color-secondary))] text-white font-heading font-bold select-none ${
-        rounded === "full" ? "rounded-full" : "rounded-xl"
-      } ${className}`}
+    <Avatar
+      shape={rounded === "full" ? "circle" : "square"}
       aria-hidden="true"
+      className={`bg-[linear-gradient(135deg,var(--color-primary),var(--color-secondary))]! font-heading! font-bold! select-none! ${
+        rounded === "lg" ? "rounded-xl!" : ""
+      } ${className}`}
     >
       {initial}
-    </div>
+    </Avatar>
   );
 }
