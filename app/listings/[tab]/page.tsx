@@ -1,6 +1,5 @@
 import { notFound } from "next/navigation";
-import Header from "@/app/_components/header/Header";
-import Footer from "@/app/_components/footer/Footer";
+import PageShell from "@/app/_components/shared/PageShell";
 import ListingsView from "@/app/_components/listings/ListingsView";
 import { LISTINGS_TABS, getTabBySlug } from "@/app/_lib/listings-data";
 
@@ -18,10 +17,8 @@ export default async function ListingsTabPage({
   if (!tab) notFound();
 
   return (
-    <div className="min-h-screen">
-      <Header active="" showCart={false} />
+    <PageShell showCart={false}>
       <ListingsView key={tab.id} activeTabId={tab.id} />
-      <Footer />
-    </div>
+    </PageShell>
   );
 }

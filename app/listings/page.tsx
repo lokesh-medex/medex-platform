@@ -1,5 +1,4 @@
-import Header from "@/app/_components/header/Header";
-import Footer from "@/app/_components/footer/Footer";
+import PageShell from "@/app/_components/shared/PageShell";
 import ListingsView from "@/app/_components/listings/ListingsView";
 import { DEFAULT_LISTINGS_TAB } from "@/app/_lib/listings-data";
 
@@ -7,10 +6,8 @@ import { DEFAULT_LISTINGS_TAB } from "@/app/_lib/listings-data";
 // app/listings/[tab]/page.tsx for the other tabs (/listings/packages, etc).
 export default function ListingsPage() {
   return (
-    <div className="min-h-screen">
-      <Header active="" showCart={false} />
+    <PageShell showCart={false}>
       <ListingsView activeTabId={DEFAULT_LISTINGS_TAB.id} />
-      <Footer />
-    </div>
+    </PageShell>
   );
 }

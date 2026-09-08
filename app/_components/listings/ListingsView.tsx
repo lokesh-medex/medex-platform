@@ -8,6 +8,9 @@ import ListingCard from "@/app/_components/listings/ListingCard";
 import MobileFilterDrawer from "@/app/_components/listings/MobileFilterDrawer";
 import SearchSortBar from "@/app/_components/listings/SearchSortBar";
 import TabPills from "@/app/_components/listings/TabPills";
+import Mesh from "@/app/_components/home/Mesh";
+import BackdropMotifs from "@/app/_components/shared/BackdropMotifs";
+import { Reveal } from "@/app/_components/shared/Motion";
 import {
   LISTINGS_TABS,
   PAGE_SIZE,
@@ -88,11 +91,22 @@ export default function ListingsView({ activeTabId }: ListingsViewProps) {
 
   return (
     <div className="bg-[#F5F5F5] min-h-screen font-sans">
-      <div className="max-w-360 mx-auto px-5 dt:px-8 pt-8">
-        <h1 className="font-heading text-slate-900 font-bold text-[clamp(24px,3vw,32px)] tracking-[-0.02em] m-0 mb-5">
-          Browse everything on the network
-        </h1>
-        <TabPills tabs={LISTINGS_TABS} activeTabId={tab.id} />
+      <div className="relative overflow-hidden">
+        <Mesh preset="listings" />
+        <BackdropMotifs
+          count={5}
+          opacity={0.05}
+          seed={42}
+          zone="edges"
+          minSize={110}
+          maxSize={200}
+        />
+        <Reveal className="relative max-w-360 mx-auto px-5 dt:px-8 pt-8 pb-2">
+          <h1 className="font-heading text-slate-900 font-bold text-[clamp(24px,3vw,32px)] tracking-[-0.02em] m-0 mb-5">
+            Browse everything on the network
+          </h1>
+          <TabPills tabs={LISTINGS_TABS} activeTabId={tab.id} />
+        </Reveal>
       </div>
 
       <div className="max-w-360 mx-auto px-5 dt:px-8 pt-7 pb-24 flex gap-8 items-start">
@@ -130,11 +144,11 @@ export default function ListingsView({ activeTabId }: ListingsViewProps) {
             sortOptions={sortOptions}
           />
 
-          <div className="grid grid-cols-[repeat(auto-fill,minmax(260px,1fr))] gap-5">
+          <Reveal className="grid grid-cols-[repeat(auto-fill,minmax(260px,1fr))] gap-5">
             {visibleItems.map((item) => (
               <ListingCard key={item.id} item={item} />
             ))}
-          </div>
+          </Reveal>
 
           {filtered.length === 0 && (
             <div className="text-center py-20 px-5 text-slate-500 font-sans">
