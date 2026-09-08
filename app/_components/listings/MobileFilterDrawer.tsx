@@ -34,6 +34,15 @@ export default function MobileFilterDrawer({
         </span>
       }
       className="dt:hidden!"
+      styles={{
+        section: {
+          background: "rgba(255,255,255,0.6)",
+          backdropFilter: "blur(24px)",
+          border: "1px solid rgba(255,255,255,0.7)",
+          boxShadow:
+            "0 1px 2px rgba(15,23,42,0.04), 0 8px 24px rgba(15,23,42,0.06)",
+        },
+      }}
     >
       <Button
         type="text"

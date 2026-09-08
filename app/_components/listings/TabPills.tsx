@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { hrefForTab, type ListingsTab } from "@/app/_lib/listings-data";
+import { glass } from "@/app/_lib/glass";
 
 interface TabPillsProps {
   tabs: ListingsTab[];
@@ -21,10 +22,8 @@ export default function TabPills({ tabs, activeTabId }: TabPillsProps) {
           <Link
             key={tab.id}
             href={hrefForTab(tab)}
-            className={`flex items-center gap-2 whitespace-nowrap rounded-full border-[1.5px] px-5 py-2.5 font-sans transition-colors duration-150 ${
-              active
-                ? "bg-secondary border-secondary"
-                : "bg-white border-slate-200"
+            className={`flex items-center gap-2 whitespace-nowrap rounded-full px-5 py-2.5 font-sans transition-colors duration-150 ${
+              active ? "border border-secondary bg-secondary" : glass.subtle
             }`}
           >
             <Icon

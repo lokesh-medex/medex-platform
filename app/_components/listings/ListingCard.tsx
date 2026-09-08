@@ -3,11 +3,14 @@ import { FaStar } from "react-icons/fa";
 import ImageWithFallback from "@/app/_components/shared/ImageWithFallback";
 import InitialsAvatar from "@/app/_components/shared/InitialsAvatar";
 import type { ListingItem } from "@/app/_lib/listings-data";
+import { glass } from "@/app/_lib/glass";
 
 /** One card in the listings grid — a lab test, package, service, vendor or doctor offer. */
 export default function ListingCard({ item }: { item: ListingItem }) {
   return (
-    <div className="rounded-[18px] overflow-hidden bg-white border border-slate-200 flex flex-col transition-[transform,box-shadow] duration-200 hover:-translate-y-1 hover:shadow-[0_16px_32px_#0f172a1a]">
+    <div
+      className={`rounded-[18px] overflow-hidden flex flex-col transition-[transform,box-shadow] duration-200 hover:-translate-y-1 hover:shadow-[0_16px_32px_#0f172a1a] ${glass.subtle}`}
+    >
       <div
         className="relative h-37.5 overflow-hidden"
         style={{ background: item.gradient }}

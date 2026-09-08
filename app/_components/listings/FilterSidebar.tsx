@@ -1,6 +1,7 @@
 import { Button } from "antd";
 import FilterGroups from "@/app/_components/listings/FilterGroups";
 import type { ListingsTab, TabFilterState } from "@/app/_lib/listings-data";
+import { glass } from "@/app/_lib/glass";
 
 interface FilterSidebarProps {
   tab: ListingsTab;
@@ -19,7 +20,9 @@ export default function FilterSidebar({
   onClear,
 }: FilterSidebarProps) {
   return (
-    <aside className="hidden dt:flex w-68 shrink-0 sticky top-27 max-h-[calc(100vh-148px)] flex-col gap-5 overflow-y-auto rounded-[18px] border border-slate-200 bg-white p-5">
+    <aside
+      className={`hidden dt:flex w-68 shrink-0 sticky top-27 max-h-[calc(100vh-148px)] flex-col gap-5 overflow-y-auto rounded-[18px] p-5 ${glass.subtle}`}
+    >
       <div className="flex items-center justify-between">
         <h3 className="font-heading text-slate-900 font-bold text-lg m-0">
           Filters
