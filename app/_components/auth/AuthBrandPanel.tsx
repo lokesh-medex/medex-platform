@@ -17,24 +17,8 @@ const BRAND_POINTS = [
  */
 export default function AuthBrandPanel() {
   return (
-    // `-mt-32` cancels PageShell's `pt-32` clearance so this grid item's
-    // gradient/Mesh/BackdropMotifs backdrop reaches y=0, full-bleed behind
-    // the fixed Header — same intent as ListingsView's intro band, but this
-    // is a CSS Grid item (not block flow), so the mechanism differs: as a
-    // grid item with default `align-self: stretch`, a negative margin-top
-    // extends the item's own box upward without touching the grid row's
-    // computed height, and its bottom edge still lands exactly on the row's
-    // bottom edge — so AuthCard's column (the other grid item) is
-    // unaffected. `pt-46` (184px = the original `p-14`'s 56px + the 128px
-    // this margin cancels) restores the real content's clearance so the
-    // copy/bullets render at the exact same position as before this fix;
-    // decorative layers (Mesh/BackdropMotifs/svg) are unaffected by padding
-    // since they're absolutely positioned to the padding box regardless.
-    // Do not change `-mt-32` without adjusting `pt-46` to match (must
-    // always sum to the padding-top this box would've had without the fix
-    // plus 128).
     <div
-      className="hidden dt:flex relative -mt-32 overflow-hidden flex-col justify-between pt-46 pr-14 pb-14 pl-14"
+      className="hidden dt:flex relative overflow-hidden flex-col justify-between p-14"
       style={{ background: "linear-gradient(135deg, #872888, #df321f)" }}
     >
       <Mesh preset="auth" />

@@ -29,8 +29,9 @@ export default function PageShell({
         showCart={showCart}
         cartCount={cartCount}
         onCartClick={onCartClick}
+        forceDense
       />
-      <div className="pt-32">{children}</div>
+      <main className="pt-32">{children}</main>
       <Footer />
     </div>
   );

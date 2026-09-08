@@ -141,14 +141,11 @@ const MESH_PRESETS: Record<MeshPreset, MeshSpec> = {
   // the page is sticky, and wrapping that region in overflow-hidden (which
   // every other Mesh usage pairs with) would become its sticky-positioning
   // ancestor. See docs/superpowers/specs/2026-09-08-vivid-mesh-listings-auth-detail-design.md.
-  // High opacity like "hero" (not "features"/"vendors") — this preset sits
-  // directly behind the fixed Header, pre-scroll, same structural role as
-  // hero, so it needs the same contrast-supporting intensity.
   listings: {
     blobs: [
-      { x: 10, y: 10, size: 640, c: "secondary", o: 0.4 },
-      { x: 92, y: 6, size: 560, c: "primary", o: 0.36 },
-      { x: 50, y: 100, size: 520, c: "violet", o: 0.28 },
+      { x: 10, y: 10, size: 640, c: "secondary", o: 0.14 },
+      { x: 92, y: 6, size: 560, c: "primary", o: 0.13 },
+      { x: 50, y: 100, size: 520, c: "violet", o: 0.1 },
     ],
   },
   auth: {
@@ -161,14 +158,11 @@ const MESH_PRESETS: Record<MeshPreset, MeshSpec> = {
   },
   // Confined to the breadcrumb strip only — same sticky-ancestor
   // constraint as `listings` (BuyBox is sticky).
-  // High opacity like "hero" — same reasoning as "listings" above (this
-  // preset sits behind the breadcrumb strip, directly under the fixed
-  // Header, pre-scroll).
   detail: {
     blobs: [
-      { x: 8, y: 8, size: 600, c: "primary", o: 0.38 },
-      { x: 94, y: 20, size: 560, c: "secondary", o: 0.34 },
-      { x: 54, y: 100, size: 480, c: "violet", o: 0.24 },
+      { x: 8, y: 8, size: 600, c: "primary", o: 0.15 },
+      { x: 94, y: 20, size: 560, c: "secondary", o: 0.13 },
+      { x: 54, y: 100, size: 480, c: "violet", o: 0.1 },
     ],
   },
 };

@@ -41,7 +41,7 @@ function BuyBox({
 }) {
   return (
     <div
-      className={`flex flex-col gap-4.5 rounded-[20px] p-6 dt:sticky dt:top-[88px] ${glass.subtle}`}
+      className={`flex flex-col gap-4.5 rounded-[20px] p-6 dt:sticky dt:top-28 ${glass.subtle}`}
     >
       <Tag
         variant="filled"
@@ -172,17 +172,7 @@ export default function DetailPage({ category }: DetailPageProps) {
   return (
     <PageShell showCart cartCount={cartCount}>
       <div className="bg-[#F5F5F5]">
-        {/*
-          PageShell already padded this content by 128px (pt-32) to clear the
-          fixed Header. The Mesh/BackdropMotifs backdrop needs to be full-bleed
-          behind the Header instead (same trick Hero/ListingsView use), so
-          -mt-32 cancels that padding here; the inner content div re-applies
-          pt-32 so the breadcrumb chip still sits clear of the Header. Do not
-          delete the -mt-32 without also removing the inner pt-32 — dropping
-          just one reintroduces either the header overlap or the 128px dead
-          gap.
-        */}
-        <div className="relative -mt-32 overflow-hidden">
+        <div className="relative overflow-hidden">
           <Mesh preset="detail" />
           <BackdropMotifs
             count={4}
@@ -192,7 +182,7 @@ export default function DetailPage({ category }: DetailPageProps) {
             minSize={100}
             maxSize={190}
           />
-          <div className="relative max-w-[1280px] mx-auto px-5 dt:px-8 pt-32 pb-2">
+          <div className="relative max-w-[1280px] mx-auto px-5 dt:px-8 pt-6 pb-2">
             <div
               className={`inline-flex w-fit max-w-full items-center gap-1.5 rounded-full px-4 py-2 text-[13px] text-slate-500 ${glass.subtle}`}
             >

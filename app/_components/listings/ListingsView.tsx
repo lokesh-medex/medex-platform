@@ -91,16 +91,7 @@ export default function ListingsView({ activeTabId }: ListingsViewProps) {
 
   return (
     <div className="bg-[#F5F5F5] min-h-screen font-sans">
-      {/*
-        PageShell already padded this content by 128px (pt-32) to clear the
-        fixed Header. The Mesh/BackdropMotifs backdrop needs to be full-bleed
-        behind the Header instead (same trick Hero uses on `/`), so -mt-32
-        cancels that padding here; the Reveal below re-applies pt-32 so the
-        actual heading/tabs still sit clear of the Header. Do not delete the
-        -mt-32 without also removing the Reveal's pt-32 — dropping just one
-        reintroduces either the header overlap or the 128px dead gap.
-      */}
-      <div className="relative -mt-32 overflow-hidden">
+      <div className="relative overflow-hidden">
         <Mesh preset="listings" />
         <BackdropMotifs
           count={5}
@@ -110,7 +101,7 @@ export default function ListingsView({ activeTabId }: ListingsViewProps) {
           minSize={110}
           maxSize={200}
         />
-        <Reveal className="relative max-w-360 mx-auto px-5 dt:px-8 pt-32 pb-2">
+        <Reveal className="relative max-w-360 mx-auto px-5 dt:px-8 pt-8 pb-2">
           <h1 className="font-heading text-slate-900 font-bold text-[clamp(24px,3vw,32px)] tracking-[-0.02em] m-0 mb-5">
             Browse everything on the network
           </h1>
@@ -127,7 +118,7 @@ export default function ListingsView({ activeTabId }: ListingsViewProps) {
           onClear={clearFilters}
         />
 
-        <main className="flex-1 min-w-0">
+        <section className="flex-1 min-w-0">
           <Badge
             count={activeFilterCount}
             size="small"
@@ -172,7 +163,7 @@ export default function ListingsView({ activeTabId }: ListingsViewProps) {
                 : "You've reached the end of the list."}
             </div>
           )}
-        </main>
+        </section>
       </div>
 
       <MobileFilterDrawer

@@ -47,6 +47,14 @@ interface HeaderProps {
   showCart?: boolean;
   cartCount?: number;
   onCartClick?: () => void;
+  /**
+   * Skip the scroll-based glass.dark→BRAND_DARK_PANEL transition and always
+   * render the dense panel. For routes with no dark hero behind Header at
+   * scroll 0 (everything PageShell wraps) — glass.dark's translucency
+   * depends on a dark/vivid backdrop to read against, which those routes
+   * don't have at page-load scroll position.
+   */
+  forceDense?: boolean;
 }
 
 const SCROLL_THRESHOLD = 60;
@@ -56,10 +64,12 @@ export default function Header({
   showCart = true,
   cartCount = 0,
   onCartClick,
+  forceDense = false,
 }: HeaderProps) {
   // Starts false so server and first client render agree (no `window` during
   // render) — correct anyway, since a fresh page load starts at scroll 0.
   const [scrolled, setScrolled] = useState(false);
+  const dense = forceDense || scrolled;
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > SCROLL_THRESHOLD);
@@ -72,7 +82,7 @@ export default function Header({
     <header className="fixed inset-x-0 top-3 z-40 px-4 dt:px-6">
       <div
         className={`mx-auto max-w-7xl overflow-hidden rounded-3xl transition-[background-color,border-color,box-shadow] duration-300 ${
-          scrolled ? BRAND_DARK_PANEL : glass.dark
+          dense ? BRAND_DARK_PANEL : glass.dark
         }`}
       >
         <div className="hidden border-b border-white/10 dt:block">

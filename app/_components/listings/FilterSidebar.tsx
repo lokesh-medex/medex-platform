@@ -21,7 +21,7 @@ export default function FilterSidebar({
 }: FilterSidebarProps) {
   return (
     <aside
-      className={`hidden dt:flex w-68 shrink-0 sticky top-27 max-h-[calc(100vh-148px)] flex-col gap-5 overflow-y-auto rounded-[18px] p-5 ${glass.subtle}`}
+      className={`hidden dt:flex w-68 shrink-0 sticky top-28 max-h-[calc(100vh-132px)] flex-col gap-5 overflow-y-auto rounded-[18px] p-5 ${glass.subtle}`}
     >
       <div className="flex items-center justify-between">
         <h3 className="font-heading text-slate-900 font-bold text-lg m-0">
