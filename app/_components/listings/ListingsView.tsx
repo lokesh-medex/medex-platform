@@ -91,7 +91,7 @@ export default function ListingsView({ activeTabId }: ListingsViewProps) {
 
   return (
     <div className="bg-[#F5F5F5] min-h-screen font-sans">
-      <div className="relative overflow-hidden">
+      <div className="relative -mt-32 overflow-hidden">
         <Mesh preset="listings" />
         <BackdropMotifs
           count={5}
@@ -101,7 +101,7 @@ export default function ListingsView({ activeTabId }: ListingsViewProps) {
           minSize={110}
           maxSize={200}
         />
-        <Reveal className="relative max-w-360 mx-auto px-5 dt:px-8 pt-8 pb-2">
+        <Reveal className="relative max-w-360 mx-auto px-5 dt:px-8 pt-32 pb-2">
           <h1 className="font-heading text-slate-900 font-bold text-[clamp(24px,3vw,32px)] tracking-[-0.02em] m-0 mb-5">
             Browse everything on the network
           </h1>
