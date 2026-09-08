@@ -6,8 +6,10 @@ import Image from "next/image";
 import { Button, Tag } from "antd";
 import { FaStar } from "react-icons/fa";
 import { FiCheck, FiShield, FiShoppingBag } from "react-icons/fi";
-import Header from "@/app/_components/header/Header";
-import Footer from "@/app/_components/footer/Footer";
+import PageShell from "@/app/_components/shared/PageShell";
+import Mesh from "@/app/_components/home/Mesh";
+import BackdropMotifs from "@/app/_components/shared/BackdropMotifs";
+import { glass } from "@/app/_lib/glass";
 import {
   DETAIL_CATALOG,
   formatPrice,
@@ -38,7 +40,9 @@ function BuyBox({
   onAddToCart: () => void;
 }) {
   return (
-    <div className="flex flex-col gap-4.5 bg-white rounded-[20px] border border-slate-200 p-6 dt:sticky dt:top-[88px]">
+    <div
+      className={`flex flex-col gap-4.5 rounded-[20px] p-6 dt:sticky dt:top-[88px] ${glass.subtle}`}
+    >
       <Tag
         variant="filled"
         className="self-start m-0! text-xs! font-bold text-secondary! bg-secondary-100! rounded-full px-3! py-1.5! border-0!"
@@ -166,111 +170,135 @@ export default function DetailPage({ category }: DetailPageProps) {
   const credit = splitCredit(item.credit);
 
   return (
-    <div className="bg-[#F5F5F5] min-h-screen font-sans">
-      <Header active="" showCart cartCount={cartCount} />
-
-      {/* Breadcrumb */}
-      <div className="max-w-[1280px] mx-auto px-5 dt:px-8 pt-4 flex items-center gap-1.5 text-[13px] text-slate-500">
-        <Link href="/" className="text-slate-500">
-          Home
-        </Link>
-        <span>/</span>
-        <a href="#" className="text-slate-500">
-          {item.categoryLabel}
-        </a>
-        <span>/</span>
-        <span className="text-slate-900 font-semibold">{item.title}</span>
-      </div>
-
-      <section className="max-w-[1280px] mx-auto px-5 dt:px-8 pt-5 pb-14 grid grid-cols-1 dt:grid-cols-[1.5fr_1fr] gap-9 items-start">
-        {/* LEFT: image, description, includes */}
-        <div>
-          <div className="relative rounded-[20px] overflow-hidden h-[min(46vh,420px)] min-h-[280px]">
-            <Image
-              src={item.imgSrc}
-              alt={item.title}
-              fill
-              sizes="(min-width: 1040px) 60vw, 100vw"
-              className="object-cover"
-              priority
-            />
-            {item.badge && (
-              <Tag
-                variant="filled"
-                className="absolute top-4 left-4 m-0! bg-primary! text-white! text-xs! font-extrabold rounded-full px-3.5! py-1.5! border-0!"
-              >
-                {item.badge}
-              </Tag>
-            )}
-            <span className="absolute left-1.5 bottom-1.5 max-w-[calc(100%-12px)] truncate text-[11px] text-white bg-black/40 rounded px-1.5 py-0.5">
-              {credit ? (
-                <>
-                  {credit.before}
-                  <a
-                    href={item.creditHref}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-white underline"
-                  >
-                    {credit.name}
-                  </a>
-                  {credit.after}
-                  <a
-                    href="https://unsplash.com/?utm_source=medex&utm_medium=referral"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-white underline"
-                  >
-                    Unsplash
-                  </a>
-                </>
-              ) : (
-                item.credit
-              )}
-            </span>
-          </div>
-
-          <div className="mt-7">
-            <h2 className="font-heading text-slate-900 font-bold text-[19px] mb-3">
-              Description
-            </h2>
-            <p className="text-slate-600 text-[14.5px] leading-[1.7] m-0">
-              {item.description}
-            </p>
-          </div>
-
-          <div className="mt-7">
-            <h2 className="font-heading text-slate-900 font-bold text-[19px] mb-3.5">
-              {item.includesHeading}
-            </h2>
-            <div className="grid grid-cols-[repeat(auto-fill,minmax(220px,1fr))] gap-2.5">
-              {item.includes.map((inc) => (
-                <div
-                  key={inc}
-                  className="flex items-center gap-2.5 bg-white border border-slate-200 rounded-xl px-3.5 py-2.5"
-                >
-                  <FiCheck size={16} className="shrink-0 text-primary" />
-                  <span className="text-[13.5px] text-slate-700 font-semibold">
-                    {inc}
-                  </span>
-                </div>
-              ))}
+    <PageShell showCart cartCount={cartCount}>
+      <div className="bg-[#F5F5F5]">
+        {/*
+          PageShell already padded this content by 128px (pt-32) to clear the
+          fixed Header. The Mesh/BackdropMotifs backdrop needs to be full-bleed
+          behind the Header instead (same trick Hero/ListingsView use), so
+          -mt-32 cancels that padding here; the inner content div re-applies
+          pt-32 so the breadcrumb chip still sits clear of the Header. Do not
+          delete the -mt-32 without also removing the inner pt-32 — dropping
+          just one reintroduces either the header overlap or the 128px dead
+          gap.
+        */}
+        <div className="relative -mt-32 overflow-hidden">
+          <Mesh preset="detail" />
+          <BackdropMotifs
+            count={4}
+            opacity={0.05}
+            seed={77}
+            zone="edges"
+            minSize={100}
+            maxSize={190}
+          />
+          <div className="relative max-w-[1280px] mx-auto px-5 dt:px-8 pt-32 pb-2">
+            <div
+              className={`inline-flex w-fit max-w-full items-center gap-1.5 rounded-full px-4 py-2 text-[13px] text-slate-500 ${glass.subtle}`}
+            >
+              <Link href="/" className="text-slate-500 shrink-0">
+                Home
+              </Link>
+              <span className="shrink-0">/</span>
+              <a href="#" className="text-slate-500 shrink-0">
+                {item.categoryLabel}
+              </a>
+              <span className="shrink-0">/</span>
+              <span className="text-slate-900 font-semibold truncate">
+                {item.title}
+              </span>
             </div>
           </div>
         </div>
 
-        {/* RIGHT: buy box */}
-        <BuyBox
-          item={item}
-          qty={qty}
-          totalPrice={totalPrice}
-          onDecQty={() => setQty((q) => Math.max(1, q - 1))}
-          onIncQty={() => setQty((q) => q + 1)}
-          onAddToCart={() => setCartCount((c) => c + qty)}
-        />
-      </section>
+        <section className="max-w-[1280px] mx-auto px-5 dt:px-8 pt-5 pb-14 grid grid-cols-1 dt:grid-cols-[1.5fr_1fr] gap-9 items-start">
+          {/* LEFT: image, description, includes */}
+          <div>
+            <div className="relative rounded-[20px] overflow-hidden h-[min(46vh,420px)] min-h-[280px] border border-white/70 shadow-[0_8px_32px_rgba(15,23,42,0.12)]">
+              <Image
+                src={item.imgSrc}
+                alt={item.title}
+                fill
+                sizes="(min-width: 1040px) 60vw, 100vw"
+                className="object-cover"
+                priority
+              />
+              {item.badge && (
+                <Tag
+                  variant="filled"
+                  className="absolute top-4 left-4 m-0! bg-primary! text-white! text-xs! font-extrabold rounded-full px-3.5! py-1.5! border-0!"
+                >
+                  {item.badge}
+                </Tag>
+              )}
+              <span className="absolute left-1.5 bottom-1.5 max-w-[calc(100%-12px)] truncate text-[11px] text-white bg-black/40 rounded px-1.5 py-0.5">
+                {credit ? (
+                  <>
+                    {credit.before}
+                    <a
+                      href={item.creditHref}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-white underline"
+                    >
+                      {credit.name}
+                    </a>
+                    {credit.after}
+                    <a
+                      href="https://unsplash.com/?utm_source=medex&utm_medium=referral"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-white underline"
+                    >
+                      Unsplash
+                    </a>
+                  </>
+                ) : (
+                  item.credit
+                )}
+              </span>
+            </div>
 
-      <Footer />
-    </div>
+            <div className={`mt-7 rounded-[20px] p-6 ${glass.subtle}`}>
+              <h2 className="font-heading text-slate-900 font-bold text-[19px] mb-3">
+                Description
+              </h2>
+              <p className="text-slate-600 text-[14.5px] leading-[1.7] m-0">
+                {item.description}
+              </p>
+            </div>
+
+            <div className={`mt-7 rounded-[20px] p-6 ${glass.subtle}`}>
+              <h2 className="font-heading text-slate-900 font-bold text-[19px] mb-3.5">
+                {item.includesHeading}
+              </h2>
+              <div className="grid grid-cols-[repeat(auto-fill,minmax(220px,1fr))] gap-2.5">
+                {item.includes.map((inc) => (
+                  <div
+                    key={inc}
+                    className="flex items-center gap-2.5 bg-white border border-slate-200 rounded-xl px-3.5 py-2.5"
+                  >
+                    <FiCheck size={16} className="shrink-0 text-primary" />
+                    <span className="text-[13.5px] text-slate-700 font-semibold">
+                      {inc}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* RIGHT: buy box */}
+          <BuyBox
+            item={item}
+            qty={qty}
+            totalPrice={totalPrice}
+            onDecQty={() => setQty((q) => Math.max(1, q - 1))}
+            onIncQty={() => setQty((q) => q + 1)}
+            onAddToCart={() => setCartCount((c) => c + qty)}
+          />
+        </section>
+      </div>
+    </PageShell>
   );
 }
