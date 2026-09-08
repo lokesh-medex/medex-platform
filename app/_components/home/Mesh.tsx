@@ -46,7 +46,10 @@ export type MeshPreset =
   | "doctors"
   | "testimonials"
   | "cta"
-  | "footer";
+  | "footer"
+  | "listings"
+  | "auth"
+  | "detail";
 
 const MESH_PRESETS: Record<MeshPreset, MeshSpec> = {
   hero: {
@@ -132,6 +135,34 @@ const MESH_PRESETS: Record<MeshPreset, MeshSpec> = {
     blobs: [
       { x: 12, y: 8, size: 520, c: "secondary", o: 0.14 },
       { x: 92, y: 86, size: 460, c: "primary", o: 0.12 },
+    ],
+  },
+  // Confined to the listings intro band only — FilterSidebar further down
+  // the page is sticky, and wrapping that region in overflow-hidden (which
+  // every other Mesh usage pairs with) would become its sticky-positioning
+  // ancestor. See docs/superpowers/specs/2026-09-08-vivid-mesh-listings-auth-detail-design.md.
+  listings: {
+    blobs: [
+      { x: 10, y: 10, size: 640, c: "secondary", o: 0.16 },
+      { x: 92, y: 6, size: 560, c: "primary", o: 0.14 },
+      { x: 50, y: 100, size: 520, c: "violet", o: 0.12 },
+    ],
+  },
+  auth: {
+    blend: "screen",
+    blobs: [
+      { x: 20, y: 14, size: 620, c: "primary", o: 0.35 },
+      { x: 88, y: 30, size: 560, c: "secondary", o: 0.4 },
+      { x: 46, y: 96, size: 640, c: "violet", o: 0.3 },
+    ],
+  },
+  // Confined to the breadcrumb strip only — same sticky-ancestor
+  // constraint as `listings` (BuyBox is sticky).
+  detail: {
+    blobs: [
+      { x: 8, y: 8, size: 600, c: "primary", o: 0.14 },
+      { x: 94, y: 20, size: 560, c: "secondary", o: 0.13 },
+      { x: 54, y: 100, size: 480, c: "violet", o: 0.1 },
     ],
   },
 };
