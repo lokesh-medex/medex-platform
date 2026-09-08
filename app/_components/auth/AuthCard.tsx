@@ -2,6 +2,8 @@ import Link from "next/link";
 import LoginForm from "@/app/_components/auth/LoginForm";
 import SignupForm from "@/app/_components/auth/SignupForm";
 import SocialAuthButtons from "@/app/_components/auth/SocialAuthButtons";
+import { glass } from "@/app/_lib/glass";
+import { BRAND_DARK_PANEL } from "@/app/_lib/theme";
 
 export type AuthMode = "login" | "signup";
 
@@ -20,12 +22,12 @@ export default function AuthCard({ mode }: AuthCardProps) {
 
   return (
     <div className="w-full max-w-100">
-      <div className="flex bg-slate-100 rounded-full p-1 mb-8">
+      <div className={`flex rounded-full p-1 mb-8 ${glass.subtle}`}>
         <Link
           href="/auth/login"
           className={`flex-1 flex items-center justify-center rounded-full py-2.5 text-sm font-bold font-sans transition-colors ${
             isLogin
-              ? "bg-white text-slate-900 shadow-[0_2px_8px_#0f172a1a]"
+              ? `text-white! ${BRAND_DARK_PANEL}`
               : "bg-transparent text-slate-500"
           }`}
         >
@@ -35,7 +37,7 @@ export default function AuthCard({ mode }: AuthCardProps) {
           href="/auth/signup"
           className={`flex-1 flex items-center justify-center rounded-full py-2.5 text-sm font-bold font-sans transition-colors ${
             !isLogin
-              ? "bg-white text-slate-900 shadow-[0_2px_8px_#0f172a1a]"
+              ? `text-white! ${BRAND_DARK_PANEL}`
               : "bg-transparent text-slate-500"
           }`}
         >
