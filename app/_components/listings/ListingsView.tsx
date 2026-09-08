@@ -91,6 +91,15 @@ export default function ListingsView({ activeTabId }: ListingsViewProps) {
 
   return (
     <div className="bg-[#F5F5F5] min-h-screen font-sans">
+      {/*
+        PageShell already padded this content by 128px (pt-32) to clear the
+        fixed Header. The Mesh/BackdropMotifs backdrop needs to be full-bleed
+        behind the Header instead (same trick Hero uses on `/`), so -mt-32
+        cancels that padding here; the Reveal below re-applies pt-32 so the
+        actual heading/tabs still sit clear of the Header. Do not delete the
+        -mt-32 without also removing the Reveal's pt-32 — dropping just one
+        reintroduces either the header overlap or the 128px dead gap.
+      */}
       <div className="relative -mt-32 overflow-hidden">
         <Mesh preset="listings" />
         <BackdropMotifs
