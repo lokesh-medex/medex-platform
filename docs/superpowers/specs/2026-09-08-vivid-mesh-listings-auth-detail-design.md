@@ -59,11 +59,17 @@ detail page's BuyBox. This is a visual/structural migration only.
    auth, then detail — each independently reviewable.
 3. **Header clearance**: introduce a shared `PageShell` wrapper (new:
    `app/_components/shared/PageShell.tsx`) rather than repeating top
-   padding in each page. Props: `{ active: HeaderActive; children:
-ReactNode }`. Renders `<Header active={active} />`, a `pt-32`
-   top-padded wrapper around `children` (matching the `pt-32` Hero
-   currently uses at `app/_components/home/Hero.tsx:142` to clear the
-   fixed Header), then `<Footer />`.
+   padding in each page. Props: `{ active?: HeaderActive; showCart?:
+boolean; cartCount?: number; onCartClick?: () => void; children:
+ReactNode }` (passed straight through to `Header`, `active`
+   defaulting to `""`). Renders `<Header .../>`, a `pt-32` top-padded
+   wrapper around `children` (matching the `pt-32` Hero currently uses
+   at `app/_components/home/Hero.tsx:142` to clear the fixed Header),
+   then `<Footer />`. `HeaderActive` (`"" | "Packages" | "Lab Tests" |
+"Services" | "Wellness" | "Vendors" | "Doctors"`) tracks mega-menu
+   categories, not route groups — all 4 current usages already pass
+   `active=""`, and the migration preserves that (no new nav-highlight
+   behavior for listings/auth/detail).
 4. **Deletion timing**: keep `app/_components/header/*` and
    `app/_components/footer/Footer.tsx` in the tree (unused but present)
    until all three groups are migrated, then delete everything in one
@@ -78,23 +84,36 @@ ReactNode }`. Renders `<Header active={active} />`, a `pt-32`
 
 `app/_components/listings/*`)
 
-- Wrap page content in `PageShell active="listings"`.
+- Wrap page content in `PageShell showCart={false}` (matches current
+  `<Header active="" showCart={false} />` usage).
 - Add a new slim intro band above `TabPills`: heading + `Mesh
-preset="listings"` + `BackdropMotifs`. This gives the fixed-header
-  clearance area real content instead of blank space, mirroring how
-  `Hero` absorbs that role on `/`.
-- Restyle `TabPills`, `SearchSortBar`, `FilterSidebar` /
-  `MobileFilterDrawer`, `FilterGroups` onto `glass.subtle` panels
-  (need strong legibility for controls — not `glass.vivid`).
-- `ListingCard` becomes a `glass.subtle` card with hover lift; the card
-  grid's entrance wrapped in `Reveal`.
+preset="listings"` + `BackdropMotifs`, in its own `relative
+overflow-hidden` block (following the established
+  `Hero`/`FeaturedServices`/`StatsBand` convention of pairing `Mesh`
+  with `overflow-hidden` on the containing section). This gives the
+  fixed-header clearance area real content instead of blank space,
+  mirroring how `Hero` absorbs that role on `/`.
+- **Implementation constraint discovered while planning:**
+  `FilterSidebar` is `dt:sticky`, spanning the full height of the
+  results area. Wrapping the filter/results region in `overflow-hidden`
+  (to carry a mesh backdrop) would make that region `FilterSidebar`'s
+  sticky-positioning ancestor and risk breaking its sticky behavior —
+  so the mesh backdrop stays scoped to the intro band only; the
+  filter/results region below it carries no mesh.
+- Restyle `TabPills` (sits over the intro band's mesh, so `glass.subtle`
+  refracts it) and `SearchSortBar`, `FilterSidebar`/
+  `MobileFilterDrawer`, `FilterGroups`, `ListingCard` onto `glass.subtle`
+  panels — `glass.subtle` is documented as safe "regardless of what's
+  behind it", so this holds even without a mesh behind the
+  filter/results region.
+- `ListingCard`'s grid entrance wrapped in `Reveal`.
 - No changes to `ListingsView.tsx`'s filter/search/sort/pagination
   state or logic — visual only.
 
 ### Auth (`app/_components/auth/{AuthPageShell,AuthBrandPanel,AuthCard}.tsx`)
 
 - `AuthPageShell` swaps its old Header/2-col-grid/old-Footer
-  composition for `PageShell active="auth"` wrapping the existing
+  composition for `PageShell showCart={false}` wrapping the existing
   2-col grid (`AuthBrandPanel` | `AuthCard`).
 - `AuthBrandPanel` gets `Mesh preset="auth"` + `BackdropMotifs` behind
   its existing bullet content, replacing the current plain
@@ -109,14 +128,27 @@ preset="listings"` + `BackdropMotifs`. This gives the fixed-header
 
 ### Detail (`app/_components/detail/DetailPage.tsx`)
 
-- Swap old Header/Footer for `PageShell active="detail"`.
-- Breadcrumb becomes a small `glass.subtle` chip.
-- Gallery/description/includes sections become `glass.subtle` cards
-  over a `Mesh preset="detail"` + `BackdropMotifs` backdrop behind the
-  top of the page.
-- `BuyBox` (sticky right column) becomes a `glass.vivid` panel with
-  `glassScrim` applied to its price/CTA text, since it floats over the
-  mesh backdrop.
+- Swap old Header/Footer for `PageShell showCart cartCount={cartCount}`
+  (matches current `<Header active="" showCart cartCount={cartCount} />`
+  usage).
+- **Implementation constraint discovered while planning:** the
+  established codebase convention (`Hero`/`FeaturedServices`/`StatsBand`/
+  `ServicesOrbital`) always pairs `Mesh`/`BackdropMotifs` with `relative
+overflow-hidden` on their containing section, so the blob layer clips
+  to that section. `BuyBox` is `dt:sticky`; wrapping its containing grid
+  section in `overflow-hidden` would make that section `BuyBox`'s
+  sticky-positioning ancestor and risk breaking the sticky behavior
+  (`Non-goals` rules out layout/behavior regressions). So the mesh
+  backdrop is scoped to the breadcrumb strip only (a short, non-sticky
+  block) rather than spanning the sticky grid section below it.
+- Breadcrumb strip becomes its own `relative overflow-hidden` section
+  with `Mesh preset="detail"` + `BackdropMotifs` behind it, breadcrumb
+  content restyled as a `glass.subtle` chip.
+- Gallery/description/includes cards and `BuyBox` (sticky right column)
+  all use `glass.subtle` (documented as safe to use "regardless of
+  what's behind it", unlike `glass.vivid` which needs a live mesh/gradient
+  behind it to avoid reading as a plain grey box) — no mesh sits behind
+  this section, by the constraint above.
 - All cart/qty/booking state and logic in `BuyBox`/`DetailPage`
   untouched.
 
