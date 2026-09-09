@@ -7,8 +7,10 @@ import {
   type FieldValues,
   type Path,
 } from "react-hook-form";
-import { Input, type TextAreaProps } from "antd";
+import { Input, type GetProps } from "antd";
 import ErrorLabel from "@/app/_components/form/ErrorLabel";
+
+type TextAreaProps = GetProps<typeof Input.TextArea>;
 
 interface IProps<T extends FieldValues> extends Omit<
   TextAreaProps,

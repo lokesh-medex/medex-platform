@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Button, Modal } from "antd";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -38,19 +38,37 @@ export default function VendorContactModal({
     defaultValues: { name: "", email: "", phone: "", message: "" },
   });
 
-  const submit = () => {
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
+  }, []);
+
+  const submit = useCallback(() => {
     setSubmitted(true);
-    setTimeout(() => {
+    timeoutRef.current = setTimeout(() => {
       setSubmitted(false);
       reset();
       onClose();
     }, 2000);
+  }, [onClose, reset]);
+
+  const handleCancel = () => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
+      setSubmitted(false);
+      reset();
+    }
+    onClose();
   };
 
   return (
     <Modal
       open={open}
-      onCancel={onClose}
+      onCancel={handleCancel}
       footer={null}
       title={
         <span className="font-heading text-slate-900 font-bold text-lg">
@@ -66,7 +84,13 @@ export default function VendorContactModal({
           </p>
         </div>
       ) : (
-        <form onSubmit={handleSubmit(submit)} noValidate className="pt-2">
+        <form
+          onSubmit={(e) => {
+            void handleSubmit(submit)(e);
+          }}
+          noValidate
+          className="pt-2"
+        >
           <div className="mb-4">
             <AppInput
               name="name"
