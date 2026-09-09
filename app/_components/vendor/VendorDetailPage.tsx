@@ -9,6 +9,7 @@ import Mesh from "@/app/_components/home/Mesh";
 import BackdropMotifs from "@/app/_components/shared/BackdropMotifs";
 import VendorGallery from "@/app/_components/vendor/VendorGallery";
 import VendorDoctors from "@/app/_components/vendor/VendorDoctors";
+import VendorServices from "@/app/_components/vendor/VendorServices";
 import { glass } from "@/app/_lib/glass";
 import type { Vendor } from "@/app/_lib/vendor-data";
 
@@ -127,6 +128,7 @@ export default function VendorDetailPage({ vendor }: VendorDetailPageProps) {
             </div>
 
             <VendorDoctors doctors={vendor.doctors} />
+            <VendorServices services={vendor.services} />
           </div>
 
           {/* RIGHT: sticky vendor info card (Task 6 replaces this placeholder) */}
