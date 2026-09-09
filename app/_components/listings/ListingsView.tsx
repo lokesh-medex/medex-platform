@@ -194,6 +194,7 @@ export default function ListingsView({ activeTabId }: ListingsViewProps) {
                   key={item.id}
                   item={item}
                   detailHref={hrefForItem(item)}
+                  forceDetailLink={tab.id === "doctors"}
                   onAddToCart={() => setCartCount((c) => c + 1)}
                 />
               ))}
