@@ -35,6 +35,7 @@ export default function DoctorBookingPanel({ doctor, onConfirm }: IProps) {
 
   const [status, setStatus] = useState<"idle" | "loading" | "success">("idle");
   const [confirmed, setConfirmed] = useState<{
+    mode: string;
     date: string;
     time: string;
   } | null>(null);
@@ -54,7 +55,11 @@ export default function DoctorBookingPanel({ doctor, onConfirm }: IProps) {
   const onSubmit = (data: BookingFormValues) => {
     if (!data.date || !data.timeSlot) return;
     setStatus("loading");
+    const mode =
+      consultOptions.find((o) => o.value === data.consultType)?.label ??
+      data.consultType;
     setConfirmed({
+      mode,
       date: data.date.format("ddd, MMM D, YYYY"),
       time: data.timeSlot,
     });
@@ -81,7 +86,8 @@ export default function DoctorBookingPanel({ doctor, onConfirm }: IProps) {
 
       {status === "success" && confirmed ? (
         <div className="rounded-2xl border border-green-200 bg-green-50 px-4 py-3.5 text-[13.5px] font-semibold text-green-800">
-          Booking confirmed for {confirmed.date} at {confirmed.time}.
+          Booking confirmed for {confirmed.mode} on {confirmed.date} at{" "}
+          {confirmed.time}.
         </div>
       ) : (
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
