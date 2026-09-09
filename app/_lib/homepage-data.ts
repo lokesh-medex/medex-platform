@@ -2,6 +2,7 @@
 // (Medex-Homepage.dc.html / Medex-Header.dc.html / Medex-Footer.dc.html) data constants.
 
 import { brand } from "@/app/_lib/theme";
+import { slugify } from "@/app/_lib/slug";
 
 // Data-driven per-item styling below (gradients, tier colors, ...) needs
 // plain hex strings rather than Tailwind classes, so it draws from the same
@@ -143,6 +144,7 @@ export interface Doctor {
   rating: string;
   initials: string;
   img: string;
+  slug?: string;
 }
 
 export const DOCTORS_DATA: Doctor[] = [
@@ -178,7 +180,7 @@ export const DOCTORS_DATA: Doctor[] = [
     initials: "SG",
     img: "/uploads/usman-yousaf-pTrhfmj2jDA-unsplash-2d4c9cea.jpg",
   },
-];
+].map((d) => ({ ...d, slug: slugify(d.name) }));
 
 export interface Testimonial {
   quote: string;
