@@ -2,13 +2,13 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { Tag } from "antd";
 import { FaStar } from "react-icons/fa";
 import { FiCheck, FiMail, FiPhone } from "react-icons/fi";
 import PageShell from "@/app/_components/shared/PageShell";
 import Mesh from "@/app/_components/home/Mesh";
 import BackdropMotifs from "@/app/_components/shared/BackdropMotifs";
+import FlagBadge from "@/app/_components/shared/FlagBadge";
 import ImageWithFallback from "@/app/_components/shared/ImageWithFallback";
 import InitialsAvatar from "@/app/_components/shared/InitialsAvatar";
 import { glass } from "@/app/_lib/glass";
@@ -24,15 +24,7 @@ function LanguageChip({ name }: { name: string }) {
   const flag = LANGUAGES_DATA.find((l) => l.name === name)?.flag;
   return (
     <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white/70 px-2.5 py-1 text-[12px] font-semibold text-slate-700">
-      {flag && (
-        <Image
-          src={flag}
-          alt=""
-          width={14}
-          height={14}
-          className="h-3.5 w-3.5 rounded-full object-cover"
-        />
-      )}
+      {flag && <FlagBadge name={name} flag={flag} />}
       {name}
     </span>
   );
