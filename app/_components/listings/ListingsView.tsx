@@ -23,6 +23,7 @@ import {
   defaultFilterState,
   filterAndSortItems,
   sortOptionsFor,
+  type ListingItem,
   type SortValue,
 } from "@/app/_lib/listings-data";
 
@@ -57,11 +58,15 @@ export default function ListingsView({ activeTabId }: ListingsViewProps) {
 
   // Only labtests/packages/services/wellness have a detail page — it's one
   // static page per category, not per item, so every item in a tab shares
-  // the same href. Vendors/doctors have no detail page to link to.
+  // the same href. Doctors have a real per-item page (/doctor/[slug]);
+  // vendors still have no detail page to link to.
   const detailCategory = getDetailCategoryByLabel(tab.label);
-  const detailHref = detailCategory
+  const tabDetailHref = detailCategory
     ? hrefForDetailCategory(detailCategory)
     : undefined;
+
+  const hrefForItem = (item: ListingItem) =>
+    tab.id === "doctors" && item.slug ? `/doctor/${item.slug}` : tabDetailHref;
 
   const filtered = useMemo(
     () => filterAndSortItems(tab, filters),
@@ -188,7 +193,7 @@ export default function ListingsView({ activeTabId }: ListingsViewProps) {
                 <ListingCard
                   key={item.id}
                   item={item}
-                  detailHref={detailHref}
+                  detailHref={hrefForItem(item)}
                   onAddToCart={() => setCartCount((c) => c + 1)}
                 />
               ))}
