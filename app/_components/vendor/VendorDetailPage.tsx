@@ -7,6 +7,7 @@ import { FiCheck } from "react-icons/fi";
 import PageShell from "@/app/_components/shared/PageShell";
 import Mesh from "@/app/_components/home/Mesh";
 import BackdropMotifs from "@/app/_components/shared/BackdropMotifs";
+import VendorGallery from "@/app/_components/vendor/VendorGallery";
 import { glass } from "@/app/_lib/glass";
 import type { Vendor } from "@/app/_lib/vendor-data";
 
@@ -65,7 +66,11 @@ export default function VendorDetailPage({ vendor }: VendorDetailPageProps) {
           />
 
           {/* LEFT: header, gallery (Task 3), about, facilities, doctors (Task 4), services (Task 5) */}
-          <div>
+          {/* `min-w-0` is required here: without it, a 1fr grid item defaults
+              to `min-width: auto`, and antd's Carousel measures its own
+              width before the grid has settled, blowing the grid track (and
+              the whole section) out to match that stale measurement. */}
+          <div className="min-w-0">
             <Tag
               variant="filled"
               className="m-0! mb-3! text-xs! font-bold text-secondary! bg-secondary-100! rounded-full px-3! py-1.5! border-0!"
@@ -87,7 +92,9 @@ export default function VendorDetailPage({ vendor }: VendorDetailPageProps) {
               <span className="text-[13px] text-slate-500">{vendor.meta}</span>
             </div>
 
-            <div className={`rounded-[20px] p-6 ${glass.subtle}`}>
+            <VendorGallery vendor={vendor} />
+
+            <div className={`mt-7 rounded-[20px] p-6 ${glass.subtle}`}>
               <h2 className="font-heading text-slate-900 font-bold text-[19px] mb-3">
                 About
               </h2>
