@@ -49,6 +49,7 @@ export default function VendorContactModal({
   const submit = useCallback(() => {
     setSubmitted(true);
     timeoutRef.current = setTimeout(() => {
+      timeoutRef.current = null;
       setSubmitted(false);
       reset();
       onClose();
