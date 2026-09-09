@@ -10,6 +10,7 @@ import BackdropMotifs from "@/app/_components/shared/BackdropMotifs";
 import VendorGallery from "@/app/_components/vendor/VendorGallery";
 import VendorDoctors from "@/app/_components/vendor/VendorDoctors";
 import VendorServices from "@/app/_components/vendor/VendorServices";
+import VendorInfoPanel from "@/app/_components/vendor/VendorInfoPanel";
 import { glass } from "@/app/_lib/glass";
 import type { Vendor } from "@/app/_lib/vendor-data";
 
@@ -131,18 +132,8 @@ export default function VendorDetailPage({ vendor }: VendorDetailPageProps) {
             <VendorServices services={vendor.services} />
           </div>
 
-          {/* RIGHT: sticky vendor info card (Task 6 replaces this placeholder) */}
-          <div
-            className={`flex flex-col gap-3 rounded-[20px] p-6 dt:sticky dt:top-28 ${glass.subtle}`}
-          >
-            <h2 className="font-heading text-slate-900 font-bold text-base m-0">
-              {vendor.title}
-            </h2>
-            <p className="text-[13.5px] text-slate-600 m-0">{vendor.address}</p>
-            <p className="text-[13.5px] text-slate-600 m-0">
-              {vendor.phone} &middot; {vendor.email}
-            </p>
-          </div>
+          {/* RIGHT: sticky vendor info card */}
+          <VendorInfoPanel vendor={vendor} />
         </section>
       </div>
     </PageShell>
