@@ -39,15 +39,15 @@ export default function TopBar() {
       <div className="flex items-center gap-2">
         <Button
           type="text"
-          icon={<FiShield size={12} />}
-          className="flex! h-auto! items-center! gap-1! bg-white/8! py-1! pr-3.5! pl-2.5! text-xs! font-sans text-white/85! hover:bg-white/14!"
+          icon={<FiShield size={12} className="text-white!" />}
+          className="flex! h-auto! items-center! gap-1! border-2! border-primary! bg-primary/15! py-0.75! pr-3.5! pl-2.5! text-xs! font-sans text-white/90! transition-colors hover:bg-primary/25!"
         >
           Become a Partner
         </Button>
         <Button
           type="text"
-          icon={<FiStar size={12} />}
-          className="flex! h-auto! items-center! gap-1! bg-white/8! py-1! pr-3.5! pl-2.5! text-xs! font-sans text-white/85! hover:bg-white/14!"
+          icon={<FiStar size={12} className="text-white!" />}
+          className="flex! h-auto! items-center! gap-1! border-2! border-secondary! bg-secondary/15! py-0.75! pr-3.5! pl-2.5! text-xs! font-sans text-white/90! transition-colors hover:bg-secondary/25!"
         >
           Become a Member
         </Button>

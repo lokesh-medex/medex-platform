@@ -1,28 +1,25 @@
 "use client";
 
 /**
- * Testimonials — a GSAP-pinned horizontal scroll: the section pins in place
- * while the track of testimonial cards translates left as the page scrolls
- * vertically through the pinned duration (the `gsap.to(track, { x: ...
- * scrollTrigger: { pin: true } })` recipe).
+ * Testimonials — an infinite marquee on desktop (`dt:`, 1040px+), a native
+ * horizontal swipe/snap rail on mobile and tablet. The marquee runs on its
+ * own clock (duration + `repeat: -1`), decoupled from page scroll, so unlike
+ * the pinned-scrub version this replaced, it can never fight the user's
+ * scroll input or feel like it's "stuck".
  *
- * The DOM underneath is a genuinely-working `overflow-x-auto` snap rail on
- * its own — no layout branching between the two motion states. When
- * `prefers-reduced-motion: no-preference` is NOT set, GSAP never runs and the
- * rail behaves like any horizontally-scrollable row (drag/swipe/trackpad).
- * When motion is welcome, `mm.add` swaps the container to `overflow: hidden`
- * and hands scroll control to the pinned tween instead, so there's never a
- * moment where native scroll and the tween fight each other.
+ * Desktop is also `Draggable` — grabbing the track pauses the auto-scroll,
+ * and releasing (with or without an inertia throw) resyncs the tween's
+ * progress to wherever the drag left it before resuming, so there's no snap.
  *
- * `pinType: "transform"` is required here because the section (like every
- * homepage section) is `overflow-hidden` for its Mesh/BackdropMotifs layers —
- * GSAP's default `position: fixed` pin doesn't survive that ancestor, but a
- * transform-based pin does.
+ * The marquee track renders two back-to-back copies of the data so looping
+ * (drag-wrapped, or the auto-tween's `x: -copyWidth`) is seamless — the
+ * frame right after the reset looks identical to the frame right before it.
  */
 
 import { useRef } from "react";
 import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { Draggable } from "gsap/Draggable";
+import { InertiaPlugin } from "gsap/InertiaPlugin";
 import { useGSAP } from "@gsap/react";
 import { Rate } from "antd";
 import BackdropMotifs from "@/app/_components/shared/BackdropMotifs";
@@ -32,7 +29,7 @@ import InitialsAvatar from "@/app/_components/shared/InitialsAvatar";
 import { TESTIMONIALS_DATA, type Testimonial } from "@/app/_lib/homepage-data";
 import Mesh from "./Mesh";
 
-gsap.registerPlugin(ScrollTrigger, useGSAP);
+gsap.registerPlugin(useGSAP, Draggable, InertiaPlugin);
 
 function TestimonialCard({ t }: { t: Testimonial }) {
   return (
@@ -67,56 +64,88 @@ function TestimonialCard({ t }: { t: Testimonial }) {
 }
 
 export default function Testimonials() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
 
   useGSAP(
     () => {
       const mm = gsap.matchMedia();
 
-      mm.add("(prefers-reduced-motion: no-preference)", () => {
-        const section = sectionRef.current;
-        const container = containerRef.current;
-        const track = trackRef.current;
-        if (!section || !container || !track) return;
+      mm.add(
+        "(prefers-reduced-motion: no-preference) and (min-width: 1040px)",
+        () => {
+          const track = trackRef.current;
+          if (!track) return;
 
-        // Native drag-scroll and the pinned tween would otherwise both try to
-        // own horizontal position at once — hand it fully to GSAP while
-        // motion is welcome, restore the native rail on cleanup.
-        const prevOverflow = container.style.overflow;
-        container.style.overflow = "hidden";
+          const copyWidth = track.scrollWidth / 2;
+          const wrap = gsap.utils.wrap(-copyWidth, 0);
+          const progressFor = (x: number) =>
+            gsap.utils.wrap(0, 1, -x / copyWidth);
 
-        const tween = gsap.to(track, {
-          x: () => -(track.scrollWidth - container.clientWidth),
-          ease: "none",
-          scrollTrigger: {
-            trigger: section,
-            start: "top top",
-            end: () => "+=" + (track.scrollWidth - container.clientWidth),
-            scrub: 1,
-            pin: true,
-            pinType: "transform",
-            invalidateOnRefresh: true,
-          },
-        });
+          const tween = gsap.to(track, {
+            x: -copyWidth,
+            duration: TESTIMONIALS_DATA.length * 6,
+            ease: "none",
+            repeat: -1,
+          });
 
-        return () => {
-          tween.kill();
-          container.style.overflow = prevOverflow;
-        };
-      });
+          let hovering = false;
+          const resumeIfIdle = () => {
+            if (!hovering) tween.play();
+          };
+
+          const onEnter = () => {
+            hovering = true;
+            tween.pause();
+          };
+          const onLeave = () => {
+            hovering = false;
+            resumeIfIdle();
+          };
+          track.addEventListener("mouseenter", onEnter);
+          track.addEventListener("mouseleave", onLeave);
+
+          const [draggable] = Draggable.create(track, {
+            type: "x",
+            inertia: true,
+            onPress() {
+              tween.pause();
+            },
+            onDrag() {
+              this.x = wrap(this.x);
+              gsap.set(track, { x: this.x });
+            },
+            onThrowUpdate() {
+              this.x = wrap(this.x);
+              gsap.set(track, { x: this.x });
+            },
+            onDragEnd() {
+              if (!this.tween) {
+                tween.progress(progressFor(this.x));
+                resumeIfIdle();
+              }
+            },
+            onThrowComplete() {
+              tween.progress(progressFor(this.x));
+              resumeIfIdle();
+            },
+          });
+
+          return () => {
+            track.removeEventListener("mouseenter", onEnter);
+            track.removeEventListener("mouseleave", onLeave);
+            draggable.kill();
+            tween.kill();
+          };
+        }
+      );
 
       return () => mm.revert();
     },
-    { scope: sectionRef }
+    { scope: trackRef }
   );
 
   return (
-    <section
-      ref={sectionRef}
-      className="relative overflow-hidden bg-white py-24 dt:py-32"
-    >
+    <section className="relative py-24 dt:py-32">
       <Parallax yPercent={-8} className="pointer-events-none absolute inset-0">
         <Mesh preset="testimonials" />
       </Parallax>
@@ -142,16 +171,24 @@ export default function Testimonials() {
         </div>
       </div>
 
-      <div
-        ref={containerRef}
-        className="relative overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-      >
-        <div
-          ref={trackRef}
-          className="flex w-max snap-x snap-mandatory gap-6 px-5 pb-2 dt:px-8"
-        >
+      {/* Mobile/tablet: native swipe/snap rail, one copy of the data. */}
+      <div className="relative overflow-x-auto px-5 pb-2 [-ms-overflow-style:none] [scrollbar-width:none] dt:hidden [&::-webkit-scrollbar]:hidden">
+        <div className="flex w-max snap-x snap-mandatory gap-6">
           {TESTIMONIALS_DATA.map((t) => (
             <TestimonialCard key={t.name} t={t} />
+          ))}
+        </div>
+      </div>
+
+      {/* Desktop: infinite marquee, two copies of the data for a seamless loop.
+          Draggable too — grab and swipe to scrub it manually. */}
+      <div className="relative hidden overflow-hidden dt:block">
+        <div
+          ref={trackRef}
+          className="flex w-max cursor-grab gap-6 px-8 select-none active:cursor-grabbing"
+        >
+          {[...TESTIMONIALS_DATA, ...TESTIMONIALS_DATA].map((t, i) => (
+            <TestimonialCard key={`${t.name}-${i}`} t={t} />
           ))}
         </div>
       </div>

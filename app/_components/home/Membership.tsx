@@ -9,7 +9,7 @@
  */
 
 import { Button, Tag } from "antd";
-import { FiCheck } from "react-icons/fi";
+import { FiArrowRight, FiCheck } from "react-icons/fi";
 import BackdropMotifs from "@/app/_components/shared/BackdropMotifs";
 import { Parallax, Reveal } from "@/app/_components/shared/Motion";
 import { glass } from "@/app/_lib/glass";
@@ -82,7 +82,7 @@ function TierCard({ tier }: { tier: MembershipTier }) {
 
 export default function Membership() {
   return (
-    <section className="relative overflow-hidden bg-[#160221] py-24 dt:py-32">
+    <section className="relative py-24 dt:py-32">
       <Parallax yPercent={-8} className="pointer-events-none absolute inset-0">
         <Mesh preset="membership" />
       </Parallax>
@@ -106,6 +106,19 @@ export default function Membership() {
           <h2 className="mt-3 font-heading text-[clamp(30px,4.4vw,52px)] leading-[1.02] font-bold tracking-[-0.04em] text-balance text-white">
             Pick the plan that fits your family.
           </h2>
+          <div className="mt-7 flex justify-center">
+            {/* No dedicated membership/plans page exists yet — placeholder
+                until one does, styled to match the other sections' CTA. */}
+            <Button
+              type="text"
+              className="h-auto! border-[1.5px]! border-white/25! bg-transparent! px-6! py-3! text-[14px]! text-white! font-sans hover:border-white/50! hover:text-white!"
+            >
+              <span className="flex items-center gap-2">
+                Browse all plans
+                <FiArrowRight size={14} />
+              </span>
+            </Button>
+          </div>
         </div>
 
         <Reveal

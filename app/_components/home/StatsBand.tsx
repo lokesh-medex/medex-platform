@@ -132,10 +132,7 @@ export default function StatsBand() {
   );
 
   return (
-    <section
-      ref={ref}
-      className="relative z-0 overflow-hidden bg-white pt-40 pb-24 dt:pb-28"
-    >
+    <section ref={ref} className="relative z-0 pt-40 pb-24 dt:pb-28">
       <Parallax yPercent={-8} className="pointer-events-none absolute inset-0">
         <Mesh preset="stats" />
       </Parallax>

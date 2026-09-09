@@ -7,7 +7,7 @@
 
 import Image from "next/image";
 import { Button } from "antd";
-import { FiArrowUpRight, FiMapPin } from "react-icons/fi";
+import { FiArrowRight, FiArrowUpRight, FiMapPin } from "react-icons/fi";
 import BackdropMotifs from "@/app/_components/shared/BackdropMotifs";
 import { Parallax, Reveal } from "@/app/_components/shared/Motion";
 import { VENDORS_DATA } from "@/app/_lib/homepage-data";
@@ -25,10 +25,7 @@ const SPANS = [
 
 export default function Vendors() {
   return (
-    <section
-      id="vendors"
-      className="relative overflow-hidden bg-white py-24 dt:py-32"
-    >
+    <section id="vendors" className="relative py-24 dt:py-32">
       <Parallax yPercent={-8} className="pointer-events-none absolute inset-0">
         <Mesh preset="vendors" />
       </Parallax>
@@ -52,11 +49,21 @@ export default function Vendors() {
             <h2 className="mt-3 font-heading text-[clamp(30px,4.4vw,52px)] leading-[1.02] font-bold tracking-[-0.04em] text-balance text-slate-900">
               Vendors people actually rebook.
             </h2>
+            <p className="mt-4 max-w-120 font-sans text-[14.5px] leading-[1.6] text-slate-700">
+              Every listing is verified before it goes live — licences,
+              facilities and pricing checked by our team.
+            </p>
           </div>
-          <p className="max-w-[340px] font-sans text-[14.5px] leading-[1.6] text-slate-700">
-            Every listing is verified before it goes live — licences, facilities
-            and pricing checked by our team.
-          </p>
+          <Button
+            type="text"
+            href="/listings/vendors"
+            className="h-auto! border-[1.5px]! border-slate-900/15! bg-white/60! px-6! py-3! text-[14px]! text-slate-900! font-sans"
+          >
+            <span className="flex items-center gap-2">
+              Browse all vendors
+              <FiArrowRight size={14} />
+            </span>
+          </Button>
         </div>
 
         <Reveal

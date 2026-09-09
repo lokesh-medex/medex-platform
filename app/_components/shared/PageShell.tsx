@@ -6,6 +6,7 @@ interface PageShellProps {
   showCart?: boolean;
   cartCount?: number;
   onCartClick?: () => void;
+  showFooter?: boolean;
   children: React.ReactNode;
 }
 
@@ -20,6 +21,7 @@ export default function PageShell({
   showCart = true,
   cartCount = 0,
   onCartClick,
+  showFooter = true,
   children,
 }: PageShellProps) {
   return (
@@ -32,7 +34,11 @@ export default function PageShell({
         forceDense
       />
       <main className="pt-32">{children}</main>
-      <Footer />
+      {showFooter && (
+        <div className="overflow-hidden bg-[#0d0116]">
+          <Footer />
+        </div>
+      )}
     </div>
   );
 }

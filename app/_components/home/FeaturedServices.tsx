@@ -131,7 +131,7 @@ function CompactTile({ card, span }: { card: HighlightCard; span: string }) {
 
 export default function FeaturedServices() {
   return (
-    <section className="relative overflow-hidden bg-[#f8f5fa] py-24 dt:py-32">
+    <section className="relative py-24 dt:py-32">
       <Parallax yPercent={-8} className="pointer-events-none absolute inset-0">
         <Mesh preset="features" />
       </Parallax>
@@ -158,6 +158,7 @@ export default function FeaturedServices() {
           </div>
           <Button
             type="text"
+            href="/listings"
             className="h-auto! border-[1.5px]! border-slate-900/15! bg-white/60! px-6! py-3! text-[14px]! text-slate-900! font-sans"
           >
             <span className="flex items-center gap-2">

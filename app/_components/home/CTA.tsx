@@ -14,7 +14,7 @@ import Mesh from "./Mesh";
 
 export default function CTA() {
   return (
-    <section className="relative overflow-hidden bg-[#0d0116] py-24 dt:py-32">
+    <section className="relative py-24 dt:py-32">
       <Parallax yPercent={-8} className="pointer-events-none absolute inset-0">
         <Mesh preset="cta" />
       </Parallax>

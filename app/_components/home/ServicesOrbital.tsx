@@ -25,6 +25,7 @@ import {
   SERVICES_DATA,
   type ServiceNode,
 } from "@/app/_lib/homepage-data";
+import { getTabByLabel, hrefForTab } from "@/app/_lib/listings-data";
 import Mesh from "./Mesh";
 
 const VIEWBOX = 760;
@@ -81,10 +82,7 @@ export default function ServicesOrbital() {
   const activeColor = ICON_COLORS[active.icon];
 
   return (
-    <section
-      id="services"
-      className="relative overflow-hidden bg-[#100119] py-24 dt:py-36"
-    >
+    <section id="services" className="relative py-24 dt:py-36">
       <Parallax yPercent={-8} className="pointer-events-none absolute inset-0">
         <Mesh preset="orbital" />
       </Parallax>
@@ -352,6 +350,11 @@ export default function ServicesOrbital() {
             <Button
               type="text"
               block
+              href={
+                getTabByLabel(active.title)
+                  ? hrefForTab(getTabByLabel(active.title)!)
+                  : "/listings"
+              }
               className="h-auto! bg-white! py-3.5! text-[14px]! text-slate-900! transition-transform! duration-200! font-sans hover:-translate-y-0.5!"
             >
               <span className="flex items-center justify-center gap-2">

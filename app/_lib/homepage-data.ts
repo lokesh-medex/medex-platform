@@ -209,6 +209,20 @@ export const TESTIMONIALS_DATA: Testimonial[] = [
     role: "Patient, wellness programs",
     rating: 4,
   },
+  {
+    quote:
+      "I compared three hospitals for my father's knee surgery in one afternoon — package price, surgeon reviews, everything side by side. We saved almost a week of phone calls.",
+    name: "Prakash Shrestha",
+    role: "Patient, orthopedic package",
+    rating: 5,
+  },
+  {
+    quote:
+      "Booking a video consultation used to mean juggling three different apps. Now I message my doctor, pay, and get my prescription in one place.",
+    name: "Nadia Wongsawat",
+    role: "Patient, telemedicine",
+    rating: 4,
+  },
 ];
 
 export interface FlagOption {

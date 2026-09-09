@@ -33,6 +33,7 @@ import {
 } from "react-icons/fi";
 import { FaFlask } from "react-icons/fa";
 import LangCountrySwitcher from "@/app/_components/shared/LangCountrySwitcher";
+import NavSearch from "@/app/_components/home/NavSearch";
 import { glass } from "@/app/_lib/glass";
 import { BRAND_DARK_PANEL } from "@/app/_lib/theme";
 import { MOBILE_NAV_LABELS, NAV_MENUS_DATA } from "@/app/_lib/homepage-data";
@@ -80,13 +81,20 @@ export default function Navbar({
   return (
     <div className="px-6">
       <div className="flex items-center justify-between gap-4 py-2.5">
-        <Link href="/" className="shrink-0">
+        {/* Solid white chip, not just the bare mark: the logo's own red/purple
+            hues match the brand mesh behind the hero and the brand-gradient
+            dense panel alike, so without an opaque, color-neutral backdrop it
+            blends into whatever's behind the header instead of standing out. */}
+        <Link
+          href="/"
+          className="flex shrink-0 items-center rounded-full bg-white px-3 py-1.5 shadow-[0_2px_10px_rgba(0,0,0,0.18)]"
+        >
           <Image
             src="/medex.webp"
             alt="Medex"
-            height={30}
-            width={131}
-            className="h-7.5 w-auto brightness-0 invert"
+            height={24}
+            width={105}
+            className="h-6 w-auto"
             priority
           />
         </Link>
@@ -167,6 +175,7 @@ export default function Navbar({
 
         {/* Desktop auth/cart */}
         <div className="hidden shrink-0 items-center gap-1.5 dt:flex">
+          <NavSearch />
           <Link
             href="/auth/login"
             className="flex cursor-pointer items-center gap-1.5 rounded-full px-2.5 py-1.5 text-sm font-bold whitespace-nowrap text-white/85 transition-colors duration-150 hover:bg-white/10 hover:text-white font-sans"
@@ -197,6 +206,7 @@ export default function Navbar({
 
         {/* Mobile right side */}
         <div className="flex items-center gap-2 dt:hidden">
+          <NavSearch compact />
           {showCart && (
             <Badge count={cartCount} size="small" offset={[-2, 2]}>
               <Button

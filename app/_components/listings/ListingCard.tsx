@@ -1,16 +1,39 @@
+import Link from "next/link";
 import { Button, Tag } from "antd";
 import { FaStar } from "react-icons/fa";
+import { FiShoppingCart } from "react-icons/fi";
 import ImageWithFallback from "@/app/_components/shared/ImageWithFallback";
 import InitialsAvatar from "@/app/_components/shared/InitialsAvatar";
 import type { ListingItem } from "@/app/_lib/listings-data";
 import { glass } from "@/app/_lib/glass";
 
+interface IProps {
+  item: ListingItem;
+  /** Category detail page to open on card click — omitted for tabs (vendors,
+   * doctors) that have no detail page, in which case the card isn't a link. */
+  detailHref?: string;
+  onAddToCart?: () => void;
+}
+
 /** One card in the listings grid — a lab test, package, service, vendor or doctor offer. */
-export default function ListingCard({ item }: { item: ListingItem }) {
+export default function ListingCard({ item, detailHref, onAddToCart }: IProps) {
+  const canAddToCart = item.cta === "Book Now";
+
   return (
     <div
-      className={`rounded-[18px] overflow-hidden flex flex-col transition-[transform,box-shadow] duration-200 hover:-translate-y-1 hover:shadow-[0_16px_32px_#0f172a1a] ${glass.subtle}`}
+      className={`relative rounded-[18px] overflow-hidden flex flex-col transition-[transform,box-shadow] duration-200 hover:-translate-y-1 hover:shadow-[0_16px_32px_#0f172a1a] ${glass.subtle}`}
     >
+      {/* Stretched-link overlay: makes the whole card clickable while
+          leaving the Add to Cart button (raised above it via z-index)
+          independently clickable, instead of nesting a <button> inside
+          this <a>, which HTML forbids. */}
+      {detailHref && (
+        <Link
+          href={detailHref}
+          aria-label={item.title}
+          className="absolute inset-0 z-0"
+        />
+      )}
       <div
         className="relative h-37.5 overflow-hidden"
         style={{ background: item.gradient }}
@@ -76,9 +99,17 @@ export default function ListingCard({ item }: { item: ListingItem }) {
           )}
           <Button
             type="primary"
-            className="whitespace-nowrap! text-[12.5px]! h-auto! py-2.5! px-4! text-white! font-bold! font-sans bg-[linear-gradient(120deg,var(--color-primary),var(--color-secondary))]!"
+            onClick={canAddToCart ? onAddToCart : undefined}
+            className="relative! z-10 whitespace-nowrap! text-[12.5px]! h-auto! py-2.5! px-4! text-white! font-bold! font-sans bg-[linear-gradient(120deg,var(--color-primary),var(--color-secondary))]!"
           >
-            {item.cta}
+            {canAddToCart ? (
+              <span className="flex items-center gap-1.5">
+                <FiShoppingCart size={13} />
+                Add to Cart
+              </span>
+            ) : (
+              item.cta
+            )}
           </Button>
         </div>
       </div>

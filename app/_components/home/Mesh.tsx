@@ -7,6 +7,27 @@
  *
  * Server-safe (no hooks) so sections can render it without going client.
  * Purely decorative: `aria-hidden` + `pointer-events-none`.
+ *
+ * FLAT SECTION GROUNDS: individual `<section>`s do NOT paint their own flat
+ * background. A run of consecutive sections in the same "register" (light
+ * vs. dark) shares ONE background, painted once on a wrapping `<div>` in
+ * `app/page.tsx` — `bg-[#f8f5fa]` around {StatsBand, FeaturedServices,
+ * Vendors} and again around {Partners, Doctors, Testimonials}; `bg-[#100119]`
+ * around {ServicesOrbital, Membership}; `bg-[#0d0116]` around {CTA, Footer}.
+ * A per-section background would show as a visible seam at the shared
+ * boundary even at an identical hex (anti-aliasing, subpixel rounding), and
+ * a Mesh preset's blur can't hide it — it fades to transparent, not to the
+ * neighbor's color. Adding a section to one of these runs means dropping its
+ * own `bg-*` and adding it inside the matching wrapper in `page.tsx`, not
+ * giving it a background of its own.
+ *
+ * For the same reason, this component does NOT clip itself with
+ * `overflow-hidden` — that's owned by the same `page.tsx` wrapper `<div>`.
+ * Each section's `<Parallax>` scrubs this layer's `yPercent` as the section
+ * scrolls, so a per-section clip (or one baked into this component) slices a
+ * visible straight edge off the layer right as it's mid-drift — exactly at
+ * the boundary between two sections. Clipping once per register run instead
+ * lets the drift bleed into the neighboring section within the same run.
  */
 
 const MESH_HEX = {
@@ -178,7 +199,7 @@ export default function Mesh({ preset, className = "" }: IProps) {
   return (
     <div
       aria-hidden
-      className={`pointer-events-none absolute inset-0 overflow-hidden ${className}`}
+      className={`pointer-events-none absolute inset-0 ${className}`}
     >
       {spec.blobs.map((b, i) => (
         <div

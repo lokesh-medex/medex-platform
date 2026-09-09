@@ -66,12 +66,21 @@ export const antdTheme: ThemeConfig = {
  * secondary in the same 120deg direction as the brand gradient used
  * everywhere else on the site.
  *
+ * The stops are `color-mix`ed from the live `--color-primary`/`--color-secondary`
+ * tokens rather than hand-picked rgba literals — plain sRGB scaling of
+ * `brand.primary` down to panel-darkness reads as muddy brown, not red, so
+ * the mix happens in oklch (perceptually uniform lightness) to keep the
+ * primary stop recognizably in the brand red's hue family. A third, middle
+ * stop blends primary and secondary together (rather than a flat two-stop
+ * fade) so the gradient plays both brand hues across the panel instead of
+ * just darkening each corner independently.
+ *
  * Exported as two pieces because not every surface wants the full panel
  * treatment — the mobile drawer supplies its own top border and shouldn't
  * gain a shadow/border on all four sides, so it takes `BG` alone.
  */
 export const BRAND_DARK_BG =
-  "bg-[linear-gradient(120deg,rgba(74,18,13,0.94),rgba(58,15,61,0.94))]";
+  "bg-[linear-gradient(120deg,color-mix(in_oklch,var(--color-primary)_55%,black),color-mix(in_oklch,var(--color-primary)_32%,var(--color-secondary)_32%),color-mix(in_oklch,var(--color-secondary)_55%,black))]";
 
 /** Full treatment: background + blur + hairline border + drop shadow. */
 export const BRAND_DARK_PANEL = `${BRAND_DARK_BG} backdrop-blur-2xl border border-white/10 shadow-[0_12px_40px_rgba(0,0,0,0.45)]`;

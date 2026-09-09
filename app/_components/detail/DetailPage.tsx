@@ -201,7 +201,22 @@ export default function DetailPage({ category }: DetailPageProps) {
           </div>
         </div>
 
-        <section className="max-w-[1280px] mx-auto px-5 dt:px-8 pt-5 pb-14 grid grid-cols-1 dt:grid-cols-[1.5fr_1fr] gap-9 items-start">
+        <section className="relative max-w-[1280px] mx-auto px-5 dt:px-8 pt-5 pb-14 grid grid-cols-1 dt:grid-cols-[1.5fr_1fr] gap-9 items-start">
+          {/*
+            Not `overflow-hidden` — BuyBox below is `dt:sticky`, and
+            wrapping a sticky ancestor in overflow-hidden breaks its sticky
+            positioning. BackdropMotifs is safe here anyway: it's `absolute`
+            (ignored by this grid's sizing) and clips its own icons to its
+            own box via its own internal `overflow-hidden`.
+          */}
+          <BackdropMotifs
+            count={5}
+            opacity={0.04}
+            seed={53}
+            zone="edges"
+            minSize={110}
+            maxSize={210}
+          />
           {/* LEFT: image, description, includes */}
           <div>
             <div className="relative rounded-[20px] overflow-hidden h-[min(46vh,420px)] min-h-[280px] border border-white/70 shadow-[0_8px_32px_rgba(15,23,42,0.12)]">

@@ -701,6 +701,31 @@ export function categoriesOf(items: ListingItem[]): string[] {
   return [...new Set(items.map((it) => it.category))];
 }
 
+export interface TabSearchResult {
+  tab: ListingsTab;
+  items: ListingItem[];
+}
+
+/** Matches a query against every tab's items, grouped by tab and capped per group — feeds the navbar's search dropdown. */
+export function searchListingItems(
+  query: string,
+  limitPerTab = 5
+): TabSearchResult[] {
+  const q = query.trim().toLowerCase();
+  if (!q) return [];
+
+  return LISTINGS_TABS.map((tab) => ({
+    tab,
+    items: tab.items
+      .filter(
+        (it) =>
+          it.title.toLowerCase().includes(q) ||
+          it.category.toLowerCase().includes(q)
+      )
+      .slice(0, limitPerTab),
+  })).filter((result) => result.items.length > 0);
+}
+
 export type SortValue =
   "popular" | "price_asc" | "price_desc" | "rating_desc" | "name_asc";
 

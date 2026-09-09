@@ -6,8 +6,8 @@
  * mobile, where an overlap would just clip content.
  */
 
-import { Rate } from "antd";
-import { FiStar } from "react-icons/fi";
+import { Button, Rate } from "antd";
+import { FiArrowRight, FiStar } from "react-icons/fi";
 import ImageWithFallback from "@/app/_components/shared/ImageWithFallback";
 import InitialsAvatar from "@/app/_components/shared/InitialsAvatar";
 import BackdropMotifs from "@/app/_components/shared/BackdropMotifs";
@@ -60,7 +60,7 @@ function DoctorCard({ doc, i }: { doc: Doctor; i: number }) {
         {doc.specialty}
       </p>
 
-      <div className="flex items-center justify-between border-t border-slate-900/10 pt-3">
+      <div className="mb-4 flex items-center justify-between border-t border-slate-900/10 pt-3">
         <span className="font-sans text-[12px] text-slate-600">
           {doc.exp} experience
         </span>
@@ -71,16 +71,21 @@ function DoctorCard({ doc, i }: { doc: Doctor; i: number }) {
           className="text-[11px]!"
         />
       </div>
+
+      <Button
+        type="primary"
+        block
+        className="h-auto! py-2.5! text-[13px]! font-sans"
+      >
+        Book now
+      </Button>
     </article>
   );
 }
 
 export default function Doctors() {
   return (
-    <section
-      id="doctors"
-      className="relative overflow-hidden bg-[#f8f5fa] py-24 dt:py-32"
-    >
+    <section id="doctors" className="relative py-24 dt:py-32">
       <Parallax yPercent={-8} className="pointer-events-none absolute inset-0">
         <Mesh preset="doctors" />
       </Parallax>
@@ -103,6 +108,18 @@ export default function Doctors() {
           <h2 className="mt-3 font-heading text-[clamp(30px,4.4vw,52px)] leading-[1.02] font-bold tracking-[-0.04em] text-balance text-slate-900">
             Doctors ready to see you.
           </h2>
+          <div className="mt-7 flex justify-center">
+            <Button
+              type="text"
+              href="/listings/doctors"
+              className="h-auto! border-[1.5px]! border-slate-900/15! bg-white/60! px-6! py-3! text-[14px]! text-slate-900! font-sans"
+            >
+              <span className="flex items-center gap-2">
+                Browse all doctors
+                <FiArrowRight size={14} />
+              </span>
+            </Button>
+          </div>
         </div>
 
         <Reveal
