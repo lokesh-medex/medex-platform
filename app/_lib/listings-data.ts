@@ -4,7 +4,7 @@
 
 import type { IconType } from "react-icons";
 import { FaFlask, FaUserMd } from "react-icons/fa";
-import { FiBox, FiHeart, FiHome, FiStar } from "react-icons/fi";
+import { FiBox, FiGrid, FiHeart, FiHome, FiStar } from "react-icons/fi";
 import { brand } from "@/app/_lib/theme";
 import { slugify } from "@/app/_lib/slug";
 
@@ -27,6 +27,11 @@ export interface ListingItem {
   /** Set on vendors- and doctors-tab items — links the card to
    * /vendor/[slug] or /doctor/[slug] respectively. */
   slug?: string;
+  /** Set only on the "all" tab's merged items — the label of the tab
+   * (Lab Tests/Packages/Services/Wellness) each item was pulled from, since
+   * that tab's single shared detail href (see ListingsView's hrefForItem)
+   * has to be resolved per-item once items from different tabs are merged. */
+  sourceTabLabel?: string;
 }
 
 export interface ListingsTab {
@@ -621,7 +626,30 @@ const DOCTOR_ITEMS = mkItems(
   { prefix: "doctors", tagColor: brand.primary, cta: "Book Now" }
 ).map((item) => ({ ...item, slug: slugify(item.title) }));
 
+/**
+ * "All" tab content — every purchasable offering (lab tests, packages,
+ * services, wellness) merged into one browsable list. Vendors and doctors
+ * are providers/people rather than offerings, so they're excluded here (they
+ * keep their own dedicated tabs).
+ */
+const ALL_ITEMS: ListingItem[] = [
+  ...LAB_ITEMS.map((it) => ({ ...it, sourceTabLabel: "Lab Tests" })),
+  ...PACKAGE_ITEMS.map((it) => ({ ...it, sourceTabLabel: "Packages" })),
+  ...SERVICE_ITEMS.map((it) => ({ ...it, sourceTabLabel: "Services" })),
+  ...WELLNESS_ITEMS.map((it) => ({ ...it, sourceTabLabel: "Wellness" })),
+];
+
 export const LISTINGS_TABS: ListingsTab[] = [
+  {
+    id: "all",
+    slug: "all",
+    label: "All",
+    icon: FiGrid,
+    items: ALL_ITEMS,
+    hasPrice: true,
+    maxPriceDefault: 15000,
+    priceStep: 500,
+  },
   {
     id: "labtests",
     slug: "lab-tests",
@@ -696,13 +724,25 @@ export function getTabByLabel(label: string): ListingsTab | undefined {
   return LISTINGS_TABS.find((t) => t.label === label);
 }
 
-/** URL for a tab's own listings page, e.g. "/listings/packages". */
+/** URL for a tab's own listings page, e.g. "/listings/packages". The "all"
+ * tab is the one /listings (no path segment) already renders, so it links
+ * back to the root rather than to /listings/all. */
 export function hrefForTab(tab: ListingsTab): string {
-  return `/listings/${tab.slug}`;
+  return tab.id === "all" ? "/listings" : `/listings/${tab.slug}`;
 }
 
 export function categoriesOf(items: ListingItem[]): string[] {
   return [...new Set(items.map((it) => it.category))];
+}
+
+/** Unique vendor names actually appearing across a set of items — feeds the
+ * "all" tab's Vendors filter. */
+export function vendorNamesOf(items: ListingItem[]): string[] {
+  return [
+    ...new Set(
+      items.map((it) => it.vendorName).filter((name): name is string => !!name)
+    ),
+  ];
 }
 
 export interface TabSearchResult {
@@ -757,6 +797,8 @@ export const PAGE_SIZE = 9;
 
 export interface TabFilterState {
   categories: string[];
+  /** Selected vendor names — only populated by the "all" tab's Vendors filter. */
+  vendors: string[];
   maxPrice: number;
   search: string;
   sort: SortValue;
@@ -765,6 +807,7 @@ export interface TabFilterState {
 export function defaultFilterState(tab: ListingsTab): TabFilterState {
   return {
     categories: [],
+    vendors: [],
     maxPrice: tab.maxPriceDefault,
     search: "",
     sort: "popular",
@@ -777,6 +820,11 @@ export function filterAndSortItems(
 ): ListingItem[] {
   let items = tab.items.filter((it) => {
     if (filters.categories.length && !filters.categories.includes(it.category))
+      return false;
+    if (
+      filters.vendors.length &&
+      (!it.vendorName || !filters.vendors.includes(it.vendorName))
+    )
       return false;
     if (tab.hasPrice && it.price != null && it.price > filters.maxPrice)
       return false;

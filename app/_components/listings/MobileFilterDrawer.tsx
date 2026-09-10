@@ -1,4 +1,5 @@
-import { Button, Drawer } from "antd";
+import { Drawer } from "antd";
+import AppliedFilters from "@/app/_components/listings/AppliedFilters";
 import FilterGroups from "@/app/_components/listings/FilterGroups";
 import type { ListingsTab, TabFilterState } from "@/app/_lib/listings-data";
 
@@ -7,6 +8,8 @@ interface MobileFilterDrawerProps {
   tab: ListingsTab;
   filters: TabFilterState;
   onToggleCategory: (category: string) => void;
+  onVendorsChange: (vendors: string[]) => void;
+  onCategoriesChange: (categories: string[]) => void;
   onMaxPriceChange: (value: number) => void;
   onClear: () => void;
   onClose: () => void;
@@ -18,6 +21,8 @@ export default function MobileFilterDrawer({
   tab,
   filters,
   onToggleCategory,
+  onVendorsChange,
+  onCategoriesChange,
   onMaxPriceChange,
   onClear,
   onClose,
@@ -44,18 +49,21 @@ export default function MobileFilterDrawer({
         },
       }}
     >
-      <Button
-        type="text"
-        onClick={onClear}
-        className="font-sans! text-primary! font-bold! text-[13px]! h-auto! p-0! mb-4"
-      >
-        Clear all
-      </Button>
       <div className="flex flex-col gap-4">
+        <AppliedFilters
+          tab={tab}
+          filters={filters}
+          onToggleCategory={onToggleCategory}
+          onVendorsChange={onVendorsChange}
+          onMaxPriceChange={onMaxPriceChange}
+          onClear={onClear}
+        />
         <FilterGroups
           tab={tab}
           filters={filters}
           onToggleCategory={onToggleCategory}
+          onVendorsChange={onVendorsChange}
+          onCategoriesChange={onCategoriesChange}
           onMaxPriceChange={onMaxPriceChange}
         />
       </div>

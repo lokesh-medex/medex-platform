@@ -45,12 +45,17 @@ export default function ListingsView({ activeTabId }: ListingsViewProps) {
 
   // Seeds the search box from `?q=` — set by NavSearch's result links (see
   // app/_components/home/NavSearch.tsx) — so following one lands pre-filtered.
+  // `?vendor=` similarly pre-selects the "all" tab's Vendors filter — set by
+  // VendorServices' "View All Services" link (see
+  // app/_components/vendor/VendorServices.tsx).
   const searchParams = useSearchParams();
   const initialQuery = searchParams.get("q") ?? "";
+  const initialVendor = searchParams.get("vendor");
 
   const [filters, setFilters] = useState(() => ({
     ...defaultFilterState(tab),
     search: initialQuery,
+    vendors: initialVendor ? [initialVendor] : [],
   }));
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const [showFilterDrawer, setShowFilterDrawer] = useState(false);
@@ -70,6 +75,15 @@ export default function ListingsView({ activeTabId }: ListingsViewProps) {
       return item.slug ? `/doctor/${item.slug}` : tabDetailHref;
     if (tab.id === "vendors")
       return item.slug ? `/vendor/${item.slug}` : undefined;
+    // The "all" tab merges items from four different tabs, each with its own
+    // shared detail href — resolve per-item via the origin tab it came from
+    // instead of the single tabDetailHref computed above for this tab.
+    if (tab.id === "all") {
+      const category = item.sourceTabLabel
+        ? getDetailCategoryByLabel(item.sourceTabLabel)
+        : undefined;
+      return category ? hrefForDetailItem(category) : undefined;
+    }
     return tabDetailHref;
   };
 
@@ -82,6 +96,7 @@ export default function ListingsView({ activeTabId }: ListingsViewProps) {
   const sortOptions = useMemo(() => sortOptionsFor(tab), [tab]);
   const activeFilterCount =
     filters.categories.length +
+    filters.vendors.length +
     (tab.hasPrice && filters.maxPrice < tab.maxPriceDefault ? 1 : 0);
 
   // Auto-load more results as the user nears the bottom of the page.
@@ -110,6 +125,12 @@ export default function ListingsView({ activeTabId }: ListingsViewProps) {
         ? f.categories.filter((c) => c !== category)
         : [...f.categories, category],
     }));
+
+  const setCategories = (categories: string[]) =>
+    updateFilters((f) => ({ ...f, categories }));
+
+  const setVendors = (vendors: string[]) =>
+    updateFilters((f) => ({ ...f, vendors }));
 
   const setMaxPrice = (value: number) =>
     updateFilters((f) => ({ ...f, maxPrice: value }));
@@ -163,6 +184,8 @@ export default function ListingsView({ activeTabId }: ListingsViewProps) {
             tab={tab}
             filters={filters}
             onToggleCategory={toggleCategory}
+            onVendorsChange={setVendors}
+            onCategoriesChange={setCategories}
             onMaxPriceChange={setMaxPrice}
             onClear={clearFilters}
           />
@@ -226,6 +249,8 @@ export default function ListingsView({ activeTabId }: ListingsViewProps) {
           tab={tab}
           filters={filters}
           onToggleCategory={toggleCategory}
+          onVendorsChange={setVendors}
+          onCategoriesChange={setCategories}
           onMaxPriceChange={setMaxPrice}
           onClear={clearFilters}
           onClose={() => setShowFilterDrawer(false)}

@@ -3,8 +3,12 @@ import { notFound } from "next/navigation";
 import ListingsView from "@/app/_components/listings/ListingsView";
 import { LISTINGS_TABS, getTabBySlug } from "@/app/_lib/listings-data";
 
+// "all" is excluded — it's the tab /listings (no path segment) already
+// renders, so /listings/all would just be a duplicate static route.
 export function generateStaticParams() {
-  return LISTINGS_TABS.map((tab) => ({ tab: tab.slug }));
+  return LISTINGS_TABS.filter((tab) => tab.id !== "all").map((tab) => ({
+    tab: tab.slug,
+  }));
 }
 
 // ListingsView renders its own PageShell (it owns the cart count shown in

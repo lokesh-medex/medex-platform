@@ -68,7 +68,7 @@ export default function VendorDetailPage({ vendor }: VendorDetailPageProps) {
             maxSize={210}
           />
 
-          {/* LEFT: header, gallery (Task 3), about, facilities, doctors (Task 4), services (Task 5) */}
+          {/* LEFT: header, gallery, about, facilities, services, doctors */}
           {/* `min-w-0` is required here: without it, a 1fr grid item defaults
               to `min-width: auto`, and antd's Carousel measures its own
               width before the grid has settled, blowing the grid track (and
@@ -128,8 +128,11 @@ export default function VendorDetailPage({ vendor }: VendorDetailPageProps) {
               </div>
             </div>
 
+            <VendorServices
+              services={vendor.services}
+              vendorName={vendor.title}
+            />
             <VendorDoctors doctors={vendor.doctors} />
-            <VendorServices services={vendor.services} />
           </div>
 
           {/* RIGHT: sticky vendor info card */}

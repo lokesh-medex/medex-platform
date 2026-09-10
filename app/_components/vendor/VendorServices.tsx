@@ -7,6 +7,7 @@ import type { VendorService } from "@/app/_lib/vendor-data";
 
 interface VendorServicesProps {
   services: VendorService[];
+  vendorName: string;
 }
 
 function hasMatchingListing(s: VendorService): boolean {
@@ -22,14 +23,25 @@ function hasMatchingListing(s: VendorService): boolean {
  * catalog match (e.g. pharmacy-only services with nothing to link to)
  * render as plain, unlinked rows instead of a "View" affordance that
  * would dead-end on an empty results page. */
-export default function VendorServices({ services }: VendorServicesProps) {
+export default function VendorServices({
+  services,
+  vendorName,
+}: VendorServicesProps) {
   if (services.length === 0) return null;
 
   return (
     <div className={`mt-7 rounded-[20px] p-6 ${glass.subtle}`}>
-      <h2 className="font-heading text-slate-900 font-bold text-[19px] mb-3.5">
-        Services
-      </h2>
+      <div className="flex items-center justify-between gap-3 mb-3.5">
+        <h2 className="font-heading text-slate-900 font-bold text-[19px] m-0">
+          Services
+        </h2>
+        <Link
+          href={`/listings?vendor=${encodeURIComponent(vendorName)}`}
+          className="shrink-0 text-[13px] font-bold text-primary hover:underline"
+        >
+          View All Services
+        </Link>
+      </div>
       <div className="flex flex-col gap-2.5">
         {services.map((s) => {
           const linkable = hasMatchingListing(s);
