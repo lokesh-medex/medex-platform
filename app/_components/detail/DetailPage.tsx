@@ -18,6 +18,8 @@ import {
   type DetailCategory,
   type DetailItem,
 } from "@/app/_lib/detail-data";
+import { getTabByLabel } from "@/app/_lib/listings-data";
+import { slugify } from "@/app/_lib/slug";
 
 interface DetailPageProps {
   category: DetailCategory;
@@ -190,9 +192,19 @@ export default function DetailPage({ category }: DetailPageProps) {
                 Home
               </Link>
               <span className="shrink-0">/</span>
-              <a href="#" className="text-slate-500 shrink-0">
+              <Link
+                href={`/listings/${getTabByLabel(item.categoryLabel)?.slug}`}
+                className="text-slate-500 shrink-0"
+              >
                 {item.categoryLabel}
-              </a>
+              </Link>
+              <span className="shrink-0">/</span>
+              <Link
+                href={`/vendor/${slugify(item.vendorName)}`}
+                className="text-slate-500 shrink-0"
+              >
+                {item.vendorName}
+              </Link>
               <span className="shrink-0">/</span>
               <span className="text-slate-900 font-semibold truncate">
                 {item.title}
