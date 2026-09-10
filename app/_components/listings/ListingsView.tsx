@@ -56,9 +56,6 @@ export default function ListingsView({ activeTabId }: ListingsViewProps) {
   const [showFilterDrawer, setShowFilterDrawer] = useState(false);
   const [cartCount, setCartCount] = useState(0);
 
-  // Only labtests/packages/services/wellness have a detail page — it's one
-  // static page per category, not per item, so every item in a tab shares
-  // the same href. Vendors/doctors have no detail page to link to.
   const detailCategory = getDetailCategoryByLabel(tab.label);
   const detailHref = detailCategory
     ? hrefForDetailCategory(detailCategory)

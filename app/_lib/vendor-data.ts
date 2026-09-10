@@ -111,7 +111,7 @@ const RAW_VENDORS: Omit<Vendor, "slug" | "gallery">[] = [
     ],
     services: [
       {
-        name: "Cardiology Consultation",
+        name: "Video Consultation - Specialist",
         category: "Specialist Consultation",
         listingsTab: "services",
         price: 2800,
@@ -124,7 +124,7 @@ const RAW_VENDORS: Omit<Vendor, "slug" | "gallery">[] = [
         price: 6200,
       },
       {
-        name: "Emergency Care",
+        name: "Emergency Ambulance (City)",
         category: "Emergency Services",
         listingsTab: "services",
       },
@@ -163,14 +163,14 @@ const RAW_VENDORS: Omit<Vendor, "slug" | "gallery">[] = [
     ],
     services: [
       {
-        name: "Pediatric Consultation",
+        name: "Video Consultation - General Physician",
         category: "Specialist Consultation",
         listingsTab: "services",
         price: 2200,
         duration: "30 min",
       },
       {
-        name: "Orthopedic Package",
+        name: "Advanced Full Body Screening",
         category: "Health Package",
         listingsTab: "packages",
         price: 8800,
@@ -214,21 +214,21 @@ const RAW_VENDORS: Omit<Vendor, "slug" | "gallery">[] = [
     ],
     services: [
       {
-        name: "General Consultation",
+        name: "Video Consultation - General Physician",
         category: "Consultation",
         listingsTab: "services",
         price: 800,
         duration: "20 min",
       },
       {
-        name: "Skin & Dermatology Consultation",
+        name: "Video Consultation - Specialist",
         category: "Consultation",
         listingsTab: "services",
         price: 1200,
         duration: "30 min",
       },
       {
-        name: "Vaccination",
+        name: "Home Nursing Care (Daily)",
         category: "Preventive Care",
         listingsTab: "services",
         price: 1500,
@@ -266,7 +266,7 @@ const RAW_VENDORS: Omit<Vendor, "slug" | "gallery">[] = [
     ],
     services: [
       {
-        name: "Wellness Consultation",
+        name: "Video Consultation - General Physician",
         category: "Consultation",
         listingsTab: "services",
         price: 1000,
@@ -280,9 +280,9 @@ const RAW_VENDORS: Omit<Vendor, "slug" | "gallery">[] = [
         duration: "75 min",
       },
       {
-        name: "Nutrition Counseling",
+        name: "Nutrition Consultation",
         category: "Consultation",
-        listingsTab: "services",
+        listingsTab: "wellness",
         price: 900,
         duration: "30 min",
       },
@@ -325,7 +325,7 @@ const RAW_VENDORS: Omit<Vendor, "slug" | "gallery">[] = [
         duration: "Results in 4 hrs",
       },
       {
-        name: "HbA1c Test",
+        name: "HbA1c",
         category: "Blood Tests",
         listingsTab: "lab-tests",
         price: 900,
@@ -372,19 +372,19 @@ const RAW_VENDORS: Omit<Vendor, "slug" | "gallery">[] = [
     ],
     services: [
       {
-        name: "Cardiac Screening Package",
+        name: "Cardiac Risk Package (Senior)",
         category: "Health Package",
         listingsTab: "packages",
         price: 5400,
       },
       {
-        name: "Maternity Package",
+        name: "Prenatal Care Package",
         category: "Health Package",
         listingsTab: "packages",
         price: 9600,
       },
       {
-        name: "Emergency Care",
+        name: "Emergency Ambulance (City)",
         category: "Emergency Services",
         listingsTab: "services",
       },
@@ -417,14 +417,14 @@ const RAW_VENDORS: Omit<Vendor, "slug" | "gallery">[] = [
     ],
     services: [
       {
-        name: "Neurology Consultation",
+        name: "Video Consultation - Specialist",
         category: "Specialist Consultation",
         listingsTab: "services",
         price: 1800,
         duration: "30 min",
       },
       {
-        name: "Cancer Screening Package",
+        name: "Advanced Full Body Screening",
         category: "Health Package",
         listingsTab: "packages",
         price: 8200,
@@ -468,13 +468,13 @@ const RAW_VENDORS: Omit<Vendor, "slug" | "gallery">[] = [
     ],
     services: [
       {
-        name: "Orthopedic Package",
+        name: "Senior Citizen Health Package",
         category: "Health Package",
         listingsTab: "packages",
         price: 9200,
       },
       {
-        name: "Cardiac Screening Package",
+        name: "Cardiac Risk Package (Senior)",
         category: "Health Package",
         listingsTab: "packages",
         price: 5600,

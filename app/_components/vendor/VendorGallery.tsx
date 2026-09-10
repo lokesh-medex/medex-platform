@@ -21,11 +21,7 @@ export default function VendorGallery({ vendor }: VendorGalleryProps) {
       <div
         className={`relative rounded-[20px] overflow-hidden h-[min(46vh,420px)] min-h-[280px] border border-white/70 shadow-[0_8px_32px_rgba(15,23,42,0.12)] ${glass.subtle}`}
       >
-        <Carousel
-          ref={carouselRef}
-          afterChange={setActive}
-          dotPosition="bottom"
-        >
+        <Carousel ref={carouselRef} afterChange={setActive}>
           {vendor.gallery.map((src, i) => (
             <div
               key={src + i}

@@ -12,7 +12,7 @@ import type { Vendor } from "@/app/_lib/vendor-data";
 
 const contactSchema = z.object({
   name: z.string().min(1, "Enter your name"),
-  email: z.string().min(1, "Enter your email").email("Enter a valid email"),
+  email: z.email("Enter a valid email"),
   phone: z.string().optional(),
   message: z.string().min(1, "Enter a message"),
 });
