@@ -146,7 +146,7 @@ export default function Navbar({
               >
                 <Button
                   type="text"
-                  className={`flex! h-auto! items-center! gap-1.5! rounded-none! border-b-2! px-0.5! py-1.5! text-sm! font-semibold! whitespace-nowrap! font-sans ${
+                  className={`flex! h-auto! items-center! gap-1.5! rounded-none! border-b-2! bg-transparent! px-0.5! py-1.5! text-sm! font-semibold! whitespace-nowrap! font-sans ${
                     highlighted
                       ? "border-b-white! text-white!"
                       : "border-b-transparent! text-white/65!"
@@ -266,7 +266,7 @@ export default function Navbar({
                   onClick={() =>
                     setMobileCategoryOpen((v) => (v === label ? null : label))
                   }
-                  className={`flex! h-auto! items-center! justify-between! py-2.5! px-1! text-left! text-[14.5px]! font-bold! font-sans ${
+                  className={`flex! h-auto! items-center! justify-between! bg-transparent! py-2.5! px-1! text-left! text-[14.5px]! font-bold! font-sans ${
                     isOpen || isActive ? "text-primary!" : "text-slate-800!"
                   }`}
                 >
@@ -340,16 +340,20 @@ export default function Navbar({
               +66-02-544-0001
             </a>
             <div className="my-1 flex items-center gap-3 px-1">
-              <a href="#" className="text-xs font-bold text-secondary">
+              <Link href="/about" className="text-xs font-bold text-secondary">
                 About
-              </a>
-              <a href="#" className="text-xs font-bold text-secondary">
+              </Link>
+              <Link
+                href="/contact"
+                className="text-xs font-bold text-secondary"
+              >
                 Contact
-              </a>
+              </Link>
             </div>
             <div className="flex flex-col gap-2">
               <Button
                 type="text"
+                href="/contact?purpose=partner"
                 icon={<FiShield size={13} />}
                 className="flex! h-auto! items-center! justify-center! gap-1.5! bg-primary-50! py-2! text-xs! font-sans text-primary-700!"
               >
@@ -357,6 +361,7 @@ export default function Navbar({
               </Button>
               <Button
                 type="text"
+                href="/membership"
                 icon={<FiStar size={13} />}
                 className="flex! h-auto! items-center! justify-center! gap-1.5! bg-secondary-100! py-2! text-xs! font-sans text-secondary-600!"
               >

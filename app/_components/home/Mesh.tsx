@@ -71,7 +71,9 @@ export type MeshPreset =
   | "listings"
   | "auth"
   | "detail"
-  | "cart";
+  | "cart"
+  | "contact"
+  | "about";
 
 const MESH_PRESETS: Record<MeshPreset, MeshSpec> = {
   hero: {
@@ -194,6 +196,24 @@ const MESH_PRESETS: Record<MeshPreset, MeshSpec> = {
       { x: 6, y: 12, size: 560, c: "secondary", o: 0.14 },
       { x: 92, y: 10, size: 520, c: "primary", o: 0.13 },
       { x: 50, y: 100, size: 460, c: "violet", o: 0.1 },
+    ],
+  },
+  // Confined to the breadcrumb strip only, matching `cart`/`detail`.
+  contact: {
+    blobs: [
+      { x: 10, y: 14, size: 580, c: "primary", o: 0.14 },
+      { x: 90, y: 8, size: 540, c: "secondary", o: 0.13 },
+      { x: 52, y: 100, size: 480, c: "violet", o: 0.1 },
+    ],
+  },
+  // Runs behind the full intro section (breadcrumb + mission headline), not
+  // just a thin strip, so it sits closer to `listings`/`partners` strength
+  // than the confined `detail`/`cart`/`contact` presets.
+  about: {
+    blobs: [
+      { x: 12, y: 18, size: 700, c: "secondary", o: 0.18 },
+      { x: 88, y: 12, size: 640, c: "primary", o: 0.16 },
+      { x: 50, y: 104, size: 600, c: "violet", o: 0.12 },
     ],
   },
 };

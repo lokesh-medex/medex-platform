@@ -15,7 +15,7 @@ import BackdropMotifs from "@/app/_components/shared/BackdropMotifs";
 import { Reveal } from "@/app/_components/shared/Motion";
 import {
   getDetailCategoryByLabel,
-  hrefForDetailCategory,
+  hrefForDetailItem,
 } from "@/app/_lib/detail-data";
 import {
   LISTINGS_TABS,
@@ -57,12 +57,12 @@ export default function ListingsView({ activeTabId }: ListingsViewProps) {
   const [cartCount, setCartCount] = useState(0);
 
   // Only labtests/packages/services/wellness share one detailHref per tab —
-  // one static /detail/[category] page each, so every item in the tab
+  // one static /[vendor]/[service] page each, so every item in the tab
   // shares the same href. Doctors and vendors each have a real per-item
   // page instead, so they need a distinct URL per card.
   const detailCategory = getDetailCategoryByLabel(tab.label);
   const tabDetailHref = detailCategory
-    ? hrefForDetailCategory(detailCategory)
+    ? hrefForDetailItem(detailCategory)
     : undefined;
 
   const hrefForItem = (item: ListingItem) => {

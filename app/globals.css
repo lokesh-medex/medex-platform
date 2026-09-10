@@ -128,6 +128,19 @@ select {
     transform: scale(1.35);
   }
 }
+/* Two of these layered with a half-period `animation-delay` (see
+   MedexMark.tsx) cross-fade between each layer's own solid color instead of
+   trying to animate a gradient's color stops directly, which browsers can't
+   tween smoothly without `@property`. */
+@keyframes markGlowPulse {
+  0%,
+  100% {
+    opacity: 0.08;
+  }
+  50% {
+    opacity: 0.38;
+  }
+}
 @keyframes heroRise {
   0% {
     transform: translateY(0) scale(1);

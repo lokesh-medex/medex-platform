@@ -92,7 +92,18 @@ function cellClasses(i: number) {
   return cls.join(" ");
 }
 
-export default function StatsBand() {
+interface StatsBandProps {
+  /**
+   * `hero` (default) is tuned to sit right below Hero on `/`, where the
+   * floating Header has no `pt-32` clearance ahead of it and needs the
+   * section's own `pt-40` to stand in for that space. `section` is for use
+   * anywhere else in the flow (e.g. inside `PageShell`, which already adds
+   * that clearance) — same visuals, ordinary section padding.
+   */
+  variant?: "hero" | "section";
+}
+
+export default function StatsBand({ variant = "hero" }: StatsBandProps) {
   const ref = useRef<HTMLDivElement>(null);
 
   useGSAP(
@@ -132,7 +143,10 @@ export default function StatsBand() {
   );
 
   return (
-    <section ref={ref} className="relative z-0 pt-40 pb-24 dt:pb-28">
+    <section
+      ref={ref}
+      className={`relative z-0 ${variant === "hero" ? "pt-40 pb-24 dt:pb-28" : "py-24 dt:py-32"}`}
+    >
       <Parallax yPercent={-8} className="pointer-events-none absolute inset-0">
         <Mesh preset="stats" />
       </Parallax>

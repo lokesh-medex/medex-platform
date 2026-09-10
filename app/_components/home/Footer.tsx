@@ -7,6 +7,7 @@
  */
 
 import Image from "next/image";
+import Link from "next/link";
 import { Button, Tag } from "antd";
 import {
   FaFacebookF,
@@ -86,11 +87,11 @@ export default function Footer() {
                 <div className="flex flex-col gap-2.5">
                   {col.items.map((item) => (
                     <a
-                      key={item}
-                      href="#"
+                      key={item.label}
+                      href={item.href}
                       className="text-sm text-white/55 transition-colors hover:text-white!"
                     >
-                      {item}
+                      {item.label}
                     </a>
                   ))}
                 </div>
@@ -136,12 +137,18 @@ export default function Footer() {
             © 2026 Medex. All rights reserved.
           </span>
           <div className="flex items-center gap-4">
-            <a href="#" className="text-xs text-white/40 hover:text-white/70!">
+            <Link
+              href="/privacy"
+              className="text-xs text-white/40 hover:text-white/70!"
+            >
               Privacy
-            </a>
-            <a href="#" className="text-xs text-white/40 hover:text-white/70!">
+            </Link>
+            <Link
+              href="/terms"
+              className="text-xs text-white/40 hover:text-white/70!"
+            >
               Terms
-            </a>
+            </Link>
           </div>
         </div>
       </div>

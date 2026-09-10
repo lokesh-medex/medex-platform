@@ -107,10 +107,9 @@ export default function Membership() {
             Pick the plan that fits your family.
           </h2>
           <div className="mt-7 flex justify-center">
-            {/* No dedicated membership/plans page exists yet — placeholder
-                until one does, styled to match the other sections' CTA. */}
             <Button
               type="text"
+              href="/membership"
               className="h-auto! border-[1.5px]! border-white/25! bg-transparent! px-6! py-3! text-[14px]! text-white! font-sans hover:border-white/50! hover:text-white!"
             >
               <span className="flex items-center gap-2">

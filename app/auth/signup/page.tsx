@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import type { Metadata } from "next";
 import AuthPageShell from "@/app/_components/auth/AuthPageShell";
 
@@ -8,5 +9,11 @@ export const metadata: Metadata = {
 };
 
 export default function SignupPage() {
-  return <AuthPageShell mode="signup" />;
+  return (
+    // SignupForm reads `?tier=` via useSearchParams, which requires a
+    // Suspense boundary on a statically generated page.
+    <Suspense>
+      <AuthPageShell mode="signup" />
+    </Suspense>
+  );
 }

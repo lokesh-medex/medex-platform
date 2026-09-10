@@ -4,15 +4,32 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Button } from "antd";
+import { useSearchParams } from "next/navigation";
 import AppInput from "@/app/_components/form/AppInput";
 import AppPasswordInput from "@/app/_components/form/AppPasswordInput";
 import AppCheckbox from "@/app/_components/form/AppCheckbox";
+import AppSelect from "@/app/_components/form/AppSelect";
+import { MEMBERSHIP_PLANS_DATA } from "@/app/_lib/membership-data";
+
+// A distinct sentinel rather than "" — antd Select only shows a placeholder
+// for a `Controller` value of null/undefined, not an empty string, so a real
+// value is needed to make "no membership" the explicit default selection.
+const NO_MEMBERSHIP = "none";
+const TIER_SLUGS = MEMBERSHIP_PLANS_DATA.map((plan) => plan.slug);
+const TIER_OPTIONS = [
+  { value: NO_MEMBERSHIP, label: "No membership" },
+  ...MEMBERSHIP_PLANS_DATA.map((plan) => ({
+    value: plan.slug,
+    label: plan.name,
+  })),
+];
 
 const signupSchema = z.object({
   fullName: z.string().min(1, "Enter your full name"),
   email: z.email("Enter a valid email address"),
   phone: z.string().min(1, "Enter your phone number"),
   password: z.string().min(8, "Password must be at least 8 characters"),
+  membership: z.string().optional(),
   agreeTerms: z
     .boolean()
     .refine(
@@ -29,6 +46,12 @@ interface SignupFormProps {
 }
 
 export default function SignupForm({ onSubmit }: SignupFormProps) {
+  const searchParams = useSearchParams();
+  const requestedTier = searchParams.get("tier") ?? "";
+  const initialTier = TIER_SLUGS.includes(requestedTier)
+    ? requestedTier
+    : NO_MEMBERSHIP;
+
   const { control, handleSubmit, formState } = useForm<SignupValues>({
     resolver: zodResolver(signupSchema),
     mode: "onChange",
@@ -37,6 +60,7 @@ export default function SignupForm({ onSubmit }: SignupFormProps) {
       email: "",
       phone: "",
       password: "",
+      membership: initialTier,
       agreeTerms: false,
     },
   });
@@ -87,6 +111,15 @@ export default function SignupForm({ onSubmit }: SignupFormProps) {
           control={control}
           label="Password"
           placeholder="At least 8 characters"
+        />
+      </div>
+
+      <div className="mb-5">
+        <AppSelect
+          name="membership"
+          control={control}
+          label="Membership plan (optional)"
+          options={TIER_OPTIONS}
         />
       </div>
 

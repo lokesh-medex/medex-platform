@@ -653,15 +653,42 @@ export const MEMBERSHIP_TIERS_DATA: MembershipTier[] = [
   },
 ];
 
+export interface FooterColItem {
+  label: string;
+  href: string;
+}
+
 export interface FooterCol {
   title: string;
-  items: string[];
+  items: FooterColItem[];
 }
 
 export const FOOTER_COLS_DATA: FooterCol[] = [
-  { title: "Services", items: ["Healthcare Packages", "Lab Test", "Wellness"] },
-  { title: "Company", items: ["About Medex", "Partners", "Careers"] },
-  { title: "Support", items: ["Help center", "Contact us", "Trust & safety"] },
+  {
+    title: "Services",
+    items: [
+      { label: "Healthcare Packages", href: "/listings" },
+      { label: "Lab Test", href: "/listings" },
+      { label: "Wellness", href: "/listings" },
+    ],
+  },
+  {
+    title: "Company",
+    items: [
+      { label: "About Medex", href: "/about" },
+      { label: "Membership", href: "/membership" },
+      { label: "Partners", href: "/contact?purpose=partner" },
+      { label: "Careers", href: "/contact" },
+    ],
+  },
+  {
+    title: "Support",
+    items: [
+      { label: "Help center", href: "/contact" },
+      { label: "Contact us", href: "/contact" },
+      { label: "Trust & safety", href: "/terms" },
+    ],
+  },
 ];
 
 // Matches the "Find Us" block in Medex-Footer.dc.html.

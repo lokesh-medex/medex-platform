@@ -5,7 +5,14 @@ import Link from "next/link";
 import Image from "next/image";
 import { Button, Tag } from "antd";
 import { FaStar } from "react-icons/fa";
-import { FiCheck, FiShield, FiShoppingBag } from "react-icons/fi";
+import {
+  FiCalendar,
+  FiCheck,
+  FiClipboard,
+  FiClock,
+  FiShield,
+  FiShoppingBag,
+} from "react-icons/fi";
 import PageShell from "@/app/_components/shared/PageShell";
 import Mesh from "@/app/_components/home/Mesh";
 import BackdropMotifs from "@/app/_components/shared/BackdropMotifs";
@@ -13,6 +20,7 @@ import { glass } from "@/app/_lib/glass";
 import {
   DETAIL_CATALOG,
   formatPrice,
+  getDetailPageTitle,
   parsePrice,
   splitCredit,
   type DetailCategory,
@@ -52,7 +60,7 @@ function BuyBox({
         {item.categoryLabel}
       </Tag>
       <h1 className="font-heading text-slate-900 font-bold text-2xl leading-[1.25] m-0">
-        {item.title}
+        {getDetailPageTitle(item)}
       </h1>
 
       <div className="flex items-center gap-1.5">
@@ -83,12 +91,12 @@ function BuyBox({
             {item.vendorLocation}
           </span>
         </div>
-        <a
-          href="#"
+        <Link
+          href={`/vendor/${slugify(item.vendorName)}`}
           className="ml-auto text-[12.5px] font-bold text-primary whitespace-nowrap"
         >
           View vendor
-        </a>
+        </Link>
       </div>
 
       <div className="flex items-baseline gap-2.5 pt-1">
@@ -159,6 +167,77 @@ function BuyBox({
           Free cancellation up to 24 hours before your appointment.
         </span>
       </div>
+    </div>
+  );
+}
+
+/** Preparation/turnaround/booking facts, shown only for the fields an item actually has. */
+function GoodToKnow({ item }: { item: DetailItem }) {
+  const rows = [
+    { icon: FiClipboard, label: "Preparation", value: item.prep },
+    { icon: FiClock, label: "Turnaround time", value: item.tat },
+    { icon: FiCalendar, label: "Booking", value: item.bookingInfo },
+  ].filter((row) => row.value);
+
+  if (rows.length === 0) return null;
+
+  return (
+    <div className={`mt-7 rounded-[20px] p-6 ${glass.subtle}`}>
+      <h2 className="font-heading text-slate-900 font-bold text-[19px] mb-3.5">
+        Good to know
+      </h2>
+      <div className="flex flex-col gap-3.5">
+        {rows.map(({ icon: Icon, label, value }) => (
+          <div key={label} className="flex items-start gap-3">
+            <Icon size={16} className="shrink-0 mt-0.5 text-primary" />
+            <div className="flex flex-col gap-0.5">
+              <span className="text-[13px] font-bold text-slate-900">
+                {label}
+              </span>
+              <span className="text-[13.5px] text-slate-600 leading-[1.6]">
+                {value}
+              </span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/** Who's providing this item: vendor identity, category/location, and a short description. */
+function AboutVendor({ item }: { item: DetailItem }) {
+  return (
+    <div className={`mt-7 rounded-[20px] p-6 ${glass.subtle}`}>
+      <h2 className="font-heading text-slate-900 font-bold text-[19px] mb-3.5">
+        About {item.vendorName}
+      </h2>
+      <div className="flex items-center gap-3 mb-3.5">
+        <Image
+          src={item.vendorLogo}
+          alt={item.vendorName}
+          height={40}
+          width={40}
+          className="h-10 w-10 rounded-[10px] object-contain bg-white border border-slate-200"
+        />
+        <div className="flex flex-col gap-0.5 min-w-0">
+          <span className="text-[13.5px] font-bold text-slate-900 truncate">
+            {item.vendorName}
+          </span>
+          <span className="text-xs text-slate-500 truncate">
+            {item.vendorCategory} · {item.vendorLocation}
+          </span>
+        </div>
+        <Link
+          href={`/vendor/${slugify(item.vendorName)}`}
+          className="ml-auto text-[12.5px] font-bold text-primary whitespace-nowrap"
+        >
+          View vendor
+        </Link>
+      </div>
+      <p className="text-slate-600 text-[14.5px] leading-[1.7] m-0">
+        {item.vendorDescription}
+      </p>
     </div>
   );
 }
@@ -284,6 +363,10 @@ export default function DetailPage({ category }: DetailPageProps) {
                 {item.description}
               </p>
             </div>
+
+            <AboutVendor item={item} />
+
+            <GoodToKnow item={item} />
 
             <div className={`mt-7 rounded-[20px] p-6 ${glass.subtle}`}>
               <h2 className="font-heading text-slate-900 font-bold text-[19px] mb-3.5">
