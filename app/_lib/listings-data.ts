@@ -7,9 +7,65 @@ import { FaFlask, FaUserMd } from "react-icons/fa";
 import { FiBox, FiGrid, FiHeart, FiHome, FiStar } from "react-icons/fi";
 import { brand } from "@/app/_lib/theme";
 import { slugify } from "@/app/_lib/slug";
+import { DOCTOR_PHOTOS } from "@/app/_lib/doctor-photos";
 
 const GRAD_A = `linear-gradient(135deg, ${brand.primary100}, ${brand.secondary100})`;
 const GRAD_B = `linear-gradient(135deg, ${brand.secondary100}, ${brand.primary100})`;
+
+// One Unsplash photo per RawItem `category` (not per individual item — most
+// categories expand into many vendor rows via expandVendors, so a single
+// category image is what ListingCard's `item.img` actually renders per
+// card). Blood Tests/Full Body/Teleconsultation/Spa reuse the same photo
+// already shown on the shared category detail page (see detail-data.ts's
+// DETAIL_CATALOG) so a card and the page it links to stay visually
+// consistent.
+const CATEGORY_IMAGES: Record<string, string> = {
+  // Lab Tests
+  "Blood Tests":
+    "https://images.unsplash.com/photo-1579154204601-01588f351e67?w=600&q=80",
+  Imaging:
+    "https://images.unsplash.com/photo-1516549655169-df83a0774514?w=600&q=80",
+  Cardiac:
+    "https://images.unsplash.com/photo-1584982751601-97dcc096659c?w=600&q=80",
+  "Hormone & Thyroid":
+    "https://images.unsplash.com/photo-1628771065518-0d82f1938462?w=600&q=80",
+  Allergy:
+    "https://images.unsplash.com/photo-1585435557343-3b092031a831?w=600&q=80",
+  // Packages
+  "Full Body":
+    "https://images.unsplash.com/photo-1631217868264-e5b90bb7e133?w=600&q=80",
+  Executive:
+    "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=600&q=80",
+  "Women's Health":
+    "https://images.unsplash.com/photo-1531983412531-1f49a365ffed?w=600&q=80",
+  "Senior Care":
+    "https://images.unsplash.com/photo-1631815589968-fdb09a223b1e?w=600&q=80",
+  // Services
+  "Home Sample Collection":
+    "https://images.unsplash.com/photo-1631815588090-d4bfec5b1ccb?w=600&q=80",
+  Teleconsultation:
+    "https://images.unsplash.com/photo-1651008376811-b90baee60c1f?w=600&q=80",
+  Ambulance:
+    "https://images.unsplash.com/photo-1600959907703-125ba1374a12?w=600&q=80",
+  Physiotherapy:
+    "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=600&q=80",
+  // Wellness
+  Yoga: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=600&q=80",
+  Nutrition:
+    "https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=600&q=80",
+  "Mental Health":
+    "https://images.unsplash.com/photo-1584515933487-779824d29309?w=600&q=80",
+  Spa: "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=600&q=80",
+  // Vendors
+  Hospital:
+    "https://images.unsplash.com/photo-1587351021759-3e566b6af7cc?w=600&q=80",
+  Clinic:
+    "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=600&q=80",
+  "Diagnostic Lab":
+    "https://images.unsplash.com/photo-1576671081837-49000212a370?w=600&q=80",
+  Pharmacy:
+    "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=600&q=80",
+};
 
 export interface ListingItem {
   id: string;
@@ -72,6 +128,7 @@ function mkItems(
     tagColor,
     cta,
     gradient: i % 2 === 0 ? GRAD_A : GRAD_B,
+    img: r.img ?? CATEGORY_IMAGES[r.category],
   }));
 }
 
@@ -553,16 +610,6 @@ const VENDOR_ITEMS: ListingItem[] = mkItems(
   { prefix: "vendors", tagColor: brand.secondary, cta: "View Vendor" }
 ).map((item) => ({ ...item, slug: slugify(item.title) }));
 
-// Reuses the same local doctor photos as the homepage's DOCTORS_DATA (see
-// app/_lib/homepage-data.ts) — cycled across more doctors here, falling back
-// to InitialsAvatar via ImageWithFallback wherever the asset isn't present.
-const DOCTOR_IMGS = [
-  "/uploads/ocho-artex-media-rm7rZYdl3rY-unsplash-53da9c94.jpg",
-  "/uploads/bruno-rodrigues-279xIHymPYY-unsplash-5e4cf0a6.jpg",
-  "/uploads/mohamad-azaam-1O8CJy1A7Wo-unsplash-5b8d19e9.jpg",
-  "/uploads/usman-yousaf-pTrhfmj2jDA-unsplash-2d4c9cea.jpg",
-];
-
 const DOCTOR_ITEMS = mkItems(
   [
     {
@@ -622,7 +669,7 @@ const DOCTOR_ITEMS = mkItems(
       rating: "4.5",
       meta: "10 yrs exp.",
     },
-  ].map((d, i) => ({ ...d, img: DOCTOR_IMGS[i % DOCTOR_IMGS.length] })),
+  ].map((d) => ({ ...d, img: DOCTOR_PHOTOS[d.title] })),
   { prefix: "doctors", tagColor: brand.primary, cta: "Book Now" }
 ).map((item) => ({ ...item, slug: slugify(item.title) }));
 

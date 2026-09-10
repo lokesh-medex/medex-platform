@@ -4,11 +4,13 @@
 // see docs/superpowers/specs/2026-09-09-vendor-detail-page-design.md.
 
 import { slugify } from "@/app/_lib/slug";
+import { VENDOR_DOCTOR_PHOTO_POOL } from "@/app/_lib/doctor-photos";
 
 export interface VendorDoctor {
   name: string;
   specialty: string;
   rating: string;
+  photo?: string;
 }
 
 export interface VendorService {
@@ -559,10 +561,19 @@ const RAW_VENDORS: Omit<Vendor, "slug" | "gallery">[] = [
   },
 ];
 
+let doctorPhotoIndex = 0;
+
 export const VENDORS: Vendor[] = RAW_VENDORS.map((v, i) => ({
   ...v,
   slug: slugify(v.title),
   gallery: galleryFor(i),
+  doctors: v.doctors.map((d) => ({
+    ...d,
+    photo:
+      VENDOR_DOCTOR_PHOTO_POOL[
+        doctorPhotoIndex++ % VENDOR_DOCTOR_PHOTO_POOL.length
+      ],
+  })),
 }));
 
 export function getVendorBySlug(slug: string): Vendor | undefined {

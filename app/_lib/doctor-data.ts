@@ -5,6 +5,7 @@
 // duplicating a second, disconnected doctor list.
 
 import { slugify } from "@/app/_lib/slug";
+import { DOCTOR_PHOTOS } from "@/app/_lib/doctor-photos";
 
 export interface Doctor {
   slug: string;
@@ -38,7 +39,7 @@ const TIME_SLOTS = [
 const RAW_DOCTORS: Omit<Doctor, "slug">[] = [
   {
     name: "Dr. Ananya Sharma",
-    photo: "/uploads/ocho-artex-media-rm7rZYdl3rY-unsplash-53da9c94.jpg",
+    photo: DOCTOR_PHOTOS["Dr. Ananya Sharma"],
     specialty: "Cardiologist",
     specializations: [
       "Interventional Cardiology",
@@ -60,7 +61,7 @@ const RAW_DOCTORS: Omit<Doctor, "slug">[] = [
   },
   {
     name: "Dr. Rajiv Thapa",
-    photo: "/uploads/bruno-rodrigues-279xIHymPYY-unsplash-5e4cf0a6.jpg",
+    photo: DOCTOR_PHOTOS["Dr. Rajiv Thapa"],
     specialty: "Dermatologist",
     specializations: [
       "Acne & Scarring",
@@ -81,7 +82,7 @@ const RAW_DOCTORS: Omit<Doctor, "slug">[] = [
   },
   {
     name: "Dr. Priya Koirala",
-    photo: "/uploads/mohamad-azaam-1O8CJy1A7Wo-unsplash-5b8d19e9.jpg",
+    photo: DOCTOR_PHOTOS["Dr. Priya Koirala"],
     specialty: "Pediatrician",
     specializations: [
       "Newborn Care",
@@ -101,7 +102,7 @@ const RAW_DOCTORS: Omit<Doctor, "slug">[] = [
   },
   {
     name: "Dr. Samuel Gurung",
-    photo: "/uploads/usman-yousaf-pTrhfmj2jDA-unsplash-2d4c9cea.jpg",
+    photo: DOCTOR_PHOTOS["Dr. Samuel Gurung"],
     specialty: "Orthopedic Surgeon",
     specializations: [
       "Knee & Hip Replacement",
@@ -123,6 +124,7 @@ const RAW_DOCTORS: Omit<Doctor, "slug">[] = [
   },
   {
     name: "Dr. Nisha Maharjan",
+    photo: DOCTOR_PHOTOS["Dr. Nisha Maharjan"],
     specialty: "Gynecologist",
     specializations: [
       "Prenatal Care",
@@ -144,6 +146,7 @@ const RAW_DOCTORS: Omit<Doctor, "slug">[] = [
   },
   {
     name: "Dr. Bipin Shrestha",
+    photo: DOCTOR_PHOTOS["Dr. Bipin Shrestha"],
     specialty: "Neurologist",
     specializations: [
       "Migraine & Headache",
@@ -163,6 +166,7 @@ const RAW_DOCTORS: Omit<Doctor, "slug">[] = [
   },
   {
     name: "Dr. Anjali Rana",
+    photo: DOCTOR_PHOTOS["Dr. Anjali Rana"],
     specialty: "Psychiatrist",
     specializations: [
       "Anxiety & Depression",
@@ -183,7 +187,7 @@ const RAW_DOCTORS: Omit<Doctor, "slug">[] = [
   },
   {
     name: "Dr. Suman Basnet",
-    photo: "/uploads/ocho-artex-media-rm7rZYdl3rY-unsplash-53da9c94.jpg",
+    photo: DOCTOR_PHOTOS["Dr. Suman Basnet"],
     specialty: "ENT Specialist",
     specializations: [
       "Sinus & Allergy",

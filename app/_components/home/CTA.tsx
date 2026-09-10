@@ -53,6 +53,7 @@ export default function CTA() {
               <Button
                 type="text"
                 size="large"
+                href="/auth/signup"
                 className="h-auto! bg-white! px-8! py-4! text-[16px]! text-slate-900! shadow-[0_18px_40px_rgba(0,0,0,0.4)]! transition-transform! duration-200! font-sans hover:-translate-y-0.5!"
               >
                 <span className="flex items-center gap-2">
@@ -63,6 +64,7 @@ export default function CTA() {
               <Button
                 type="text"
                 size="large"
+                href="/listings/doctors"
                 className={`h-auto! px-8! py-4! text-[16px]! text-white! transition-transform! duration-200! font-sans hover:-translate-y-0.5! ${glass.dark}`}
               >
                 Talk to a doctor

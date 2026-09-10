@@ -15,6 +15,15 @@ import { VENDORS_DATA } from "@/app/_lib/homepage-data";
 import { getVendorByName } from "@/app/_lib/vendor-data";
 import Mesh from "./Mesh";
 
+/**
+ * A couple of the homepage showcase names ("Purnayau Hydro Facial", "Heavenly
+ * Spa") don't have their own vendor record yet, so `getVendorByName` can't
+ * resolve them. Rather than leaving those cards dead, route them to the
+ * closest real vendor page we do have — the spa/therapy-offering "Nectar
+ * Wellness Pvt Ltd" — until they get dedicated entries in vendor-data.ts.
+ */
+const FALLBACK_VENDOR_NAME = "Nectar Wellness Pvt Ltd";
+
 /** Each row leads with a double-wide card, so no row reads as a flat 4-up. */
 const SPANS = [
   "dt:col-span-2",
@@ -73,7 +82,8 @@ export default function Vendors() {
           className="grid grid-cols-1 gap-4 sm:grid-cols-2 dt:grid-cols-4 dt:gap-5"
         >
           {VENDORS_DATA.map((v, i) => {
-            const vendor = getVendorByName(v.name);
+            const vendor =
+              getVendorByName(v.name) ?? getVendorByName(FALLBACK_VENDOR_NAME)!;
             return (
               <article
                 key={`${v.name}-${i}`}
@@ -113,6 +123,7 @@ export default function Vendors() {
                   </div>
                   <Button
                     type="text"
+                    href={`/vendor/${vendor.slug}`}
                     className="h-auto! bg-white! px-5! py-2.5! text-[13px]! text-slate-900! transition-transform! duration-200! font-sans group-hover:-translate-y-0.5!"
                   >
                     <span className="flex items-center gap-1.5">
@@ -121,13 +132,11 @@ export default function Vendors() {
                     </span>
                   </Button>
                 </div>
-                {vendor && (
-                  <Link
-                    href={`/vendor/${vendor.slug}`}
-                    aria-label={v.name}
-                    className="absolute inset-0 z-10"
-                  />
-                )}
+                <Link
+                  href={`/vendor/${vendor.slug}`}
+                  aria-label={v.name}
+                  className="absolute inset-0 z-10"
+                />
               </article>
             );
           })}

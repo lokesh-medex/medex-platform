@@ -1,7 +1,8 @@
 // Static content for the /membership page — plan pricing, feature lines and
-// trust stats, sourced from https://medex.co/membership. Kept separate from
-// `MEMBERSHIP_TIERS_DATA` in homepage-data.ts, which is placeholder content
-// for the homepage's own Membership teaser section.
+// trust stats, sourced from https://medex.co/membership. Also powers the
+// homepage's Membership teaser section (`app/_components/home/Membership.tsx`),
+// which reuses `PlanCard` and this same data rather than carrying its own
+// placeholder tiers.
 
 export const MEMBERSHIP_HERO = {
   eyebrow: "Membership",

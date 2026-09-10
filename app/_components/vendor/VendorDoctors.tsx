@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Button, Rate } from "antd";
 import { FiChevronDown } from "react-icons/fi";
+import ImageWithFallback from "@/app/_components/shared/ImageWithFallback";
 import InitialsAvatar from "@/app/_components/shared/InitialsAvatar";
 import { glass } from "@/app/_lib/glass";
 import type { VendorDoctor } from "@/app/_lib/vendor-data";
@@ -37,11 +38,28 @@ export default function VendorDoctors({ doctors }: VendorDoctorsProps) {
             key={doc.name}
             className="rounded-2xl border border-slate-200 bg-white p-4"
           >
-            <InitialsAvatar
-              name={doc.name.replace("Dr. ", "")}
-              rounded="lg"
-              className="h-16! w-16! text-2xl! mb-3"
-            />
+            {doc.photo ? (
+              <ImageWithFallback
+                src={doc.photo}
+                alt={doc.name}
+                height={64}
+                width={64}
+                className="h-16! w-16! rounded-lg object-cover mb-3"
+                fallback={
+                  <InitialsAvatar
+                    name={doc.name.replace("Dr. ", "")}
+                    rounded="lg"
+                    className="h-16! w-16! text-2xl! mb-3"
+                  />
+                }
+              />
+            ) : (
+              <InitialsAvatar
+                name={doc.name.replace("Dr. ", "")}
+                rounded="lg"
+                className="h-16! w-16! text-2xl! mb-3"
+              />
+            )}
             <h3 className="font-heading text-slate-900 font-bold text-[15px] leading-tight m-0 mb-1">
               {doc.name}
             </h3>

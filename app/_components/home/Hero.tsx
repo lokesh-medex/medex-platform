@@ -20,10 +20,19 @@ import {
   SERVICES_DATA,
   SLIDES_DATA,
   VENDORS_DATA,
+  type HeroPattern,
 } from "@/app/_lib/homepage-data";
 import Mesh from "./Mesh";
 
 const HERO_INTERVAL_MS = 6500;
+
+/** Maps each slide's `pattern` to its listings destination. */
+const HERO_CTA_HREF: Record<HeroPattern, string> = {
+  orbit: "/listings",
+  package: "/listings/packages",
+  lab: "/listings/lab-tests",
+  wellness: "/listings/wellness",
+};
 
 /** Brand gradient, lightened — the real one goes muddy clipped over a dark hero. */
 const HEADLINE_GRADIENT = "linear-gradient(100deg, #ff9d86, #ffb3c9, #e879f9)";
@@ -165,6 +174,7 @@ export default function Hero() {
           <div className="flex flex-wrap items-center gap-3">
             <Button
               type="text"
+              href={HERO_CTA_HREF[active.pattern]}
               className="h-auto! bg-white! px-7! py-3.5! text-[15px]! text-slate-900! shadow-[0_18px_40px_rgba(0,0,0,0.35)]! transition-transform! duration-200! font-sans hover:-translate-y-0.5!"
             >
               <span className="flex items-center gap-2">
@@ -174,6 +184,7 @@ export default function Hero() {
             </Button>
             <Button
               type="text"
+              href="/listings/doctors"
               className={`h-auto! px-7! py-3.5! text-[15px]! text-white! transition-transform! duration-200! font-sans hover:-translate-y-0.5! ${glass.dark}`}
             >
               Talk to a doctor

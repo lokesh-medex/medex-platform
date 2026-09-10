@@ -32,6 +32,28 @@ const TILE_SPANS = [
 const FEATURE_INDEXES = new Set([0, 3]);
 const CARDS = HIGHLIGHT_CARDS_DATA.slice(0, TILE_SPANS.length);
 
+/**
+ * These cards' `href` still points at the legacy WordPress site
+ * (medex.co.th/jivi.co) — none of that copy has a rebuilt booking flow here
+ * yet, so each card instead routes into the closest matching /listings tab.
+ * Cards with no real matching category (STD Tests, Botox, Genetic Testing)
+ * fall back to the general /listings browse rather than a category tab that
+ * would show unrelated items.
+ */
+const INTERNAL_HREF: Record<string, string> = {
+  "STD Tests": "/listings",
+  "Lab Tests": "/listings/lab-tests",
+  "Doctor On Call": `/listings/services?q=${encodeURIComponent("Video Consultation")}`,
+  "Nurse at Home": `/listings/services?q=${encodeURIComponent("Home Nursing")}`,
+  "Botox Treatment": "/listings",
+  "Medication Refill": `/listings/vendors?q=${encodeURIComponent("Pharmacy")}`,
+  "Genetic Testing": "/listings",
+};
+
+function internalHref(card: HighlightCard) {
+  return INTERNAL_HREF[card.name] ?? "/listings";
+}
+
 const SHELL =
   `group relative isolate flex flex-col overflow-hidden rounded-[28px] p-6 dt:p-7 ` +
   `transition-[transform,box-shadow] duration-300 hover:-translate-y-1.5 ` +
@@ -76,9 +98,7 @@ function FeatureTile({ card, span }: { card: HighlightCard; span: string }) {
 
       <Button
         type="text"
-        href={card.href}
-        target="_blank"
-        rel="noopener"
+        href={internalHref(card)}
         className="h-auto! self-start px-6! py-3! text-[14px]! text-white! transition-transform! duration-200! font-sans hover:-translate-y-0.5!"
         style={{ background: card.gradient }}
       >
@@ -93,12 +113,7 @@ function FeatureTile({ card, span }: { card: HighlightCard; span: string }) {
 
 function CompactTile({ card, span }: { card: HighlightCard; span: string }) {
   return (
-    <a
-      href={card.href}
-      target="_blank"
-      rel="noopener"
-      className={`${SHELL} ${span}`}
-    >
+    <a href={internalHref(card)} className={`${SHELL} ${span}`}>
       <div className="mb-5 flex items-center gap-4">
         <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white/70 p-2 shadow-[0_4px_12px_rgba(15,23,42,0.08)]">
           <Image

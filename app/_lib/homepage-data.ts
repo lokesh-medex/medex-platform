@@ -3,6 +3,7 @@
 
 import { brand } from "@/app/_lib/theme";
 import { slugify } from "@/app/_lib/slug";
+import { DOCTOR_PHOTOS } from "@/app/_lib/doctor-photos";
 
 // Data-driven per-item styling below (gradients, tier colors, ...) needs
 // plain hex strings rather than Tailwind classes, so it draws from the same
@@ -154,7 +155,7 @@ export const DOCTORS_DATA: Doctor[] = [
     exp: "14 yrs",
     rating: "4.9",
     initials: "AS",
-    img: "/uploads/ocho-artex-media-rm7rZYdl3rY-unsplash-53da9c94.jpg",
+    img: DOCTOR_PHOTOS["Dr. Ananya Sharma"],
   },
   {
     name: "Dr. Rajiv Thapa",
@@ -162,7 +163,7 @@ export const DOCTORS_DATA: Doctor[] = [
     exp: "9 yrs",
     rating: "4.8",
     initials: "RT",
-    img: "/uploads/bruno-rodrigues-279xIHymPYY-unsplash-5e4cf0a6.jpg",
+    img: DOCTOR_PHOTOS["Dr. Rajiv Thapa"],
   },
   {
     name: "Dr. Priya Koirala",
@@ -170,7 +171,7 @@ export const DOCTORS_DATA: Doctor[] = [
     exp: "11 yrs",
     rating: "4.9",
     initials: "PK",
-    img: "/uploads/mohamad-azaam-1O8CJy1A7Wo-unsplash-5b8d19e9.jpg",
+    img: DOCTOR_PHOTOS["Dr. Priya Koirala"],
   },
   {
     name: "Dr. Samuel Gurung",
@@ -178,7 +179,7 @@ export const DOCTORS_DATA: Doctor[] = [
     exp: "17 yrs",
     rating: "4.7",
     initials: "SG",
-    img: "/uploads/usman-yousaf-pTrhfmj2jDA-unsplash-2d4c9cea.jpg",
+    img: DOCTOR_PHOTOS["Dr. Samuel Gurung"],
   },
 ].map((d) => ({ ...d, slug: slugify(d.name) }));
 
@@ -566,92 +567,6 @@ export const VENDORS_DATA: Vendor[] = VENDORS_RAW.map((v, i) => ({
   ...v,
   gradient: i % 2 === 0 ? GRAD_A : GRAD_B,
 }));
-
-export interface MembershipTier {
-  name: string;
-  price: string;
-  period: string;
-  desc: string;
-  features: string[];
-  isFeatured: boolean;
-  bg: string;
-  border: string;
-  shadow: string;
-  textColor: string;
-  subTextColor: string;
-  checkColor: string;
-  btnBg: string;
-  btnColor: string;
-  btnBorder: string;
-  cta: string;
-}
-
-export const MEMBERSHIP_TIERS_DATA: MembershipTier[] = [
-  {
-    name: "Basic",
-    price: "Free",
-    period: "",
-    desc: "Search and book across our network at standard rates.",
-    features: ["Search all vendors", "Standard booking", "Email support"],
-    isFeatured: false,
-    bg: "#fff",
-    border: "1px solid #e2e8f0",
-    shadow: "none",
-    textColor: COLOR.ink,
-    subTextColor: COLOR.slate500,
-    checkColor: COLOR.secondary,
-    btnBg: "transparent",
-    btnColor: COLOR.ink,
-    btnBorder: `1.5px solid ${COLOR.slate200}`,
-    cta: "Get Started",
-  },
-  {
-    name: "Plus",
-    price: "NPR 999",
-    period: "/ month",
-    desc: "Priority booking and discounts across packages and labs.",
-    features: [
-      "Everything in Basic",
-      "10% off packages & labs",
-      "Priority booking",
-      "Phone support",
-    ],
-    isFeatured: true,
-    bg: `linear-gradient(160deg, ${COLOR.primary}, ${COLOR.secondary})`,
-    border: "none",
-    shadow: "0 20px 40px #f33b2733",
-    textColor: "#fff",
-    subTextColor: "rgba(255,255,255,0.85)",
-    checkColor: "#fff",
-    btnBg: "#fff",
-    btnColor: COLOR.primary700,
-    btnBorder: "none",
-    cta: "Become a Member",
-  },
-  {
-    name: "Family",
-    price: "NPR 2,499",
-    period: "/ month",
-    desc: "Full coverage for up to 5 family members, one account.",
-    features: [
-      "Everything in Plus",
-      "Up to 5 members",
-      "Free home sample collection",
-      "Dedicated care manager",
-    ],
-    isFeatured: false,
-    bg: "#fff",
-    border: "1px solid #e2e8f0",
-    shadow: "none",
-    textColor: COLOR.ink,
-    subTextColor: COLOR.slate500,
-    checkColor: COLOR.secondary,
-    btnBg: "transparent",
-    btnColor: COLOR.ink,
-    btnBorder: `1.5px solid ${COLOR.slate200}`,
-    cta: "Get Started",
-  },
-];
 
 export interface FooterColItem {
   label: string;

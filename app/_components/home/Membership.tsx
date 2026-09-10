@@ -1,84 +1,19 @@
 /**
- * Membership — three `glass.dark` panels on the dark `membership` mesh
- * preset instead of flat white/gradient cards. Only the tier's
- * name/price/period/desc/features/isFeatured/cta are used — the data
- * module's other style fields (bg/border/shadow/textColor/...) were authored
- * for a light card and don't apply to a dark glass shell, so they're ignored
- * here. The featured tier scales up and glows on desktop; on mobile it just
- * leads the stack (scaling up would just make it awkwardly wide there).
+ * Membership teaser — reuses the same `PlanCard` + `MEMBERSHIP_PLANS_DATA`
+ * as the full /membership page (see MembershipPage.tsx), rather than the
+ * separate Basic/Plus/Family placeholder tiers this section used to carry.
+ * That kept the homepage in sync with the real Essential/Advanced/Signature/
+ * Prestige plans and let each card's CTA link straight to
+ * `/auth/signup?tier=<slug>` for the plan actually being shown.
  */
 
-import { Button, Tag } from "antd";
-import { FiArrowRight, FiCheck } from "react-icons/fi";
+import { Button } from "antd";
+import { FiArrowRight } from "react-icons/fi";
 import BackdropMotifs from "@/app/_components/shared/BackdropMotifs";
 import { Parallax, Reveal } from "@/app/_components/shared/Motion";
-import { glass } from "@/app/_lib/glass";
-import {
-  MEMBERSHIP_TIERS_DATA,
-  type MembershipTier,
-} from "@/app/_lib/homepage-data";
+import PlanCard from "@/app/_components/membership/PlanCard";
+import { MEMBERSHIP_PLANS_DATA } from "@/app/_lib/membership-data";
 import Mesh from "./Mesh";
-
-function TierCard({ tier }: { tier: MembershipTier }) {
-  return (
-    <article
-      className={`relative isolate flex flex-col rounded-[32px] p-8 transition-transform duration-300 dt:p-9 ${
-        tier.isFeatured
-          ? "dt:scale-105 shadow-[0_0_80px_rgba(243,59,39,0.35)]"
-          : ""
-      } ${glass.dark}`}
-    >
-      {tier.isFeatured && (
-        <Tag className="absolute! -top-3! left-8! m-0! rounded-full! border-0! bg-[linear-gradient(120deg,var(--color-primary),var(--color-secondary))]! px-3! py-1! font-sans text-[11px]! font-bold! text-white! tracking-[0.1em]! uppercase!">
-          Most popular
-        </Tag>
-      )}
-
-      <h3 className="mb-2 font-heading text-[22px] font-bold tracking-[-0.02em] text-white">
-        {tier.name}
-      </h3>
-      <div className="mb-4 flex items-baseline gap-1.5">
-        <span className="font-heading text-[36px] leading-none font-bold tracking-[-0.03em] text-white">
-          {tier.price}
-        </span>
-        {tier.period && (
-          <span className="font-sans text-[13px] text-white/55">
-            {tier.period}
-          </span>
-        )}
-      </div>
-      <p className="mb-7 font-sans text-[14px] leading-[1.6] text-white/70">
-        {tier.desc}
-      </p>
-
-      <ul className="mb-8 flex flex-1 flex-col gap-3">
-        {tier.features.map((f) => (
-          <li
-            key={f}
-            className="flex items-start gap-2.5 font-sans text-[13.5px] leading-[1.5] text-white/85"
-          >
-            <FiCheck size={16} className="mt-0.5 shrink-0 text-[#ff8a75]" />
-            {f}
-          </li>
-        ))}
-      </ul>
-
-      <Button
-        type={tier.isFeatured ? "primary" : "default"}
-        ghost={!tier.isFeatured}
-        block
-        size="large"
-        className={
-          tier.isFeatured
-            ? "h-auto! border-0! bg-[linear-gradient(120deg,var(--color-primary),var(--color-secondary))]! py-3.5! text-[14.5px]! font-sans"
-            : "h-auto! border-white/25! py-3.5! text-[14.5px]! text-white! font-sans hover:border-white/50! hover:text-white!"
-        }
-      >
-        {tier.cta}
-      </Button>
-    </article>
-  );
-}
 
 export default function Membership() {
   return (
@@ -122,10 +57,10 @@ export default function Membership() {
 
         <Reveal
           preset="standard"
-          className="mx-auto grid max-w-[1080px] grid-cols-1 gap-6 dt:grid-cols-3 dt:items-center dt:gap-7"
+          className="mx-auto grid max-w-[1200px] grid-cols-1 gap-6 sm:grid-cols-2 dt:grid-cols-4 dt:items-center dt:gap-6"
         >
-          {MEMBERSHIP_TIERS_DATA.map((tier) => (
-            <TierCard key={tier.name} tier={tier} />
+          {MEMBERSHIP_PLANS_DATA.map((plan) => (
+            <PlanCard key={plan.slug} plan={plan} />
           ))}
         </Reveal>
       </div>

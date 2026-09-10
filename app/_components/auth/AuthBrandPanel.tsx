@@ -2,6 +2,7 @@ import Image from "next/image";
 import { FiCheck } from "react-icons/fi";
 import Mesh from "@/app/_components/home/Mesh";
 import BackdropMotifs from "@/app/_components/shared/BackdropMotifs";
+import ImageWithFallback from "@/app/_components/shared/ImageWithFallback";
 
 const BRAND_POINTS = [
   { text: "Compare prices across hospitals, labs and clinics", delay: "0s" },
@@ -9,18 +10,25 @@ const BRAND_POINTS = [
   { text: "Manage bookings for your whole family", delay: "0.6s" },
 ];
 
-/**
- * Left-hand marketing panel shown alongside the auth forms on desktop.
- * No local photo has been chosen for this slot yet, so it stays a plain
- * brand-gradient panel — swap in an `ImageWithFallback` background once
- * one is picked, following the same pattern as `Hero`.
- */
+/** Left-hand marketing panel shown alongside the auth forms on desktop. */
 export default function AuthBrandPanel() {
   return (
     <div
       className="hidden dt:flex relative overflow-hidden flex-col justify-between p-14"
       style={{ background: "linear-gradient(135deg, #872888, #df321f)" }}
     >
+      <ImageWithFallback
+        src="https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=1200&q=80"
+        alt=""
+        fill
+        sizes="50vw"
+        className="object-cover"
+        fallback={<></>}
+      />
+      <div
+        className="absolute inset-0 opacity-60"
+        style={{ background: "linear-gradient(135deg, #872888, #df321f)" }}
+      />
       <Mesh preset="auth" />
       <BackdropMotifs
         count={5}
