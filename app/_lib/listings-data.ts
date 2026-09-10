@@ -6,6 +6,7 @@ import type { IconType } from "react-icons";
 import { FaFlask, FaUserMd } from "react-icons/fa";
 import { FiBox, FiHeart, FiHome, FiStar } from "react-icons/fi";
 import { brand } from "@/app/_lib/theme";
+import { slugify } from "@/app/_lib/slug";
 
 const GRAD_A = `linear-gradient(135deg, ${brand.primary100}, ${brand.secondary100})`;
 const GRAD_B = `linear-gradient(135deg, ${brand.secondary100}, ${brand.primary100})`;
@@ -23,6 +24,7 @@ export interface ListingItem {
   badge?: string;
   img?: string;
   vendorName?: string;
+  slug?: string;
 }
 
 export interface ListingsTab {
@@ -615,7 +617,7 @@ const DOCTOR_ITEMS = mkItems(
     },
   ].map((d, i) => ({ ...d, img: DOCTOR_IMGS[i % DOCTOR_IMGS.length] })),
   { prefix: "doctors", tagColor: brand.primary, cta: "Book Now" }
-);
+).map((item) => ({ ...item, slug: slugify(item.title) }));
 
 export const LISTINGS_TABS: ListingsTab[] = [
   {

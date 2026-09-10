@@ -75,6 +75,7 @@ function DoctorCard({ doc, i }: { doc: Doctor; i: number }) {
       <Button
         type="primary"
         block
+        href={doc.slug ? `/doctor/${doc.slug}` : undefined}
         className="h-auto! py-2.5! text-[13px]! font-sans"
       >
         Book now

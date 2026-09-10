@@ -12,11 +12,23 @@ interface IProps {
   /** Category detail page to open on card click — omitted for tabs (vendors,
    * doctors) that have no detail page, in which case the card isn't a link. */
   detailHref?: string;
+  /** When true, the CTA button ignores `canAddToCart` and instead navigates
+   * to `detailHref` (used by the doctors tab, where "Book Now" must open the
+   * doctor's own page to pick a date/time rather than instant-adding to
+   * cart). Other tabs (labtests, packages, services, wellness) also have a
+   * `detailHref` but keep the add-to-cart behavior, so this must be an
+   * explicit opt-in rather than inferred from `detailHref` alone. */
+  forceDetailLink?: boolean;
   onAddToCart?: () => void;
 }
 
 /** One card in the listings grid — a lab test, package, service, vendor or doctor offer. */
-export default function ListingCard({ item, detailHref, onAddToCart }: IProps) {
+export default function ListingCard({
+  item,
+  detailHref,
+  forceDetailLink,
+  onAddToCart,
+}: IProps) {
   const canAddToCart = item.cta === "Book Now";
 
   return (
@@ -99,10 +111,11 @@ export default function ListingCard({ item, detailHref, onAddToCart }: IProps) {
           )}
           <Button
             type="primary"
-            onClick={canAddToCart ? onAddToCart : undefined}
+            href={forceDetailLink ? detailHref : undefined}
+            onClick={!forceDetailLink && canAddToCart ? onAddToCart : undefined}
             className="relative! z-10 whitespace-nowrap! text-[12.5px]! h-auto! py-2.5! px-4! text-white! font-bold! font-sans bg-[linear-gradient(120deg,var(--color-primary),var(--color-secondary))]!"
           >
-            {canAddToCart ? (
+            {canAddToCart && !forceDetailLink ? (
               <span className="flex items-center gap-1.5">
                 <FiShoppingCart size={13} />
                 Add to Cart
