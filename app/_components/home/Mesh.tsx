@@ -70,7 +70,8 @@ export type MeshPreset =
   | "footer"
   | "listings"
   | "auth"
-  | "detail";
+  | "detail"
+  | "cart";
 
 const MESH_PRESETS: Record<MeshPreset, MeshSpec> = {
   hero: {
@@ -184,6 +185,15 @@ const MESH_PRESETS: Record<MeshPreset, MeshSpec> = {
       { x: 8, y: 8, size: 600, c: "primary", o: 0.15 },
       { x: 94, y: 20, size: 560, c: "secondary", o: 0.13 },
       { x: 54, y: 100, size: 480, c: "violet", o: 0.1 },
+    ],
+  },
+  // Same confined-strip constraint as `detail` — the order summary panel
+  // below is sticky.
+  cart: {
+    blobs: [
+      { x: 6, y: 12, size: 560, c: "secondary", o: 0.14 },
+      { x: 92, y: 10, size: 520, c: "primary", o: 0.13 },
+      { x: 50, y: 100, size: 460, c: "violet", o: 0.1 },
     ],
   },
 };

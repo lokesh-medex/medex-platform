@@ -35,6 +35,7 @@
  */
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import TopBar from "./TopBar";
 import Navbar, { type HeaderActive } from "./Navbar";
 import { glass } from "@/app/_lib/glass";
@@ -70,6 +71,7 @@ export default function Header({
   // render) — correct anyway, since a fresh page load starts at scroll 0.
   const [scrolled, setScrolled] = useState(false);
   const dense = forceDense || scrolled;
+  const router = useRouter();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > SCROLL_THRESHOLD);
@@ -92,7 +94,7 @@ export default function Header({
           active={active}
           showCart={showCart}
           cartCount={cartCount}
-          onCartClick={onCartClick}
+          onCartClick={onCartClick ?? (() => router.push("/cart"))}
         />
       </div>
     </header>

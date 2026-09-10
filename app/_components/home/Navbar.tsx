@@ -38,10 +38,6 @@ import { glass } from "@/app/_lib/glass";
 import { BRAND_DARK_PANEL } from "@/app/_lib/theme";
 import { MOBILE_NAV_LABELS, NAV_MENUS_DATA } from "@/app/_lib/homepage-data";
 import { getTabByLabel, hrefForTab } from "@/app/_lib/listings-data";
-import {
-  getDetailCategoryByLabel,
-  hrefForDetailCategory,
-} from "@/app/_lib/detail-data";
 
 export type HeaderActive =
   | ""
@@ -107,10 +103,6 @@ export default function Navbar({
             const highlighted = isOpen || isActive;
             const menuTab = getTabByLabel(menu.label);
             const viewAllHref = menuTab ? hrefForTab(menuTab) : "/listings";
-            const detailCategory = getDetailCategoryByLabel(menu.label);
-            const itemHref = detailCategory
-              ? hrefForDetailCategory(detailCategory)
-              : viewAllHref;
             return (
               <Dropdown
                 key={menu.label}
@@ -124,7 +116,7 @@ export default function Navbar({
                     {menu.items.map((mi) => (
                       <Link
                         key={mi.label}
-                        href={itemHref}
+                        href={`${viewAllHref}?q=${encodeURIComponent(mi.label)}`}
                         onClick={() => setNavMenuOpen(null)}
                         className="flex items-center justify-between gap-2 px-4 py-2 text-sm text-white/85! transition-colors duration-150 hover:bg-white/10 hover:text-white!"
                       >
@@ -266,10 +258,6 @@ export default function Navbar({
             const isOpen = mobileCategoryOpen === label;
             const menuTab = getTabByLabel(label);
             const viewAllHref = menuTab ? hrefForTab(menuTab) : "/listings";
-            const detailCategory = getDetailCategoryByLabel(label);
-            const itemHref = detailCategory
-              ? hrefForDetailCategory(detailCategory)
-              : viewAllHref;
             return (
               <div key={label}>
                 <Button
@@ -294,7 +282,7 @@ export default function Navbar({
                     {menu.items.map((mi) => (
                       <Link
                         key={mi.label}
-                        href={itemHref}
+                        href={`${viewAllHref}?q=${encodeURIComponent(mi.label)}`}
                         onClick={() => setMobileOpen(false)}
                         className="flex items-center justify-between gap-2 rounded-lg px-2 py-2 text-sm text-slate-600 transition-colors duration-150 hover:bg-slate-900/5 hover:text-slate-900"
                       >
