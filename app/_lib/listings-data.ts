@@ -24,6 +24,8 @@ export interface ListingItem {
   badge?: string;
   img?: string;
   vendorName?: string;
+  /** Set on vendors- and doctors-tab items — links the card to
+   * /vendor/[slug] or /doctor/[slug] respectively. */
   slug?: string;
 }
 
@@ -480,7 +482,7 @@ const WELLNESS_ITEMS = expandVendors(
   WELLNESS_VENDOR_POOL
 );
 
-const VENDOR_ITEMS = mkItems(
+const VENDOR_ITEMS: ListingItem[] = mkItems(
   [
     {
       title: "Bangkok Hospital",
@@ -544,7 +546,7 @@ const VENDOR_ITEMS = mkItems(
     },
   ],
   { prefix: "vendors", tagColor: brand.secondary, cta: "View Vendor" }
-);
+).map((item) => ({ ...item, slug: slugify(item.title) }));
 
 // Reuses the same local doctor photos as the homepage's DOCTORS_DATA (see
 // app/_lib/homepage-data.ts) — cycled across more doctors here, falling back

@@ -56,17 +56,22 @@ export default function ListingsView({ activeTabId }: ListingsViewProps) {
   const [showFilterDrawer, setShowFilterDrawer] = useState(false);
   const [cartCount, setCartCount] = useState(0);
 
-  // Only labtests/packages/services/wellness have a detail page — it's one
-  // static page per category, not per item, so every item in a tab shares
-  // the same href. Doctors have a real per-item page (/doctor/[slug]);
-  // vendors still have no detail page to link to.
+  // Only labtests/packages/services/wellness share one detailHref per tab —
+  // one static /detail/[category] page each, so every item in the tab
+  // shares the same href. Doctors and vendors each have a real per-item
+  // page instead, so they need a distinct URL per card.
   const detailCategory = getDetailCategoryByLabel(tab.label);
   const tabDetailHref = detailCategory
     ? hrefForDetailCategory(detailCategory)
     : undefined;
 
-  const hrefForItem = (item: ListingItem) =>
-    tab.id === "doctors" && item.slug ? `/doctor/${item.slug}` : tabDetailHref;
+  const hrefForItem = (item: ListingItem) => {
+    if (tab.id === "doctors")
+      return item.slug ? `/doctor/${item.slug}` : tabDetailHref;
+    if (tab.id === "vendors")
+      return item.slug ? `/vendor/${item.slug}` : undefined;
+    return tabDetailHref;
+  };
 
   const filtered = useMemo(
     () => filterAndSortItems(tab, filters),

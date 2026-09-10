@@ -9,8 +9,9 @@ import { glass } from "@/app/_lib/glass";
 
 interface IProps {
   item: ListingItem;
-  /** Category detail page to open on card click — omitted for tabs (vendors,
-   * doctors) that have no detail page, in which case the card isn't a link. */
+  /** Detail page to open on card click — a shared per-category page for
+   * labtests/packages/services/wellness, a distinct per-item page for
+   * vendors; omitted (card isn't a link) for tabs with neither. */
   detailHref?: string;
   /** When true, the CTA button ignores `canAddToCart` and instead navigates
    * to `detailHref` (used by the doctors tab, where "Book Now" must open the
