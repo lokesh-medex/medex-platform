@@ -6,6 +6,7 @@ import type { IconType } from "react-icons";
 import { FaFlask, FaUserMd } from "react-icons/fa";
 import { FiBox, FiHeart, FiHome, FiStar } from "react-icons/fi";
 import { brand } from "@/app/_lib/theme";
+import { slugify } from "@/app/_lib/vendor-data";
 
 const GRAD_A = `linear-gradient(135deg, ${brand.primary100}, ${brand.secondary100})`;
 const GRAD_B = `linear-gradient(135deg, ${brand.secondary100}, ${brand.primary100})`;
@@ -23,6 +24,8 @@ export interface ListingItem {
   badge?: string;
   img?: string;
   vendorName?: string;
+  /** Set only on vendors-tab items — links the card to /vendor/[slug]. */
+  slug?: string;
 }
 
 export interface ListingsTab {
@@ -478,7 +481,7 @@ const WELLNESS_ITEMS = expandVendors(
   WELLNESS_VENDOR_POOL
 );
 
-const VENDOR_ITEMS = mkItems(
+const VENDOR_ITEMS: ListingItem[] = mkItems(
   [
     {
       title: "Bangkok Hospital",
@@ -542,7 +545,7 @@ const VENDOR_ITEMS = mkItems(
     },
   ],
   { prefix: "vendors", tagColor: brand.secondary, cta: "View Vendor" }
-);
+).map((item) => ({ ...item, slug: slugify(item.title) }));
 
 // Reuses the same local doctor photos as the homepage's DOCTORS_DATA (see
 // app/_lib/homepage-data.ts) — cycled across more doctors here, falling back

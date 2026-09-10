@@ -23,6 +23,7 @@ import {
   defaultFilterState,
   filterAndSortItems,
   sortOptionsFor,
+  type ListingItem,
   type SortValue,
 } from "@/app/_lib/listings-data";
 
@@ -112,6 +113,15 @@ export default function ListingsView({ activeTabId }: ListingsViewProps) {
 
   const clearFilters = () => updateFilters(() => defaultFilterState(tab));
 
+  // Every other linkable tab shares one detailHref per tab (one static
+  // /detail/[category] page each); vendors need a distinct URL per card.
+  const hrefFor = (item: ListingItem) =>
+    tab.id === "vendors"
+      ? item.slug
+        ? `/vendor/${item.slug}`
+        : undefined
+      : detailHref;
+
   return (
     <PageShell showCart cartCount={cartCount} showFooter={false}>
       <div className="font-sans">
@@ -188,7 +198,7 @@ export default function ListingsView({ activeTabId }: ListingsViewProps) {
                 <ListingCard
                   key={item.id}
                   item={item}
-                  detailHref={detailHref}
+                  detailHref={hrefFor(item)}
                   onAddToCart={() => setCartCount((c) => c + 1)}
                 />
               ))}
