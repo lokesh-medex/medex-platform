@@ -33,6 +33,8 @@ import {
 } from "react-icons/fi";
 import { FaFlask } from "react-icons/fa";
 import LangCountrySwitcher from "@/app/_components/shared/LangCountrySwitcher";
+import AiLauncherIcon from "@/app/_components/shared/AiLauncherIcon";
+import AiChatDrawer from "@/app/_components/shared/ai-chat/AiChatDrawer";
 import NavSearch from "@/app/_components/home/NavSearch";
 import { glass } from "@/app/_lib/glass";
 import { BRAND_DARK_PANEL } from "@/app/_lib/theme";
@@ -73,6 +75,7 @@ export default function Navbar({
   const [mobileCategoryOpen, setMobileCategoryOpen] = useState<string | null>(
     null
   );
+  const [chatOpen, setChatOpen] = useState(false);
 
   return (
     <div className="px-6">
@@ -167,7 +170,10 @@ export default function Navbar({
 
         {/* Desktop auth/cart */}
         <div className="hidden shrink-0 items-center gap-1.5 dt:flex">
-          <NavSearch />
+          <div className="flex items-center gap-3">
+            <AiLauncherIcon onClick={() => setChatOpen(true)} />
+            <NavSearch />
+          </div>
           <Link
             href="/auth/login"
             className="flex cursor-pointer items-center gap-1.5 rounded-full px-2.5 py-1.5 text-sm font-bold whitespace-nowrap text-white/85 transition-colors duration-150 hover:bg-white/10 hover:text-white font-sans"
@@ -198,6 +204,7 @@ export default function Navbar({
 
         {/* Mobile right side */}
         <div className="flex items-center gap-2 dt:hidden">
+          <AiLauncherIcon compact onClick={() => setChatOpen(true)} />
           <NavSearch compact />
           {showCart && (
             <Badge count={cartCount} size="small" offset={[-2, 2]}>
@@ -371,6 +378,8 @@ export default function Navbar({
           </div>
         </div>
       )}
+
+      <AiChatDrawer open={chatOpen} onClose={() => setChatOpen(false)} />
     </div>
   );
 }

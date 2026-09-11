@@ -73,7 +73,8 @@ export type MeshPreset =
   | "detail"
   | "cart"
   | "contact"
-  | "about";
+  | "about"
+  | "aiChat";
 
 const MESH_PRESETS: Record<MeshPreset, MeshSpec> = {
   hero: {
@@ -214,6 +215,18 @@ const MESH_PRESETS: Record<MeshPreset, MeshSpec> = {
       { x: 12, y: 18, size: 700, c: "secondary", o: 0.18 },
       { x: 88, y: 12, size: 640, c: "primary", o: 0.16 },
       { x: 50, y: 104, size: 600, c: "violet", o: 0.12 },
+    ],
+  },
+  // Tall/narrow panel (the AI chat drawer), not a wide section — blobs are
+  // stacked down the vertical centerline instead of spread corner-to-corner,
+  // so the wash still reaches every scroll position of a long chat thread.
+  aiChat: {
+    blend: "screen",
+    blobs: [
+      { x: 20, y: 6, size: 560, c: "primary", o: 0.4 },
+      { x: 88, y: 30, size: 520, c: "secondary", o: 0.4 },
+      { x: 24, y: 62, size: 560, c: "violet", o: 0.3 },
+      { x: 80, y: 92, size: 520, c: "rose", o: 0.28 },
     ],
   },
 };
