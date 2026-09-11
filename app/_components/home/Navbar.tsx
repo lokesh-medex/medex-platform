@@ -33,6 +33,7 @@ import {
 } from "react-icons/fi";
 import { FaFlask } from "react-icons/fa";
 import LangCountrySwitcher from "@/app/_components/shared/LangCountrySwitcher";
+import AiLauncherIcon from "@/app/_components/shared/AiLauncherIcon";
 import NavSearch from "@/app/_components/home/NavSearch";
 import { glass } from "@/app/_lib/glass";
 import { BRAND_DARK_PANEL } from "@/app/_lib/theme";
@@ -167,6 +168,7 @@ export default function Navbar({
 
         {/* Desktop auth/cart */}
         <div className="hidden shrink-0 items-center gap-1.5 dt:flex">
+          <AiLauncherIcon />
           <NavSearch />
           <Link
             href="/auth/login"
@@ -198,6 +200,7 @@ export default function Navbar({
 
         {/* Mobile right side */}
         <div className="flex items-center gap-2 dt:hidden">
+          <AiLauncherIcon compact />
           <NavSearch compact />
           {showCart && (
             <Badge count={cartCount} size="small" offset={[-2, 2]}>
