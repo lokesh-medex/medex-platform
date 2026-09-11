@@ -99,7 +99,7 @@ export default function ServicesOrbital() {
       </Parallax>
 
       <div className="relative mx-auto max-w-[1320px] px-5 dt:px-8">
-        <div className="mx-auto mb-14 max-w-[760px] text-center">
+        <div className="mx-auto mb-10 max-w-[760px] text-center dt:mb-14">
           <span className="font-sans text-[12px] font-bold tracking-[0.16em] text-[#ff8a75] uppercase">
             What Medex aggregates
           </span>
@@ -112,10 +112,10 @@ export default function ServicesOrbital() {
           </p>
         </div>
 
-        <div className="grid items-center gap-12 dt:grid-cols-[minmax(0,1fr)_400px] dt:gap-16">
+        <div className="grid items-center gap-8 dt:grid-cols-[minmax(0,1fr)_400px] dt:gap-16">
           {/* ---------- Orbit ---------- */}
           <div
-            className="relative mx-auto aspect-square w-[min(760px,92vw)]"
+            className="relative mx-auto aspect-square w-[min(340px,82vw)] dt:w-[min(760px,92vw)]"
             onMouseEnter={() => (paused.current = true)}
             onMouseLeave={() => (paused.current = false)}
           >
@@ -190,15 +190,15 @@ export default function ServicesOrbital() {
             </svg>
 
             {/* Hub */}
-            <div className="absolute top-1/2 left-1/2 z-20 flex h-[172px] w-[172px] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white shadow-[0_16px_60px_rgba(0,0,0,0.5)]">
-              <div className="absolute -inset-5 animate-[heroPulse_3.4s_ease-in-out_infinite] rounded-full border border-white/25" />
-              <div className="absolute -inset-11 animate-[heroPulse_3.4s_ease-in-out_infinite] rounded-full border border-white/12 [animation-delay:0.7s]" />
+            <div className="absolute top-1/2 left-1/2 z-20 flex h-[100px] w-[100px] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white shadow-[0_16px_60px_rgba(0,0,0,0.5)] dt:h-[172px] dt:w-[172px]">
+              <div className="absolute -inset-3 animate-[heroPulse_3.4s_ease-in-out_infinite] rounded-full border border-white/25 dt:-inset-5" />
+              <div className="absolute -inset-6 animate-[heroPulse_3.4s_ease-in-out_infinite] rounded-full border border-white/12 [animation-delay:0.7s] dt:-inset-11" />
               <Image
                 src="/medex.webp"
                 alt="Medex"
                 height={40}
                 width={176}
-                className="h-10 w-auto max-w-[76%] object-contain"
+                className="h-6 w-auto max-w-[76%] object-contain dt:h-10"
               />
             </div>
 
@@ -228,7 +228,7 @@ export default function ServicesOrbital() {
                     {isActive && (
                       <div
                         aria-hidden
-                        className="pointer-events-none absolute top-1/2 left-1/2 h-44 w-44 -translate-x-1/2 -translate-y-1/2 rounded-full blur-2xl"
+                        className="pointer-events-none absolute top-1/2 left-1/2 h-24 w-24 -translate-x-1/2 -translate-y-1/2 rounded-full blur-2xl dt:h-44 dt:w-44"
                         style={{
                           background: `radial-gradient(circle, ${color}55, transparent 70%)`,
                         }}
@@ -239,7 +239,7 @@ export default function ServicesOrbital() {
                       shape="circle"
                       onClick={() => setActiveId(svc.id)}
                       aria-label={svc.title}
-                      className="relative! h-24! w-24! transition-transform! duration-300!"
+                      className="relative! h-14! w-14! transition-transform! duration-300! dt:h-24! dt:w-24!"
                       style={{
                         background: isActive
                           ? "#fff"
@@ -265,12 +265,12 @@ export default function ServicesOrbital() {
                         <ServiceIcon
                           icon={svc.icon}
                           color={isActive ? COLOR.ink : color}
-                          size={26}
+                          size={20}
                         />
                       }
                     />
                     <span
-                      className="mt-3.5 font-sans text-[13px] font-bold tracking-[0.02em] whitespace-nowrap transition-colors duration-300"
+                      className="mt-2 font-sans text-[11px] font-bold tracking-[0.02em] whitespace-nowrap transition-colors duration-300 dt:mt-3.5 dt:text-[13px]"
                       style={{
                         color: isActive
                           ? "#fff"
@@ -288,7 +288,7 @@ export default function ServicesOrbital() {
           </div>
 
           {/* ---------- Detail panel ---------- */}
-          <div className={`rounded-[32px] p-8 ${glass.dark}`}>
+          <div className={`rounded-[32px] p-6 dt:p-8 ${glass.dark}`}>
             <div className="mb-4 flex items-center gap-3">
               <span
                 className="flex h-11 w-11 items-center justify-center rounded-2xl"

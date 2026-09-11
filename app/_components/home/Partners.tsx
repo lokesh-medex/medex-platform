@@ -33,7 +33,7 @@ gsap.registerPlugin(useGSAP, Draggable, InertiaPlugin);
 function LogoChip({ src, alt }: { src: string; alt: string }) {
   return (
     <div
-      className={`flex h-[92px] w-[190px] shrink-0 snap-start items-center justify-center rounded-2xl p-4 ${glass.vivid}`}
+      className={`flex h-[64px] w-[132px] shrink-0 snap-start items-center justify-center rounded-2xl p-3 dt:h-[92px] dt:w-[190px] dt:p-4 ${glass.vivid}`}
     >
       <Image
         src={src}
@@ -163,7 +163,7 @@ export default function Partners() {
 
         {/* Mobile/tablet: native swipe/snap rail, one copy of the data. */}
         <div className="relative overflow-x-auto px-5 pb-2 [-ms-overflow-style:none] [scrollbar-width:none] dt:hidden [&::-webkit-scrollbar]:hidden">
-          <div className="flex w-max snap-x snap-mandatory gap-5">
+          <div className="flex w-max snap-x snap-mandatory gap-3">
             {PARTNER_LOGOS_DATA.map((logo) => (
               <LogoChip key={logo.alt} src={logo.src} alt={logo.alt} />
             ))}

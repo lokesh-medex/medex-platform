@@ -99,6 +99,13 @@ export default function NavSearch({ compact }: NavSearchProps) {
       trigger={["click"]}
       open={open}
       placement="bottomRight"
+      // On mobile the trigger sits well left of the viewport's right edge
+      // (AI launcher/cart/menu buttons follow it), so antd's own
+      // right-aligned-to-trigger positioning pushes the panel off the left
+      // edge of the screen. Pin it to the viewport edge instead — paired
+      // with the popup's own `calc(100vw-2rem)` width, this keeps an equal
+      // margin on both sides at every width, independent of trigger position.
+      rootClassName={compact ? "!right-4" : undefined}
       onOpenChange={(next) => {
         setOpen(next);
         if (!next) setQuery("");
@@ -113,17 +120,17 @@ export default function NavSearch({ compact }: NavSearchProps) {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search Medex"
-            prefix={<FiSearch size={15} className="text-white/50" />}
+            prefix={<FiSearch size={15} className="text-slate-400" />}
             suffix={
               query && (
                 <FiX
                   size={15}
-                  className="cursor-pointer text-white/50 hover:text-white"
+                  className="cursor-pointer text-slate-400 hover:text-slate-700"
                   onClick={() => setQuery("")}
                 />
               )
             }
-            className="border-white/15! bg-white/10! text-white! [&_input]:text-white! [&_input::placeholder]:text-white/50!"
+            className="border-white/15! bg-white! text-slate-900! [&_input]:text-slate-900! [&_input::placeholder]:text-slate-400!"
           />
           <div className="mt-1 border-t border-white/10 pt-1">
             <ResultsList query={query} onNavigate={() => setOpen(false)} />
