@@ -9,6 +9,7 @@
  * else.
  */
 
+import Image from "next/image";
 import { Reveal } from "@/app/_components/shared/Motion";
 
 interface MedexMarkProps {
